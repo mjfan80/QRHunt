@@ -2,7 +2,7 @@
 
 **Project:** QRHunt
 
-**Document Version:** 0.1 (Draft)
+**Document Version:** 0.2 (Draft)
 
 **Plugin Version:** Target 1.0.0
 
@@ -15,82 +15,85 @@ Il database di QRHunt deve essere:
 - semplice;
 - normalizzato;
 - facilmente estendibile;
-- indipendente dai contenuti WordPress.
+- indipendente dai contenuti gestiti da WordPress.
 
 Devono essere memorizzati esclusivamente i dati necessari al funzionamento del plugin.
 
-Tutti i dati derivabili dovranno essere calcolati e non duplicati.
+Tutti i dati derivabili devono essere calcolati e non duplicati.
 
 ---
 
-# 2. Entità principali
+# 2. Principi progettuali
 
-QRHunt è composto dalle seguenti entità.
+Il database segue i seguenti principi.
+
+- Utilizzare WordPress quando esiste già una struttura adeguata.
+- Separare i contenuti dalla logica di gioco.
+- Evitare la duplicazione dei dati.
+- Rendere il modello facilmente estendibile.
+- Mantenere il numero di tabelle ridotto ma con responsabilità ben definite.
+
+---
+
+# 3. Entità
+
+QRHunt utilizza le seguenti entità.
 
 - Utente (WordPress)
 - Percorso
 - Checkpoint
+- Gruppo di Checkpoint
+- Dipendenza
 - Partecipazione
 - Evento
 
-Le relazioni tra tali entità costituiscono l'intero modello dati del plugin.
+---
 
-```
-Utente (WordPress)
-        │
-        │
-        ▼
-Partecipazione
-        │
-        ▼
-Percorso
-        │
-        ▼
-Checkpoint
-        │
-        ▼
-Evento
-```
+# 4. Entità WordPress
+
+## Utenti
+
+Gli utenti sono quelli nativi dell'installazione WordPress.
+
+QRHunt non implementa alcun sistema di autenticazione.
+
+Utilizza esclusivamente gli utenti presenti nelle tabelle:
+
+- wp_users
+- wp_usermeta
 
 ---
 
-# 3. Entità WordPress
+## Checkpoint
 
-QRHunt utilizza direttamente le seguenti strutture native di WordPress.
+Ogni Checkpoint è un Custom Post Type di WordPress.
 
-## wp_users
+WordPress gestisce automaticamente:
 
-Contiene gli utenti.
-
-QRHunt non implementa un sistema di autenticazione proprio.
-
----
-
-## wp_posts
-
-Ogni Checkpoint è un Custom Post Type.
-
-Il contenuto del Checkpoint viene gestito completamente da WordPress.
-
-Sono quindi disponibili automaticamente:
-
+- titolo;
+- contenuto;
 - Gutenberg;
-- Revisioni;
-- Media Library;
-- Tassonomie;
-- Hook;
+- media;
+- revisioni;
+- permalink;
 - REST API.
 
+QRHunt aggiunge esclusivamente la logica di gioco.
+
 ---
 
-# 4. Tabelle del plugin
+# 5. Tabelle del plugin
 
-La versione 1.0 prevede quattro tabelle dedicate.
+La versione 1.0 prevede le seguenti tabelle.
 
 ```
 wp_qrhunt_paths
 
 wp_qrhunt_checkpoints
+
+wp_qrhunt_checkpoint_groups
+
+wp_qrhunt_dependencies
 
 wp_qrhunt_participations
 
@@ -99,52 +102,64 @@ wp_qrhunt_events
 
 ---
 
-# 5. Tabella Percorsi
+# 6. Percorsi
 
-Contiene esclusivamente i dati propri del Percorso.
+La tabella dei Percorsi contiene esclusivamente le informazioni proprie del Percorso.
 
-Non contiene informazioni sui partecipanti.
+Non contiene:
 
-Non contiene informazioni sui Checkpoint.
+- contenuti editoriali;
+- Checkpoint;
+- Partecipazioni;
+- Eventi.
 
----
+Ogni Percorso possiede almeno:
 
-Campi principali
+- identificativo;
+- nome;
+- descrizione;
+- stato;
+- data di apertura;
+- data di chiusura;
+- checkpoint iniziale;
+- checkpoint finale.
 
-- id
-- nome
-- descrizione
-- stato
-- data_apertura
-- data_chiusura
-- created_at
-- updated_at
+Il Checkpoint iniziale ed il Checkpoint finale vengono identificati tramite i rispettivi riferimenti.
 
----
-
-# 6. Tabella Checkpoint
-
-Contiene esclusivamente le informazioni di gioco del Checkpoint.
-
-Il contenuto rimane nel Custom Post Type.
+Non vengono utilizzati flag all'interno dei Checkpoint.
 
 ---
 
-Campi principali
+# 7. Checkpoint
 
-- post_id
-- path_id
-- token
-- prerequisite_checkpoint_id
-- invalid_after_checkpoint_id
-- is_start
-- is_finish
-- created_at
-- updated_at
+La tabella dei Checkpoint contiene esclusivamente le informazioni tecniche necessarie al funzionamento del gioco.
+
+Il contenuto editoriale rimane nel relativo Custom Post Type.
+
+Ogni Checkpoint contiene almeno:
+
+- riferimento al Custom Post Type;
+- riferimento al Percorso;
+- token pubblico;
+- data di creazione;
+- data di aggiornamento.
+
+Il Checkpoint non contiene regole di progressione.
 
 ---
 
-Il token identifica pubblicamente il Checkpoint.
+# 8. Token
+
+Ogni Checkpoint possiede un token pubblico univoco.
+
+Il token viene generato automaticamente dal plugin alla creazione del Checkpoint.
+
+Il token:
+
+- è univoco;
+- è casuale;
+- non contiene informazioni sul Checkpoint;
+- non è modificabile manualmente.
 
 L'URL pubblico utilizza esclusivamente il token.
 
@@ -154,31 +169,82 @@ Esempio
 https://example.com/qrhunt/T6GJ5Q9ZP4M8N2
 ```
 
-L'identificativo interno non viene mai esposto.
+Durante la duplicazione di un Percorso vengono generati nuovi token per tutti i Checkpoint.
 
 ---
 
-# 7. Tabella Partecipazioni
+# 9. Gruppi di Checkpoint
 
-Rappresenta il legame tra un Utente ed un Percorso.
+Un Gruppo rappresenta un insieme logico di Checkpoint.
+
+Ogni Gruppo appartiene ad un solo Percorso.
+
+Un Checkpoint può appartenere a più Gruppi.
+
+I Gruppi consentono di modellare situazioni nelle quali più Checkpoint devono essere completati senza imporre un ordine.
+
+Esempio:
+
+```
+Checkpoint 4
+
+Checkpoint 5
+
+Checkpoint 6
+```
+
+appartengono al medesimo Gruppo.
+
+Il Checkpoint 7 può richiedere il completamento del Gruppo senza imporre un ordine tra i suoi elementi.
+
+---
+
+# 10. Dipendenze
+
+Le regole di progressione sono memorizzate in una tabella dedicata.
+
+Le Dipendenze sono indipendenti dai Checkpoint.
+
+Ogni Dipendenza collega un Checkpoint ad un obiettivo.
+
+L'obiettivo può essere:
+
+- un altro Checkpoint;
+- un Gruppo.
+
+Ogni Dipendenza possiede almeno:
+
+- Checkpoint sorgente;
+- tipo;
+- tipo di destinazione;
+- destinazione.
+
+I tipi previsti sono:
+
+- after;
+- before.
+
+Più Dipendenze dello stesso tipo vengono valutate in AND.
+
+La logica OR non fa parte della versione 1.0.
+
+---
+
+# 11. Partecipazioni
+
+Una Partecipazione rappresenta il legame tra un Utente ed un Percorso.
 
 Per ogni coppia Utente/Percorso può esistere una sola Partecipazione.
 
----
+La Partecipazione contiene esclusivamente:
 
-Campi principali
-
-- id
-- user_id
-- path_id
-- stato
-- started_at
-- finished_at
-- cancelled_at
-- created_at
-- updated_at
-
----
+- utente;
+- percorso;
+- stato;
+- data di inizio;
+- data di conclusione;
+- data di annullamento;
+- date tecniche.
 
 La durata del Percorso non viene memorizzata.
 
@@ -186,100 +252,76 @@ Viene sempre calcolata dagli Eventi.
 
 ---
 
-# 8. Tabella Eventi
+# 12. Eventi
 
-Ogni interazione significativa genera un Evento.
+Ogni interazione significativa viene registrata come Evento.
 
 Nella versione 1.0 l'unico tipo previsto è la scansione di un QR Code.
 
-Il modello è però progettato per poter essere esteso.
+La struttura è progettata per poter gestire in futuro ulteriori tipologie di Evento.
+
+Ogni Evento contiene almeno:
+
+- Partecipazione;
+- Checkpoint;
+- tipo;
+- esito;
+- timestamp.
+
+La registrazione di indirizzo IP e User Agent è configurabile e può essere disabilitata.
 
 ---
 
-Campi principali
+# 13. Dati derivati
 
-- id
-- participation_id
-- checkpoint_id
-- event_type
-- result
-- ip_address
-- user_agent
-- created_at
+I seguenti dati non vengono memorizzati nel database.
 
----
-
-La registrazione di IP e User Agent deve poter essere disabilitata dalle impostazioni del plugin.
-
----
-
-# 9. Dati derivati
-
-I seguenti dati non vengono memorizzati.
-
-Vengono sempre calcolati.
+Sono sempre calcolati.
 
 - durata del Percorso;
 - numero di Checkpoint validati;
 - numero di Eventi validi;
+- numero di Eventi non validi;
 - numero di Eventi duplicati;
 - statistiche;
 - classifiche.
 
 ---
 
-# 10. Relazioni
+# 14. Relazioni
 
+```
 Utente
-
-1 → N Partecipazioni
-
----
-
-Percorso
-
-1 → N Checkpoint
-
-1 → N Partecipazioni
-
----
-
-Checkpoint
-
-1 → N Eventi
-
----
-
+    │
+    ▼
 Partecipazione
-
-1 → N Eventi
+    │
+    ├──────────────► Percorso
+    │                    │
+    │                    ▼
+    │              Checkpoint
+    │                    │
+    │          ┌─────────┴─────────┐
+    │          ▼                   ▼
+    │      Gruppi           Dipendenze
+    │
+    ▼
+Evento
+```
 
 ---
 
-# 11. Principi progettuali
+# 15. Estendibilità
 
-Il database deve rispettare i seguenti principi.
-
-- nessuna duplicazione dei dati;
-- nessun dato derivabile viene memorizzato;
-- nessuna dipendenza da plugin esterni;
-- utilizzo delle strutture native di WordPress quando appropriato;
-- separazione netta tra contenuto editoriale e logica del gioco.
-
----
-
-# 12. Evoluzioni future
-
-Il modello dati è progettato per consentire l'introduzione di:
+Il modello dati è progettato per consentire l'introduzione futura di:
 
 - quiz;
 - badge;
-- punteggi;
-- checkpoint GPS;
+- punti;
+- GPS;
 - NFC;
-- percorsi ramificati;
-- finali multipli;
 - classifiche;
-- API pubbliche.
+- API pubbliche;
+- percorsi ramificati.
 
-Tali funzionalità non fanno parte della versione 1.0 ma non richiederanno modifiche sostanziali al modello dati.
+L'introduzione di tali funzionalità non dovrà richiedere modifiche sostanziali alla struttura del database.
