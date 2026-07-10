@@ -121,8 +121,8 @@ Ogni Percorso possiede almeno:
 - stato;
 - data di apertura;
 - data di chiusura;
-- checkpoint iniziale;
-- checkpoint finale.
+- riferimento al Checkpoint iniziale;
+- riferimento al Checkpoint finale.
 
 Il Checkpoint iniziale ed il Checkpoint finale vengono identificati tramite i rispettivi riferimenti.
 
@@ -171,6 +171,8 @@ https://example.com/qrhunt/T6GJ5Q9ZP4M8N2
 
 Durante la duplicazione di un Percorso vengono generati nuovi token per tutti i Checkpoint.
 
+Il token viene utilizzato esclusivamente come identificativo pubblico del Checkpoint.
+
 ---
 
 # 9. Gruppi di Checkpoint
@@ -178,8 +180,9 @@ Durante la duplicazione di un Percorso vengono generati nuovi token per tutti i 
 Un Gruppo rappresenta un insieme logico di Checkpoint.
 
 Ogni Gruppo appartiene ad un solo Percorso.
+Un Gruppo non può contenere Checkpoint appartenenti a Percorsi differenti.
 
-Un Checkpoint può appartenere a più Gruppi.
+Un Checkpoint può appartenere ad un solo Gruppo oppure a nessun Gruppo.
 
 I Gruppi consentono di modellare situazioni nelle quali più Checkpoint devono essere completati senza imporre un ordine.
 
@@ -206,6 +209,7 @@ Le regole di progressione sono memorizzate in una tabella dedicata.
 Le Dipendenze sono indipendenti dai Checkpoint.
 
 Ogni Dipendenza collega un Checkpoint ad un obiettivo.
+Uno stesso Checkpoint può possedere più Dipendenze dello stesso tipo.
 
 L'obiettivo può essere:
 
@@ -225,6 +229,8 @@ I tipi previsti sono:
 - before.
 
 Più Dipendenze dello stesso tipo vengono valutate in AND.
+
+Una Dipendenza può collegare esclusivamente entità appartenenti allo stesso Percorso.
 
 La logica OR non fa parte della versione 1.0.
 
@@ -254,8 +260,7 @@ Viene sempre calcolata dagli Eventi.
 
 # 12. Eventi
 
-Ogni interazione significativa viene registrata come Evento.
-
+Ogni richiesta elaborata dal plugin genera un Evento.
 Nella versione 1.0 l'unico tipo previsto è la scansione di un QR Code.
 
 La struttura è progettata per poter gestire in futuro ulteriori tipologie di Evento.
@@ -291,22 +296,25 @@ Sono sempre calcolati.
 # 14. Relazioni
 
 ```
-Utente
-    │
-    ▼
-Partecipazione
-    │
-    ├──────────────► Percorso
-    │                    │
-    │                    ▼
-    │              Checkpoint
-    │                    │
-    │          ┌─────────┴─────────┐
-    │          ▼                   ▼
-    │      Gruppi           Dipendenze
-    │
-    ▼
-Evento
+                wp_users
+                    │
+                    ▼
+         Partecipazioni
+          │         │
+          │         ▼
+          │     Percorsi
+          │         │
+          │         ▼
+          │   Checkpoint
+          │      │
+          │      ▼
+          │   Gruppi
+          │
+          ├──────────────┐
+          ▼              │
+       Eventi            │
+                         ▼
+                    Dipendenze
 ```
 
 ---
