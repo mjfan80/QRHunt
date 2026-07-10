@@ -283,3 +283,187 @@ L'interpretazione delle Dipendenze è demandata al motore di validazione.
 Le Foreign Key non vengono create fisicamente.
 
 L'integrità referenziale è garantita dal plugin.
+
+---
+
+# 5. Tabella `wp_qrhunt_participations`
+
+## Scopo
+
+Contiene le Partecipazioni degli utenti ai Percorsi.
+
+Ogni record rappresenta una singola partecipazione di un utente ad un Percorso.
+
+---
+
+## Struttura
+
+| Campo | Tipo | NULL | Default | Note |
+|-------|------|------|---------|------|
+| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary Key |
+| user_id | BIGINT UNSIGNED | NO | | Utente WordPress |
+| path_id | BIGINT UNSIGNED | NO | | Percorso |
+| status | VARCHAR(20) | NO | in_progress | Stato della partecipazione |
+| started_at | DATETIME | YES | NULL | Data di inizio |
+| finished_at | DATETIME | YES | NULL | Data di termine |
+| cancelled_at | DATETIME | YES | NULL | Data di annullamento |
+| created_at | DATETIME | NO | CURRENT_TIMESTAMP | Data creazione |
+| updated_at | DATETIME | NO | CURRENT_TIMESTAMP | Ultima modifica |
+
+---
+
+## Indici
+
+Primary Key
+
+```
+PRIMARY KEY (id)
+```
+
+Indici
+
+```
+UNIQUE (user_id, path_id)
+
+INDEX (path_id)
+
+INDEX (status)
+```
+
+---
+
+## Valori previsti
+
+### status
+
+- in_progress
+- completed
+- finished
+- cancelled
+
+---
+
+## Vincoli logici
+
+- Un utente può avere una sola Partecipazione per ciascun Percorso.
+- Una Partecipazione appartiene ad un solo Utente.
+- Una Partecipazione appartiene ad un solo Percorso.
+- La durata del Percorso non viene memorizzata.
+- Tutte le statistiche vengono calcolate dagli Eventi.
+
+---
+
+## Note
+
+La Partecipazione viene creata automaticamente alla prima scansione valida di un Checkpoint del Percorso.
+
+Le Foreign Key non vengono create fisicamente.
+
+L'integrità referenziale è garantita dal plugin.
+
+---
+
+# 6. Tabella `wp_qrhunt_events`
+
+## Scopo
+
+Contiene lo storico completo degli Eventi generati dal plugin.
+
+Ogni richiesta elaborata dal plugin genera un Evento.
+
+---
+
+## Struttura
+
+| Campo | Tipo | NULL | Default | Note |
+|-------|------|------|---------|------|
+| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary Key |
+| participation_id | BIGINT UNSIGNED | NO | | Partecipazione |
+| checkpoint_id | BIGINT UNSIGNED | NO | | Checkpoint interessato |
+| event_type | VARCHAR(30) | NO | | Tipo di Evento |
+| result | VARCHAR(30) | NO | | Esito |
+| message_key | VARCHAR(50) | YES | NULL | Codice del messaggio mostrato all'utente |
+| ip_address | VARCHAR(45) | YES | NULL | IPv4 o IPv6 |
+| user_agent | TEXT | YES | NULL | User Agent del client |
+| created_at | DATETIME | NO | CURRENT_TIMESTAMP | Data e ora dell'Evento |
+
+---
+
+## Indici
+
+Primary Key
+
+```
+PRIMARY KEY (id)
+```
+
+Indici
+
+```
+INDEX (participation_id)
+
+INDEX (checkpoint_id)
+
+INDEX (created_at)
+
+INDEX (event_type)
+
+INDEX (result)
+```
+
+---
+
+## Valori previsti
+
+### event_type
+
+Versione 1.0
+
+- qr_scan
+
+---
+
+### result
+
+Valori iniziali previsti
+
+- accepted
+- duplicate
+- before_failed
+- after_failed
+- authentication_required
+- path_closed
+- participation_cancelled
+- invalid_token
+
+L'elenco potrà essere esteso nelle versioni future.
+
+---
+
+## Vincoli logici
+
+- Ogni Evento appartiene ad una sola Partecipazione.
+- Ogni Evento si riferisce ad un solo Checkpoint.
+- Gli Eventi non vengono mai modificati.
+- Gli Eventi non vengono mai eliminati.
+
+---
+
+## Privacy
+
+La registrazione di indirizzo IP e User Agent è configurabile.
+
+Se disabilitata:
+
+- `ip_address` viene lasciato a NULL;
+- `user_agent` viene lasciato a NULL.
+
+---
+
+## Note
+
+Gli Eventi rappresentano la fonte primaria di tutte le statistiche del plugin.
+
+Le Foreign Key non vengono create fisicamente.
+
+L'integrità referenziale è garantita dal plugin.
