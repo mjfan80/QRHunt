@@ -1,0 +1,19 @@
+- [ ] Bootstrap
+- [ ] Activation
+- [ ] Database
+- [ ] CPT Checkpoint
+- [ ] CRUD Percorsi
+- [ ] CRUD Gruppi
+- [ ] Gestione Dipendenze
+- [ ] Routing
+- [ ] Token
+- [ ] ValidationService
+- [ ] EventService
+- [ ] Partecipazioni
+- [ ] QR Code
+- [ ] Dashboard
+- [ ] Esportazione
+- [ ] Internazionalizzazione
+- [ ] Test
+- [ ] Plugin Check
+- [ ] Release 1.0
