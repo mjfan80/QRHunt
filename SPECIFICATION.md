@@ -148,15 +148,21 @@ Il primo checkpoint è stato registrato correttamente.
 
 Il percorso è iniziato.
 
+
+---
+
+## Terminata
+
+Il partecipante ha trovato l'ultimo checkpoint rispettando tutta la catena di ritrovamenti secondo le regole impostate per ognuna, non ha però trovato tutti i checkpoint.
+Nella versione iniziale sarà possibile definire un checkpoint finale obbligatorio.
+
+
 ---
 
 ## Completata
 
-Il partecipante ha soddisfatto la condizione di completamento del percorso.
-
-La condizione sarà configurabile.
-
-Nella versione iniziale sarà possibile definire un checkpoint finale obbligatorio.
+Il partecipante ha soddisfatto la condizione di completamento del percorso, terminandolo, trovando però tutti i chekpoint.
+In sostanza è una specializzazione del Terminata
 
 ---
 
