@@ -7,6 +7,8 @@
 
 namespace QRHunt;
 
+use QRHunt\Database\DatabaseInstaller;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -20,5 +22,7 @@ final class Activation {
 	 * @return void
 	 */
 	public static function activate(): void {
+		$database_installer = new DatabaseInstaller();
+		$database_installer->install();
 	}
 }
