@@ -16,5 +16,8 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+register_activation_hook( __FILE__, array( QRHunt\Activation::class, 'activate' ) );
+register_deactivation_hook( __FILE__, array( QRHunt\Deactivation::class, 'deactivate' ) );
+
 $qrhunt_plugin = new QRHunt\Plugin();
 $qrhunt_plugin->register_hooks();

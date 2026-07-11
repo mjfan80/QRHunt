@@ -7,5 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'QRHunt\\Activation' => $baseDir . '/src/Activation.php',
+    'QRHunt\\Deactivation' => $baseDir . '/src/Deactivation.php',
     'QRHunt\\Plugin' => $baseDir . '/src/Plugin.php',
 );
