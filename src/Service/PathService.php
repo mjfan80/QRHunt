@@ -37,4 +37,8 @@ final class PathService {
 	public function get_paths(): array {
 		return $this->path_repository->find_all();
 	}
+
+	public function save_path( Path $path ): void {
+		$this->path_repository->save( $path );
+	}
 }

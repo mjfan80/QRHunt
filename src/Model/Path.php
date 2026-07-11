@@ -17,6 +17,9 @@ final class Path {
 	/** @var int|null */
 	private $id;
 
+	/** @var int|null */
+	private $post_id;
+
 	/** @var string|null */
 	private $name;
 
@@ -61,6 +64,14 @@ final class Path {
 	 */
 	public function set_id( ?int $id ): void {
 		$this->id = $id;
+	}
+
+	public function get_post_id(): ?int {
+		return $this->post_id;
+	}
+
+	public function set_post_id( ?int $post_id ): void {
+		$this->post_id = $post_id;
 	}
 
 	/**

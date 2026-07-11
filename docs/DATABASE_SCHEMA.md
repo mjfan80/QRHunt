@@ -68,6 +68,8 @@ Le Foreign Key non vengono create fisicamente, in accordo con le linee guida di 
 
 L'integrità referenziale è garantita dal plugin.
 
+post_id: riferimento al post del Custom Post Type qrhunt_path. Realizza una relazione 1:1 tra il contenuto WordPress e i dati di dominio memorizzati nella tabella del plugin.
+
 ---
 
 # 2. Tabella `wp_qrhunt_checkpoints`

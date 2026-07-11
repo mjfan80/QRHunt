@@ -34,6 +34,7 @@ final class DatabaseInstaller {
 
 		$paths_sql = "CREATE TABLE $paths_table (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			post_id bigint(20) unsigned NOT NULL,
 			name varchar(255) NOT NULL,
 			description text DEFAULT NULL,
 			status varchar(20) NOT NULL DEFAULT 'draft',
@@ -44,6 +45,7 @@ final class DatabaseInstaller {
 			created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY  (id),
+			UNIQUE KEY post_id (post_id),
 			KEY status (status),
 			KEY opening_date (opening_date),
 			KEY closing_date (closing_date)

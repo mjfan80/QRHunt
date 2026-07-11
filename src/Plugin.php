@@ -7,6 +7,10 @@
 
 namespace QRHunt;
 
+use QRHunt\Controller\PathController;
+use QRHunt\Repository\PathRepository;
+use QRHunt\Service\PathService;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -23,6 +27,7 @@ final class Plugin {
 		add_action( 'plugins_loaded', array( $this, 'initialize' ) );
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
+		add_action( 'save_post_qrhunt_path', array( $this, 'synchronize_path' ), 10, 2 );
 	}
 
 	/**
@@ -54,5 +59,18 @@ final class Plugin {
 	public function register_admin_menu(): void {
 		$admin_menu = new AdminMenu();
 		$admin_menu->register();
+	}
+
+	public function synchronize_path( int $post_id, \WP_Post $post ): void {
+		$this->get_path_controller()->save( $post_id, $post );
+	}
+
+	private function get_path_controller(): PathController {
+		global $wpdb;
+
+		$path_repository = new PathRepository( $wpdb );
+		$path_service    = new PathService( $path_repository );
+
+		return new PathController( $path_service );
 	}
 }
