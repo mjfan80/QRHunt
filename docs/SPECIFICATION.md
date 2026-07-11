@@ -420,6 +420,8 @@ L'amministratore deve poter:
 - rigenerare il QR Code;
 - consultare le statistiche del Checkpoint.
 
+I Checkpoint vengono gestiti all'interno del menu amministrativo del plugin QRHunt e non come voce autonoma del menu di WordPress.
+
 ---
 
 ## 5.10 Visibilità
@@ -432,6 +434,29 @@ I Checkpoint non devono comparire:
 - nei risultati di ricerca del sito.
 
 Devono essere raggiungibili esclusivamente conoscendo il relativo URL pubblico.
+
+Il contenuto di un Checkpoint viene visualizzato esclusivamente tramite il router pubblico del plugin utilizzando il token pubblico.
+
+Il permalink del Custom Post Type non viene utilizzato.
+
+## 5.11 Rendering del Checkpoint
+
+Il contenuto del Checkpoint non viene visualizzato tramite il permalink del Custom Post Type.
+
+L'accesso avviene esclusivamente tramite l'URL pubblico generato dal plugin utilizzando il token.
+
+Il plugin intercetta la richiesta, esegue le verifiche previste dal flusso di validazione e rende una pagina dedicata del Checkpoint.
+
+La pagina deve:
+
+- utilizzare il tema WordPress attivo;
+- mantenere automaticamente gli elementi grafici del sito (colori, tipografia, favicon, ecc.), salvo diversa configurazione del plugin;
+- consentire al plugin di utilizzare un layout dedicato ai Checkpoint, ottimizzato per la visualizzazione su dispositivi mobili;
+- visualizzare il contenuto Gutenberg del Checkpoint;
+- permettere al plugin di aggiungere automaticamente elementi dell'interfaccia (messaggi, stato della validazione, pulsanti, indicazioni per il passo successivo, ecc.).
+
+Il layout della pagina può essere personalizzato dal tema o dal plugin senza modificare il contenuto del Checkpoint.
+La visualizzazione deve essere responsive e ottimizzata prioritariamente per smartphone.
 
 # 6. Gestione dei Tentativi
 
