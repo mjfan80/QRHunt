@@ -260,7 +260,15 @@ Viene sempre calcolata dagli Eventi.
 
 # 12. Eventi
 
-Ogni richiesta elaborata dal plugin genera un Evento.
+Ogni richiesta valida elaborata dal plugin genera un Evento.
+
+Una richiesta è considerata valida quando:
+
+il token pubblico identifica un Checkpoint esistente;
+l'utente è autenticato.
+
+Le richieste che non soddisfano tali requisiti (ad esempio utente non autenticato o token inesistente) non generano alcun Evento.
+
 Nella versione 1.0 l'unico tipo previsto è la scansione di un QR Code.
 
 La struttura è progettata per poter gestire in futuro ulteriori tipologie di Evento.
@@ -274,6 +282,10 @@ Ogni Evento contiene almeno:
 - timestamp.
 
 La registrazione di indirizzo IP e User Agent è configurabile e può essere disabilitata.
+
+Un Evento viene registrato esclusivamente quando la richiesta ha superato tutte le verifiche preliminari (autenticazione, risoluzione del token e disponibilità del Percorso) ed entra nel flusso di gioco.
+
+Le richieste che terminano durante le verifiche preliminari non generano Eventi.
 
 ---
 

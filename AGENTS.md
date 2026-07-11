@@ -97,3 +97,19 @@ Stop and ask for clarification before making architectural or functional decisio
 Each task should normally produce a single logical commit.
 
 Do not create additional commits unless explicitly requested.
+
+---
+
+## Local development environment
+
+Local WordPress installation:
+
+D:\Local-Sites\app\public
+
+The plugin is available through a symbolic link in:
+
+wp-content/plugins/qrhunt
+
+When useful, use this environment to perform local verification.
+
+Do not modify WordPress core, the database, or other plugins unless explicitly requested.

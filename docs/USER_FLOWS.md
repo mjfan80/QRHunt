@@ -195,7 +195,8 @@ Ogni flusso rappresenta il comportamento atteso del sistema.
 ## Risultato
 
 - Viene mostrato un messaggio che informa che il QR Code non è valido.
-- 
+- Nessun Evento viene registrato.
+- Nessuna Partecipazione viene creata.
 ---
 
 # 11. Percorso non ancora aperto

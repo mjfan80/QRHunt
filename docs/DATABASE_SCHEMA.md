@@ -369,8 +369,9 @@ L'integrità referenziale è garantita dal plugin.
 
 Contiene lo storico completo degli Eventi generati dal plugin.
 
-Ogni richiesta elaborata dal plugin genera un Evento.
+Ogni richiesta valida elaborata dal plugin genera un Evento.
 
+Le richieste prive di autenticazione oppure riferite a token inesistenti non vengono registrate.
 ---
 
 ## Struttura
@@ -427,14 +428,12 @@ Versione 1.0
 
 Valori iniziali previsti
 
-- accepted
-- duplicate
-- before_failed
-- after_failed
-- authentication_required
-- path_closed
-- participation_cancelled
-- invalid_token
+accepted
+duplicate
+before_failed
+after_failed
+path_closed
+participation_cancelled
 
 L'elenco potrà essere esteso nelle versioni future.
 
@@ -446,6 +445,8 @@ L'elenco potrà essere esteso nelle versioni future.
 - Ogni Evento si riferisce ad un solo Checkpoint.
 - Gli Eventi non vengono mai modificati.
 - Gli Eventi non vengono mai eliminati.
+
+Gli Eventi vengono registrati esclusivamente dopo la risoluzione del token pubblico in un Checkpoint esistente e dopo la verifica dell'autenticazione dell'utente.
 
 ---
 
