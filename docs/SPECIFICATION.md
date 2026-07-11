@@ -307,6 +307,8 @@ Il token deve essere sufficientemente casuale da impedire l'individuazione dei C
 
 ## 5.3 Contenuto
 
+Il nome tecnico del Custom Post Type è `qrhunt_checkpoint`.
+
 Ogni Checkpoint è implementato come Custom Post Type di WordPress.
 
 Il contenuto viene gestito tramite l'editor Gutenberg senza limitazioni.

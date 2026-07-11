@@ -21,6 +21,7 @@ final class Plugin {
 	 */
 	public function register_hooks(): void {
 		add_action( 'plugins_loaded', array( $this, 'initialize' ) );
+		add_action( 'init', array( $this, 'register_post_types' ) );
 	}
 
 	/**
@@ -29,5 +30,15 @@ final class Plugin {
 	 * @return void
 	 */
 	public function initialize(): void {
+	}
+
+	/**
+	 * Registers the plugin custom post types.
+	 *
+	 * @return void
+	 */
+	public function register_post_types(): void {
+		$checkpoint_post_type = new CheckpointPostType();
+		$checkpoint_post_type->register();
 	}
 }
