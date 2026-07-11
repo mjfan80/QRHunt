@@ -22,6 +22,7 @@ final class Plugin {
 	public function register_hooks(): void {
 		add_action( 'plugins_loaded', array( $this, 'initialize' ) );
 		add_action( 'init', array( $this, 'register_post_types' ) );
+		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 	}
 
 	/**
@@ -43,5 +44,15 @@ final class Plugin {
 
 		$path_post_type = new PathPostType();
 		$path_post_type->register();
+	}
+
+	/**
+	 * Registers the plugin administration menu.
+	 *
+	 * @return void
+	 */
+	public function register_admin_menu(): void {
+		$admin_menu = new AdminMenu();
+		$admin_menu->register();
 	}
 }
