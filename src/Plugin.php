@@ -40,5 +40,8 @@ final class Plugin {
 	public function register_post_types(): void {
 		$checkpoint_post_type = new CheckpointPostType();
 		$checkpoint_post_type->register();
+
+		$path_post_type = new PathPostType();
+		$path_post_type->register();
 	}
 }

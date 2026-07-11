@@ -11,5 +11,6 @@ return array(
     'QRHunt\\CheckpointPostType' => $baseDir . '/src/CheckpointPostType.php',
     'QRHunt\\Database\\DatabaseInstaller' => $baseDir . '/src/Database/DatabaseInstaller.php',
     'QRHunt\\Deactivation' => $baseDir . '/src/Deactivation.php',
+    'QRHunt\\PathPostType' => $baseDir . '/src/PathPostType.php',
     'QRHunt\\Plugin' => $baseDir . '/src/Plugin.php',
 );

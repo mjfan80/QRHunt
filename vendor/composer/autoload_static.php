@@ -26,6 +26,7 @@ class ComposerStaticInit5167c08ab67ff7c18be4cb070859748f
         'QRHunt\\CheckpointPostType' => __DIR__ . '/../..' . '/src/CheckpointPostType.php',
         'QRHunt\\Database\\DatabaseInstaller' => __DIR__ . '/../..' . '/src/Database/DatabaseInstaller.php',
         'QRHunt\\Deactivation' => __DIR__ . '/../..' . '/src/Deactivation.php',
+        'QRHunt\\PathPostType' => __DIR__ . '/../..' . '/src/PathPostType.php',
         'QRHunt\\Plugin' => __DIR__ . '/../..' . '/src/Plugin.php',
     );
 
