@@ -110,6 +110,54 @@ The plugin is available through a symbolic link in:
 
 wp-content/plugins/qrhunt
 
-When useful, use this environment to perform local verification.
+For local testing, always use the Local Site Shell.
 
-Do not modify WordPress core, the database, or other plugins unless explicitly requested.
+The Local Site Shell automatically provides:
+
+- PHP
+- php.ini
+- MySQL
+- Composer
+- WP-CLI
+
+The WordPress root directory is:
+
+D:\Local-Sites\app\public
+
+Use this environment whenever local verification is required.
+
+Do not modify WordPress core, the database, installed plugins, or the active theme unless explicitly requested.
+
+Whenever possible, verify changes using:
+
+- PHP lint
+- Composer validation
+- WP-CLI
+- Plugin Check
+
+Known Plugin Check findings that may be ignored during development:
+
+- .gitkeep placeholder files
+- AGENTS.md
+- .gitignore
+
+These files are part of the development repository and are not intended for the final distribution package.
+
+## Working methodology
+
+Do not make architectural decisions.
+
+If the documentation is incomplete, stop and ask for clarification before implementing.
+
+Implement only the requested scope.
+
+Do not start the next roadmap task automatically.
+
+After completing the requested implementation:
+
+1. run the available automated checks;
+2. show the final diff;
+3. wait for approval;
+4. create the commit only after explicit approval.
+
+Do not start a new task after creating a commit.
