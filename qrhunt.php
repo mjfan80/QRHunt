@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once __DIR__ . '/src/Plugin.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $qrhunt_plugin = new QRHunt\Plugin();
 $qrhunt_plugin->register_hooks();
