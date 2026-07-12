@@ -8,6 +8,8 @@
 namespace QRHunt;
 
 use QRHunt\Controller\PathController;
+use QRHunt\Controller\CheckpointController;
+use QRHunt\Repository\CheckpointRepository;
 use QRHunt\Repository\PathRepository;
 use QRHunt\Service\PathService;
 
@@ -28,6 +30,8 @@ final class Plugin {
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 		add_action( 'save_post_qrhunt_path', array( $this, 'synchronize_path' ), 10, 2 );
+		add_action( 'add_meta_boxes_qrhunt_checkpoint', array( $this, 'register_checkpoint_metabox' ) );
+		add_action( 'save_post_qrhunt_checkpoint', array( $this, 'save_checkpoint_path' ), 10, 2 );
 	}
 
 	/**
@@ -72,5 +76,24 @@ final class Plugin {
 		$path_service    = new PathService( $path_repository );
 
 		return new PathController( $path_service );
+	}
+
+	public function register_checkpoint_metabox(): void {
+		$this->get_checkpoint_controller()->register_metabox();
+	}
+
+	public function save_checkpoint_path( int $post_id, \WP_Post $post ): void {
+		$this->get_checkpoint_controller()->save( $post_id, $post );
+	}
+
+	private function get_checkpoint_controller(): CheckpointController {
+		global $wpdb;
+
+		$checkpoint_repository = new CheckpointRepository( $wpdb );
+		$checkpoint_service    = new \QRHunt\Service\CheckpointService( $checkpoint_repository );
+		$path_repository       = new PathRepository( $wpdb );
+		$path_service          = new PathService( $path_repository );
+
+		return new CheckpointController( $checkpoint_service, $path_service );
 	}
 }

@@ -37,4 +37,12 @@ final class CheckpointService {
 	public function get_checkpoints(): array {
 		return $this->checkpoint_repository->find_all();
 	}
+
+	public function get_checkpoint( int $post_id ): ?Checkpoint {
+		return $this->checkpoint_repository->find_by_post_id( $post_id );
+	}
+
+	public function save_path( Checkpoint $checkpoint ): void {
+		$this->checkpoint_repository->save_path( $checkpoint );
+	}
 }
