@@ -8,6 +8,9 @@
 namespace QRHunt;
 
 use QRHunt\Controller\PathController;
+use QRHunt\Controller\GroupController;
+use QRHunt\Repository\GroupRepository;
+use QRHunt\Service\GroupService;
 use QRHunt\Controller\CheckpointController;
 use QRHunt\Repository\CheckpointRepository;
 use QRHunt\Repository\PathRepository;
@@ -29,6 +32,9 @@ final class Plugin {
 		add_action( 'plugins_loaded', array( $this, 'initialize' ) );
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
+		add_action( 'admin_menu', array( $this, 'register_groups_page' ) );
+		add_action( 'admin_post_qrhunt_save_group', array( $this, 'save_group' ) );
+		add_action( 'admin_post_qrhunt_delete_group', array( $this, 'delete_group' ) );
 		add_action( 'save_post_qrhunt_path', array( $this, 'synchronize_path' ), 10, 2 );
 		add_action( 'add_meta_boxes_qrhunt_checkpoint', array( $this, 'register_checkpoint_metabox' ) );
 		add_action( 'save_post_qrhunt_checkpoint', array( $this, 'save_checkpoint_path' ), 10, 2 );
@@ -63,6 +69,19 @@ final class Plugin {
 	public function register_admin_menu(): void {
 		$admin_menu = new AdminMenu();
 		$admin_menu->register();
+	}
+
+	public function register_groups_page(): void { $this->get_group_controller()->register_page(); }
+	public function save_group(): void { $this->get_group_controller()->save(); }
+	public function delete_group(): void { $this->get_group_controller()->delete(); }
+
+	private function get_group_controller(): GroupController {
+		global $wpdb;
+		$group_repository = new GroupRepository( $wpdb );
+		$group_service = new GroupService( $group_repository );
+		$path_repository = new PathRepository( $wpdb );
+		$path_service = new PathService( $path_repository );
+		return new GroupController( $group_service, $path_service );
 	}
 
 	public function synchronize_path( int $post_id, \WP_Post $post ): void {
