@@ -7,9 +7,12 @@
 
 namespace QRHunt;
 
+use QRHunt\Controller\DependencyController;
 use QRHunt\Controller\PathController;
 use QRHunt\Controller\GroupController;
+use QRHunt\Repository\DependencyRepository;
 use QRHunt\Repository\GroupRepository;
+use QRHunt\Service\DependencyService;
 use QRHunt\Service\GroupService;
 use QRHunt\Controller\CheckpointController;
 use QRHunt\Repository\CheckpointRepository;
@@ -110,11 +113,14 @@ final class Plugin {
 
 		$checkpoint_repository = new CheckpointRepository( $wpdb );
 		$checkpoint_service    = new \QRHunt\Service\CheckpointService( $checkpoint_repository );
+		$dependency_repository = new DependencyRepository( $wpdb );
+		$dependency_service    = new DependencyService( $dependency_repository );
 		$group_repository      = new GroupRepository( $wpdb );
 		$group_service         = new GroupService( $group_repository );
 		$path_repository       = new PathRepository( $wpdb );
 		$path_service          = new PathService( $path_repository );
+		$dependency_controller = new DependencyController( $dependency_service, $checkpoint_service, $group_service );
 
-		return new CheckpointController( $checkpoint_service, $group_service, $path_service );
+		return new CheckpointController( $checkpoint_service, $dependency_controller, $group_service, $path_service );
 	}
 }

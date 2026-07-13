@@ -83,6 +83,38 @@ final class CheckpointRepository {
 		return $checkpoint;
 	}
 
+	/**
+	 * Gets all Checkpoints for a Path.
+	 *
+	 * @param int $path_id Path identifier.
+	 * @return array<int, Checkpoint>
+	 */
+	public function find_by_path( int $path_id ): array {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_checkpoints suffix.
+		$sql = $this->wpdb->prepare(
+			"SELECT post_id, path_id, group_id, token, created_at, updated_at FROM {$this->table_name} WHERE path_id = %d ORDER BY post_id ASC",
+			$path_id
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
+		$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+		$checkpoints = array();
+
+		foreach ( $rows as $row ) {
+			$checkpoint = new Checkpoint();
+			$checkpoint->set_post_id( (int) $row['post_id'] );
+			$checkpoint->set_path_id( (int) $row['path_id'] );
+			$checkpoint->set_group_id( null === $row['group_id'] ? null : (int) $row['group_id'] );
+			$checkpoint->set_token( (string) $row['token'] );
+			$checkpoint->set_created_at( (string) $row['created_at'] );
+			$checkpoint->set_updated_at( (string) $row['updated_at'] );
+			$checkpoints[] = $checkpoint;
+		}
+
+		return $checkpoints;
+	}
+
 	public function save_path( Checkpoint $checkpoint ): void {
 		if ( null !== $this->find_by_post_id( $checkpoint->get_post_id() ) ) {
 			$this->wpdb->update(

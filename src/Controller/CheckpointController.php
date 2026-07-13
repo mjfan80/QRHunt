@@ -17,13 +17,15 @@ defined( 'ABSPATH' ) || exit;
 final class CheckpointController {
 
 	private $checkpoint_service;
+	private $dependency_controller;
 	private $group_service;
 	private $path_service;
 
-	public function __construct( CheckpointService $checkpoint_service, GroupService $group_service, PathService $path_service ) {
-		$this->checkpoint_service = $checkpoint_service;
-		$this->group_service      = $group_service;
-		$this->path_service       = $path_service;
+	public function __construct( CheckpointService $checkpoint_service, DependencyController $dependency_controller, GroupService $group_service, PathService $path_service ) {
+		$this->checkpoint_service   = $checkpoint_service;
+		$this->dependency_controller = $dependency_controller;
+		$this->group_service        = $group_service;
+		$this->path_service         = $path_service;
 	}
 
 	public function register_metabox(): void {
@@ -35,13 +37,6 @@ final class CheckpointController {
 		$path_id             = null === $checkpoint ? 0 : (int) $checkpoint->get_path_id();
 		$group_id            = null === $checkpoint || null === $checkpoint->get_group_id() ? 0 : (int) $checkpoint->get_group_id();
 		$paths               = $this->path_service->get_paths();
-		$groups              = $this->group_service->get_groups();
-		$groups_by_path      = $this->group_service->get_groups_by_path( $path_id );
-		$available_group_ids = array();
-
-		foreach ( $groups_by_path as $group ) {
-			$available_group_ids[ $group->get_id() ] = true;
-		}
 
 		wp_nonce_field( 'qrhunt_checkpoint_path', 'qrhunt_checkpoint_path_nonce' );
 		?>
@@ -54,20 +49,8 @@ final class CheckpointController {
 		</select>
 		<p>
 			<label for="qrhunt-group-id"><?php esc_html_e( 'Group', 'qrhunt' ); ?></label>
-			<select id="qrhunt-group-id" name="qrhunt_group_id">
+			<select id="qrhunt-group-id" name="qrhunt_group_id" data-selected-group-id="<?php echo esc_attr( (string) $group_id ); ?>">
 				<option value="0"><?php esc_html_e( 'No Group', 'qrhunt' ); ?></option>
-				<?php foreach ( $groups as $group ) : ?>
-					<?php $is_available = isset( $available_group_ids[ $group->get_id() ] ); ?>
-					<option
-						value="<?php echo esc_attr( (string) $group->get_id() ); ?>"
-						data-path-id="<?php echo esc_attr( (string) $group->get_path_id() ); ?>"
-						<?php selected( $group_id, $group->get_id() ); ?>
-						<?php disabled( ! $is_available ); ?>
-						<?php echo $is_available ? '' : 'hidden'; ?>
-					>
-						<?php echo esc_html( $group->get_name() ); ?>
-					</option>
-				<?php endforeach; ?>
 			</select>
 		</p>
 		<p>
@@ -79,10 +62,12 @@ final class CheckpointController {
 				<input id="qrhunt-checkpoint-token" type="text" value="<?php echo esc_attr( $checkpoint->get_token() ); ?>" readonly="readonly" />
 			<?php endif; ?>
 		</p>
+		<?php $this->dependency_controller->render_section( $post, $path_id ); ?>
 		<script>
 			(function() {
 				const pathField = document.getElementById( 'qrhunt-path-id' );
 				const groupField = document.getElementById( 'qrhunt-group-id' );
+				const groups = <?php echo wp_json_encode( $this->get_group_options() ); ?>;
 
 				if ( ! pathField || ! groupField ) {
 					return;
@@ -90,26 +75,32 @@ final class CheckpointController {
 
 				const syncGroups = function() {
 					const selectedPathId = pathField.value;
+					const selectedGroupId = groupField.dataset.selectedGroupId || groupField.value;
 					let hasSelectedGroup = false;
 
-					Array.from( groupField.options ).forEach( function( option, index ) {
-						if ( 0 === index ) {
+					groupField.innerHTML = '';
+					groupField.appendChild( new Option( '<?php echo esc_js( __( 'No Group', 'qrhunt' ) ); ?>', '0' ) );
+
+					groups.forEach( function( group ) {
+						if ( String( group.path_id ) !== selectedPathId ) {
 							return;
 						}
 
-						const matchesPath = option.dataset.pathId === selectedPathId;
+						const option = new Option( group.name, String( group.id ) );
 
-						option.hidden = ! matchesPath;
-						option.disabled = ! matchesPath;
-
-						if ( matchesPath && option.selected ) {
+						if ( String( group.id ) === selectedGroupId ) {
+							option.selected = true;
 							hasSelectedGroup = true;
 						}
+
+						groupField.appendChild( option );
 					} );
 
 					if ( ! hasSelectedGroup ) {
 						groupField.value = '0';
 					}
+
+					groupField.dataset.selectedGroupId = groupField.value;
 				};
 
 				pathField.addEventListener( 'change', syncGroups );
@@ -133,5 +124,20 @@ final class CheckpointController {
 		$checkpoint->set_group_id( 0 === $group_id ? null : $group_id );
 
 		$this->checkpoint_service->save_path( $checkpoint );
+		$this->dependency_controller->save( $post_id );
+	}
+
+	private function get_group_options(): array {
+		$groups = array();
+
+		foreach ( $this->group_service->get_groups() as $group ) {
+			$groups[] = array(
+				'id'      => $group->get_id(),
+				'path_id' => $group->get_path_id(),
+				'name'    => $group->get_name(),
+			);
+		}
+
+		return $groups;
 	}
 }

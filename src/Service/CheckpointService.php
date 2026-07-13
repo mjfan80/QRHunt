@@ -42,6 +42,16 @@ final class CheckpointService {
 		return $this->checkpoint_repository->find_by_post_id( $post_id );
 	}
 
+	/**
+	 * Gets Checkpoints for a Path.
+	 *
+	 * @param int $path_id Path identifier.
+	 * @return array<int, Checkpoint>
+	 */
+	public function get_checkpoints_by_path( int $path_id ): array {
+		return $this->checkpoint_repository->find_by_path( $path_id );
+	}
+
 	public function save_path( Checkpoint $checkpoint ): void {
 		$this->checkpoint_repository->save_path( $checkpoint );
 	}
