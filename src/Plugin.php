@@ -8,12 +8,15 @@
 namespace QRHunt;
 
 use QRHunt\Controller\DependencyController;
+use QRHunt\Controller\ParticipationController;
 use QRHunt\Controller\PathController;
 use QRHunt\Controller\GroupController;
 use QRHunt\Repository\DependencyRepository;
 use QRHunt\Repository\GroupRepository;
+use QRHunt\Repository\ParticipationRepository;
 use QRHunt\Service\DependencyService;
 use QRHunt\Service\GroupService;
+use QRHunt\Service\ParticipationService;
 use QRHunt\Controller\CheckpointController;
 use QRHunt\Repository\CheckpointRepository;
 use QRHunt\Repository\PathRepository;
@@ -36,8 +39,11 @@ final class Plugin {
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 		add_action( 'admin_menu', array( $this, 'register_groups_page' ) );
+		add_action( 'admin_menu', array( $this, 'register_participations_page' ) );
 		add_action( 'admin_post_qrhunt_save_group', array( $this, 'save_group' ) );
 		add_action( 'admin_post_qrhunt_delete_group', array( $this, 'delete_group' ) );
+		add_action( 'admin_post_qrhunt_save_participation', array( $this, 'save_participation' ) );
+		add_action( 'admin_post_qrhunt_delete_participation', array( $this, 'delete_participation' ) );
 		add_action( 'save_post_qrhunt_path', array( $this, 'synchronize_path' ), 10, 2 );
 		add_action( 'add_meta_boxes_qrhunt_checkpoint', array( $this, 'register_checkpoint_metabox' ) );
 		add_action( 'save_post_qrhunt_checkpoint', array( $this, 'save_checkpoint_path' ), 10, 2 );
@@ -77,6 +83,9 @@ final class Plugin {
 	public function register_groups_page(): void { $this->get_group_controller()->register_page(); }
 	public function save_group(): void { $this->get_group_controller()->save(); }
 	public function delete_group(): void { $this->get_group_controller()->delete(); }
+	public function register_participations_page(): void { $this->get_participation_controller()->register_page(); }
+	public function save_participation(): void { $this->get_participation_controller()->save(); }
+	public function delete_participation(): void { $this->get_participation_controller()->delete(); }
 
 	private function get_group_controller(): GroupController {
 		global $wpdb;
@@ -85,6 +94,15 @@ final class Plugin {
 		$path_repository = new PathRepository( $wpdb );
 		$path_service = new PathService( $path_repository );
 		return new GroupController( $group_service, $path_service );
+	}
+
+	private function get_participation_controller(): ParticipationController {
+		global $wpdb;
+		$participation_repository = new ParticipationRepository( $wpdb );
+		$participation_service    = new ParticipationService( $participation_repository );
+		$path_repository          = new PathRepository( $wpdb );
+		$path_service             = new PathService( $path_repository );
+		return new ParticipationController( $participation_service, $path_service );
 	}
 
 	public function synchronize_path( int $post_id, \WP_Post $post ): void {
