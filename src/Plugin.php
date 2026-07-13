@@ -110,9 +110,11 @@ final class Plugin {
 
 		$checkpoint_repository = new CheckpointRepository( $wpdb );
 		$checkpoint_service    = new \QRHunt\Service\CheckpointService( $checkpoint_repository );
+		$group_repository      = new GroupRepository( $wpdb );
+		$group_service         = new GroupService( $group_repository );
 		$path_repository       = new PathRepository( $wpdb );
 		$path_service          = new PathService( $path_repository );
 
-		return new CheckpointController( $checkpoint_service, $path_service );
+		return new CheckpointController( $checkpoint_service, $group_service, $path_service );
 	}
 }

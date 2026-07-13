@@ -85,11 +85,30 @@ final class CheckpointRepository {
 
 	public function save_path( Checkpoint $checkpoint ): void {
 		if ( null !== $this->find_by_post_id( $checkpoint->get_post_id() ) ) {
-			$this->wpdb->update( $this->table_name, array( 'path_id' => $checkpoint->get_path_id() ), array( 'post_id' => $checkpoint->get_post_id() ), array( '%d' ), array( '%d' ) );
+			$this->wpdb->update(
+				$this->table_name,
+				array(
+					'path_id'  => $checkpoint->get_path_id(),
+					'group_id' => $checkpoint->get_group_id(),
+				),
+				array( 'post_id' => $checkpoint->get_post_id() ),
+				array( '%d', '%d' ),
+				array( '%d' )
+			);
+
 			return;
 		}
 
-		$this->wpdb->insert( $this->table_name, array( 'post_id' => $checkpoint->get_post_id(), 'path_id' => $checkpoint->get_path_id(), 'token' => $this->generate_token() ), array( '%d', '%d', '%s' ) );
+		$this->wpdb->insert(
+			$this->table_name,
+			array(
+				'post_id'  => $checkpoint->get_post_id(),
+				'path_id'  => $checkpoint->get_path_id(),
+				'group_id' => $checkpoint->get_group_id(),
+				'token'    => $this->generate_token(),
+			),
+			array( '%d', '%d', '%d', '%s' )
+		);
 	}
 
 	private function generate_token(): string {

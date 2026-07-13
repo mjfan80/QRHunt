@@ -18,16 +18,40 @@ final class GroupRepository {
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_checkpoint_groups suffix.
 		$rows = $this->wpdb->get_results( "SELECT id, path_id, name, description FROM {$this->table_name} ORDER BY name ASC", ARRAY_A );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$groups = array();
-		foreach ( $rows as $row ) {
-			$group = new Group();
-			$group->set_id( (int) $row['id'] );
-			$group->set_path_id( (int) $row['path_id'] );
-			$group->set_name( (string) $row['name'] );
-			$group->set_description( null === $row['description'] ? null : (string) $row['description'] );
-			$groups[] = $group;
+
+		return $this->hydrate_groups( $rows );
+	}
+
+	public function find_by_path( int $path_id ): array {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_checkpoint_groups suffix.
+		$sql = $this->wpdb->prepare(
+			"SELECT id, path_id, name, description FROM {$this->table_name} WHERE path_id = %d ORDER BY name ASC",
+			$path_id
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
+		$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+		return $this->hydrate_groups( $rows );
+	}
+
+	public function find_by_id( int $id ): ?Group {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_checkpoint_groups suffix.
+		$sql = $this->wpdb->prepare(
+			"SELECT id, path_id, name, description FROM {$this->table_name} WHERE id = %d",
+			$id
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
+		$row = $this->wpdb->get_row( $sql, ARRAY_A );
+
+		if ( null === $row ) {
+			return null;
 		}
-		return $groups;
+
+		$groups = $this->hydrate_groups( array( $row ) );
+
+		return $groups[0];
 	}
 
 	public function save( Group $group ): void {
@@ -40,4 +64,19 @@ final class GroupRepository {
 	}
 
 	public function delete( int $id ): void { $this->wpdb->delete( $this->table_name, array( 'id' => $id ), array( '%d' ) ); }
+
+	private function hydrate_groups( array $rows ): array {
+		$groups = array();
+
+		foreach ( $rows as $row ) {
+			$group = new Group();
+			$group->set_id( (int) $row['id'] );
+			$group->set_path_id( (int) $row['path_id'] );
+			$group->set_name( (string) $row['name'] );
+			$group->set_description( null === $row['description'] ? null : (string) $row['description'] );
+			$groups[] = $group;
+		}
+
+		return $groups;
+	}
 }
