@@ -49,4 +49,22 @@ final class ParticipationCheckpointRepository {
 
 		return array_map( 'absint', $rows );
 	}
+
+	/**
+	 * Saves a validated Checkpoint for a Participation.
+	 *
+	 * @param int $participation_id Participation identifier.
+	 * @param int $checkpoint_id    Checkpoint identifier.
+	 * @return void
+	 */
+	public function save( int $participation_id, int $checkpoint_id ): void {
+		$this->wpdb->insert(
+			$this->table_name,
+			array(
+				'participation_id' => $participation_id,
+				'checkpoint_id'    => $checkpoint_id,
+			),
+			array( '%d', '%d' )
+		);
+	}
 }
