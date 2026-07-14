@@ -32,6 +32,9 @@ final class Checkpoint {
 	/** @var string|null */
 	private $updated_at;
 
+	/** @var array<int, ResolvedDependency> */
+	private $dependencies = array();
+
 	/**
 	 * Gets the post identifier.
 	 *
@@ -144,5 +147,24 @@ final class Checkpoint {
 	 */
 	public function set_updated_at( ?string $updated_at ): void {
 		$this->updated_at = $updated_at;
+	}
+
+	/**
+	 * Gets the Dependencies associated with the Checkpoint.
+	 *
+	 * @return array<int, ResolvedDependency>
+	 */
+	public function get_dependencies(): array {
+		return $this->dependencies;
+	}
+
+	/**
+	 * Sets the Dependencies associated with the Checkpoint.
+	 *
+	 * @param array<int, ResolvedDependency> $dependencies Checkpoint Dependencies.
+	 * @return void
+	 */
+	public function set_dependencies( array $dependencies ): void {
+		$this->dependencies = $dependencies;
 	}
 }

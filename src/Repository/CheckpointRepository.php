@@ -8,6 +8,8 @@
 namespace QRHunt\Repository;
 
 use QRHunt\Model\Checkpoint;
+use QRHunt\Model\DependencyTargetType;
+use QRHunt\Model\ResolvedDependency;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,14 +24,24 @@ final class CheckpointRepository {
 	/** @var string */
 	private $table_name;
 
+	/** @var DependencyRepository */
+	private $dependency_repository;
+
+	/** @var GroupRepository */
+	private $group_repository;
+
 	/**
 	 * Creates a Checkpoint repository.
 	 *
-	 * @param \wpdb $wpdb WordPress database access object.
+	 * @param \wpdb                $wpdb                  WordPress database access object.
+	 * @param DependencyRepository $dependency_repository Dependency repository.
+	 * @param GroupRepository      $group_repository      Group repository.
 	 */
-	public function __construct( \wpdb $wpdb ) {
-		$this->wpdb       = $wpdb;
-		$this->table_name = $wpdb->prefix . 'qrhunt_checkpoints';
+	public function __construct( \wpdb $wpdb, DependencyRepository $dependency_repository, GroupRepository $group_repository ) {
+		$this->wpdb                  = $wpdb;
+		$this->table_name            = $wpdb->prefix . 'qrhunt_checkpoints';
+		$this->dependency_repository = $dependency_repository;
+		$this->group_repository      = $group_repository;
 	}
 
 	/**
@@ -48,14 +60,7 @@ final class CheckpointRepository {
 		$checkpoints = array();
 
 		foreach ( $rows as $row ) {
-			$checkpoint = new Checkpoint();
-			$checkpoint->set_post_id( (int) $row['post_id'] );
-			$checkpoint->set_path_id( (int) $row['path_id'] );
-			$checkpoint->set_group_id( null === $row['group_id'] ? null : (int) $row['group_id'] );
-			$checkpoint->set_token( (string) $row['token'] );
-			$checkpoint->set_created_at( (string) $row['created_at'] );
-			$checkpoint->set_updated_at( (string) $row['updated_at'] );
-			$checkpoints[] = $checkpoint;
+			$checkpoints[] = $this->hydrate_checkpoint( $row );
 		}
 
 		return $checkpoints;
@@ -72,15 +77,7 @@ final class CheckpointRepository {
 			return null;
 		}
 
-		$checkpoint = new Checkpoint();
-		$checkpoint->set_post_id( (int) $row['post_id'] );
-		$checkpoint->set_path_id( (int) $row['path_id'] );
-		$checkpoint->set_group_id( null === $row['group_id'] ? null : (int) $row['group_id'] );
-		$checkpoint->set_token( (string) $row['token'] );
-		$checkpoint->set_created_at( (string) $row['created_at'] );
-		$checkpoint->set_updated_at( (string) $row['updated_at'] );
-
-		return $checkpoint;
+		return $this->hydrate_checkpoint( $row );
 	}
 
 	/**
@@ -102,17 +99,28 @@ final class CheckpointRepository {
 		$checkpoints = array();
 
 		foreach ( $rows as $row ) {
-			$checkpoint = new Checkpoint();
-			$checkpoint->set_post_id( (int) $row['post_id'] );
-			$checkpoint->set_path_id( (int) $row['path_id'] );
-			$checkpoint->set_group_id( null === $row['group_id'] ? null : (int) $row['group_id'] );
-			$checkpoint->set_token( (string) $row['token'] );
-			$checkpoint->set_created_at( (string) $row['created_at'] );
-			$checkpoint->set_updated_at( (string) $row['updated_at'] );
-			$checkpoints[] = $checkpoint;
+			$checkpoints[] = $this->hydrate_checkpoint( $row );
 		}
 
 		return $checkpoints;
+	}
+
+	/**
+	 * Gets a Checkpoint with its Dependencies.
+	 *
+	 * @param int $post_id Checkpoint post identifier.
+	 * @return Checkpoint|null
+	 */
+	public function find_by_post_id_with_dependencies( int $post_id ): ?Checkpoint {
+		$checkpoint = $this->find_by_post_id( $post_id );
+
+		if ( null === $checkpoint ) {
+			return null;
+		}
+
+		$checkpoint->set_dependencies( $this->resolve_dependencies( $post_id ) );
+
+		return $checkpoint;
 	}
 
 	public function save_path( Checkpoint $checkpoint ): void {
@@ -159,5 +167,61 @@ final class CheckpointRepository {
 		$exists = $this->wpdb->get_var( $sql );
 
 		return null !== $exists;
+	}
+
+	/**
+	 * Hydrates a Checkpoint model without loading its Dependencies.
+	 *
+	 * @param array<string, mixed> $row Database row.
+	 * @return Checkpoint
+	 */
+	private function hydrate_checkpoint( array $row ): Checkpoint {
+		$checkpoint = new Checkpoint();
+		$checkpoint->set_post_id( (int) $row['post_id'] );
+		$checkpoint->set_path_id( (int) $row['path_id'] );
+		$checkpoint->set_group_id( null === $row['group_id'] ? null : (int) $row['group_id'] );
+		$checkpoint->set_token( (string) $row['token'] );
+		$checkpoint->set_created_at( (string) $row['created_at'] );
+		$checkpoint->set_updated_at( (string) $row['updated_at'] );
+
+		return $checkpoint;
+	}
+
+	/**
+	 * Resolves the Dependencies associated with a Checkpoint.
+	 *
+	 * @param int $post_id Checkpoint post identifier.
+	 * @return array<int, ResolvedDependency>
+	 */
+	private function resolve_dependencies( int $post_id ): array {
+		$resolved_dependencies = array();
+
+		foreach ( $this->dependency_repository->find_by_checkpoint( $post_id ) as $dependency ) {
+			$resolved_dependencies[] = new ResolvedDependency(
+				(string) $dependency->get_type(),
+				(string) $dependency->get_target_type(),
+				(int) $dependency->get_target_id(),
+				$this->resolve_dependency_display_name( (string) $dependency->get_target_type(), (int) $dependency->get_target_id() )
+			);
+		}
+
+		return $resolved_dependencies;
+	}
+
+	/**
+	 * Resolves the display name of a Dependency target.
+	 *
+	 * @param string $target_type Dependency target type.
+	 * @param int    $target_id   Dependency target identifier.
+	 * @return string
+	 */
+	private function resolve_dependency_display_name( string $target_type, int $target_id ): string {
+		if ( DependencyTargetType::GROUP === $target_type ) {
+			$group = $this->group_repository->find_by_id( $target_id );
+
+			return null === $group ? '' : (string) $group->get_name();
+		}
+
+		return (string) get_the_title( $target_id );
 	}
 }

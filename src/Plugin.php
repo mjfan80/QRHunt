@@ -129,11 +129,11 @@ final class Plugin {
 	private function get_checkpoint_controller(): CheckpointController {
 		global $wpdb;
 
-		$checkpoint_repository = new CheckpointRepository( $wpdb );
-		$checkpoint_service    = new \QRHunt\Service\CheckpointService( $checkpoint_repository );
 		$dependency_repository = new DependencyRepository( $wpdb );
-		$dependency_service    = new DependencyService( $dependency_repository );
 		$group_repository      = new GroupRepository( $wpdb );
+		$checkpoint_repository = new CheckpointRepository( $wpdb, $dependency_repository, $group_repository );
+		$checkpoint_service    = new \QRHunt\Service\CheckpointService( $checkpoint_repository );
+		$dependency_service    = new DependencyService( $dependency_repository );
 		$group_service         = new GroupService( $group_repository );
 		$path_repository       = new PathRepository( $wpdb );
 		$path_service          = new PathService( $path_repository );

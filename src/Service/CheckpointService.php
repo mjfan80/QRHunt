@@ -43,6 +43,16 @@ final class CheckpointService {
 	}
 
 	/**
+	 * Gets a Checkpoint with its Dependencies.
+	 *
+	 * @param int $post_id Checkpoint post identifier.
+	 * @return Checkpoint|null
+	 */
+	public function get_checkpoint_with_dependencies( int $post_id ): ?Checkpoint {
+		return $this->checkpoint_repository->find_by_post_id_with_dependencies( $post_id );
+	}
+
+	/**
 	 * Gets Checkpoints for a Path.
 	 *
 	 * @param int $path_id Path identifier.
