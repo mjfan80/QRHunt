@@ -38,6 +38,16 @@ final class PathService {
 		return $this->path_repository->find_all();
 	}
 
+	/**
+	 * Gets a Path by identifier.
+	 *
+	 * @param int $id Path identifier.
+	 * @return Path|null
+	 */
+	public function get_path( int $id ): ?Path {
+		return $this->path_repository->find_by_id( $id );
+	}
+
 	public function save_path( Path $path ): void {
 		$this->path_repository->save( $path );
 	}

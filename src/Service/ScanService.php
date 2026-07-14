@@ -12,6 +12,8 @@ use QRHunt\Model\Event;
 use QRHunt\Model\EventResult;
 use QRHunt\Model\EventType;
 use QRHunt\Model\Participation;
+use QRHunt\Model\ParticipationProgress;
+use QRHunt\Model\ParticipationStatus;
 use QRHunt\Model\ValidationResult;
 
 defined( 'ABSPATH' ) || exit;
@@ -36,6 +38,12 @@ final class ScanService {
 	/** @var EventService */
 	private $event_service;
 
+	/** @var PathService */
+	private $path_service;
+
+	/** @var ParticipationService */
+	private $participation_service;
+
 	/**
 	 * Creates a scan service.
 	 *
@@ -44,19 +52,25 @@ final class ScanService {
 	 * @param ValidationService              $validation_service               Validation service.
 	 * @param ParticipationCheckpointService $participation_checkpoint_service Participation checkpoint service.
 	 * @param EventService                   $event_service                    Event service.
+	 * @param PathService                    $path_service                     Path service.
+	 * @param ParticipationService           $participation_service            Participation service.
 	 */
 	public function __construct(
 		CheckpointService $checkpoint_service,
 		ParticipationProgressBuilder $participation_progress_builder,
 		ValidationService $validation_service,
 		ParticipationCheckpointService $participation_checkpoint_service,
-		EventService $event_service
+		EventService $event_service,
+		PathService $path_service,
+		ParticipationService $participation_service
 	) {
 		$this->checkpoint_service               = $checkpoint_service;
 		$this->participation_progress_builder   = $participation_progress_builder;
 		$this->validation_service               = $validation_service;
 		$this->participation_checkpoint_service = $participation_checkpoint_service;
 		$this->event_service                    = $event_service;
+		$this->path_service                     = $path_service;
+		$this->participation_service            = $participation_service;
 	}
 
 	/**
@@ -80,6 +94,7 @@ final class ScanService {
 
 		if ( $validation_result->is_valid() ) {
 			$this->participation_checkpoint_service->save_validated_checkpoint( (int) $participation->get_id(), $checkpoint_post_id );
+			$this->update_participation_status( $participation, $checkpoint_post_id, $participation_progress );
 		}
 
 		return $validation_result;
@@ -123,5 +138,52 @@ final class ScanService {
 		}
 
 		return EventResult::BEFORE_FAILED;
+	}
+
+	/**
+	 * Updates the Participation status after a successful validation.
+	 *
+	 * @param Participation         $participation          Participation being updated.
+	 * @param int                   $checkpoint_post_id     Validated Checkpoint post identifier.
+	 * @param ParticipationProgress $participation_progress Participation progress before the current validation.
+	 * @return void
+	 */
+	private function update_participation_status( Participation $participation, int $checkpoint_post_id, ParticipationProgress $participation_progress ): void {
+		$path_id = $participation->get_path_id();
+
+		if ( null === $path_id ) {
+			return;
+		}
+
+		$path = $this->path_service->get_path( $path_id );
+
+		if ( null === $path ) {
+			return;
+		}
+
+		$validated_checkpoint_ids   = $participation_progress->get_validated_checkpoint_ids();
+		$validated_checkpoint_ids[] = $checkpoint_post_id;
+		$validated_checkpoint_ids   = array_values( array_unique( array_map( 'absint', $validated_checkpoint_ids ) ) );
+
+		$all_checkpoint_ids = array();
+
+		foreach ( $this->checkpoint_service->get_checkpoints_by_path( $path_id ) as $path_checkpoint ) {
+			$all_checkpoint_ids[] = (int) $path_checkpoint->get_post_id();
+		}
+
+		if ( ! empty( $all_checkpoint_ids ) && ! array_diff( $all_checkpoint_ids, $validated_checkpoint_ids ) ) {
+			$participation->set_status( ParticipationStatus::COMPLETED );
+			$this->participation_service->save_participation( $participation );
+			return;
+		}
+
+		if (
+			$checkpoint_post_id === $path->get_finish_checkpoint_id() &&
+			ParticipationStatus::FINISHED !== $participation->get_status() &&
+			ParticipationStatus::COMPLETED !== $participation->get_status()
+		) {
+			$participation->set_status( ParticipationStatus::FINISHED );
+			$this->participation_service->save_participation( $participation );
+		}
 	}
 }
