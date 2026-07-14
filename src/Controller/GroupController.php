@@ -33,6 +33,7 @@ final class GroupController {
 		$path_id      = $is_edit_mode ? (int) $editing_group->get_path_id() : 0;
 		$name         = $is_edit_mode ? (string) $editing_group->get_name() : '';
 		$description  = $is_edit_mode ? (string) $editing_group->get_description() : '';
+		$completion_mode = $is_edit_mode && null !== $editing_group->get_completion_mode() ? (string) $editing_group->get_completion_mode() : 'ALL';
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Groups', 'qrhunt' ); ?></h1>
@@ -77,6 +78,17 @@ final class GroupController {
 								<textarea id="qrhunt-group-description" class="large-text" name="description" rows="5"><?php echo esc_textarea( $description ); ?></textarea>
 							</td>
 						</tr>
+						<tr>
+							<th scope="row">
+								<label for="qrhunt-group-completion-mode"><?php esc_html_e( 'Completion Mode', 'qrhunt' ); ?></label>
+							</th>
+							<td>
+								<select id="qrhunt-group-completion-mode" name="completion_mode" required>
+									<option value="ALL" <?php selected( $completion_mode, 'ALL' ); ?>><?php esc_html_e( 'ALL', 'qrhunt' ); ?></option>
+									<option value="ANY" <?php selected( $completion_mode, 'ANY' ); ?>><?php esc_html_e( 'ANY', 'qrhunt' ); ?></option>
+								</select>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 				<?php submit_button( $button_label ); ?>
@@ -88,6 +100,7 @@ final class GroupController {
 						<th scope="col"><?php esc_html_e( 'Name', 'qrhunt' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Description', 'qrhunt' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Path', 'qrhunt' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Completion Mode', 'qrhunt' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Actions', 'qrhunt' ); ?></th>
 					</tr>
 				</thead>
@@ -97,6 +110,7 @@ final class GroupController {
 							<td><?php echo esc_html( $group->get_name() ); ?></td>
 							<td><?php echo esc_html( (string) $group->get_description() ); ?></td>
 							<td><?php echo esc_html( $path_names[ $group->get_path_id() ] ?? '' ); ?></td>
+							<td><?php echo esc_html( (string) $group->get_completion_mode() ); ?></td>
 							<td>
 								<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=qrhunt-groups&group_id=' . $group->get_id() ) ); ?>">
 									<?php esc_html_e( 'Edit', 'qrhunt' ); ?>
@@ -122,6 +136,8 @@ final class GroupController {
 		}
 
 		$group_id = isset( $_POST['group_id'] ) ? absint( wp_unslash( $_POST['group_id'] ) ) : 0;
+		$raw_completion_mode = isset( $_POST['completion_mode'] ) ? sanitize_key( wp_unslash( $_POST['completion_mode'] ) ) : 'all';
+		$completion_mode = in_array( strtoupper( $raw_completion_mode ), array( 'ALL', 'ANY' ), true ) ? strtoupper( $raw_completion_mode ) : 'ALL';
 		$group    = new Group();
 
 		if ( 0 !== $group_id ) {
@@ -131,6 +147,7 @@ final class GroupController {
 		$group->set_path_id( absint( wp_unslash( $_POST['path_id'] ?? 0 ) ) );
 		$group->set_name( sanitize_text_field( wp_unslash( $_POST['name'] ?? '' ) ) );
 		$group->set_description( sanitize_textarea_field( wp_unslash( $_POST['description'] ?? '' ) ) );
+		$group->set_completion_mode( $completion_mode );
 
 		$this->group_service->save_group( $group );
 

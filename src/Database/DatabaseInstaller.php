@@ -30,6 +30,7 @@ final class DatabaseInstaller {
 		$groups_table      = $wpdb->prefix . 'qrhunt_checkpoint_groups';
 		$dependencies_table = $wpdb->prefix . 'qrhunt_dependencies';
 		$participations_table = $wpdb->prefix . 'qrhunt_participations';
+		$participation_checkpoints_table = $wpdb->prefix . 'qrhunt_participation_checkpoints';
 		$events_table        = $wpdb->prefix . 'qrhunt_events';
 
 		$paths_sql = "CREATE TABLE $paths_table (
@@ -69,6 +70,7 @@ final class DatabaseInstaller {
 			path_id bigint(20) unsigned NOT NULL,
 			name varchar(255) NOT NULL,
 			description text DEFAULT NULL,
+			completion_mode varchar(10) NOT NULL DEFAULT 'ALL',
 			created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY  (id),
@@ -105,6 +107,15 @@ final class DatabaseInstaller {
 			KEY status (status)
 		) $charset_collate;";
 
+		$participation_checkpoints_sql = "CREATE TABLE $participation_checkpoints_table (
+			participation_id bigint(20) unsigned NOT NULL,
+			checkpoint_id bigint(20) unsigned NOT NULL,
+			validated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY  (participation_id, checkpoint_id),
+			KEY checkpoint_id (checkpoint_id),
+			KEY validated_at (validated_at)
+		) $charset_collate;";
+
 		$events_sql = "CREATE TABLE $events_table (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			participation_id bigint(20) unsigned NOT NULL,
@@ -128,6 +139,7 @@ final class DatabaseInstaller {
 		dbDelta( $groups_sql );
 		dbDelta( $dependencies_sql );
 		dbDelta( $participations_sql );
+		dbDelta( $participation_checkpoints_sql );
 		dbDelta( $events_sql );
 	}
 }

@@ -165,6 +165,7 @@ La modalità con cui un Group viene considerato completato è definita dal Valid
 | path_id | BIGINT UNSIGNED | NO | | Percorso di appartenenza |
 | name | VARCHAR(255) | NO | | Nome del Gruppo |
 | description | TEXT | YES | NULL | Descrizione opzionale |
+| completion_mode | VARCHAR(10) | NO | ALL | Modalità di completamento del Group (ALL oppure ANY)
 | created_at | DATETIME | NO | CURRENT_TIMESTAMP | Data creazione |
 | updated_at | DATETIME | NO | CURRENT_TIMESTAMP | Ultima modifica |
 
@@ -191,6 +192,7 @@ INDEX (path_id)
 - Ogni Gruppo appartiene ad un solo Percorso.
 - Un Gruppo può contenere zero o più Checkpoint.
 - Tutti i Checkpoint appartenenti ad un Gruppo devono appartenere allo stesso Percorso del Gruppo.
+- completion_mode può assumere esclusivamente i valori `ALL` oppure `ANY`.
 
 ---
 
