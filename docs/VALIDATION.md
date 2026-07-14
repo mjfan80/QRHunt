@@ -103,6 +103,8 @@ Lo scopo principale dei Group è consentire la definizione di dipendenze riferit
 
 Ogni Group definisce una modalità di completamento.
 
+Un Group che non contiene alcun Checkpoint non è mai considerato completato, indipendentemente dal valore di `completion_mode`.
+
 ### ALL
 
 Il Group è considerato completato solo quando tutti i Checkpoint appartenenti al Group sono stati validati.
