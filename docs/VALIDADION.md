@@ -26,6 +26,7 @@ Il risultato contiene almeno le seguenti informazioni:
 - `blocked_message`
   - eventuale messaggio definito dall'organizzatore del Path e associato al Checkpoint.
   Questo messaggio è facoltativo e viene restituito solo se presente.
+  Il Validation Engine restituisce il blocked_message senza interpretarlo.
 
 
   ## Messaggi
@@ -124,6 +125,7 @@ Il Validation Engine esegue sempre le verifiche nel seguente ordine:
 
 Il Validation Engine segue i seguenti principi:
 
+- Il Validation Engine determina se una validazione sia consentita consultando lo stato corrente della Participation, rappresentato dalla tabella `wp_qrhunt_participation_checkpoints`.
 - è completamente stateless;
 - non salva dati nel database;
 - non modifica lo stato della Participation;
@@ -141,7 +143,8 @@ Una `DependencyViolation` contiene almeno:
 
 - `type` (`AFTER` oppure `BEFORE`);
 - `target_type` (`Checkpoint` oppure `Group`);
-- `target_id`.
+- `target_id`;
+- `display_name`.
 
 Il Validation Engine restituisce esclusivamente informazioni strutturate e non produce direttamente messaggi destinati all'utente.
 

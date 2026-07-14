@@ -70,6 +70,10 @@ L'integrità referenziale è garantita dal plugin.
 
 post_id: riferimento al post del Custom Post Type qrhunt_path. Realizza una relazione 1:1 tra il contenuto WordPress e i dati di dominio memorizzati nella tabella del plugin.
 
+Il Checkpoint iniziale rappresenta il punto di ingresso del Percorso.
+
+La prima scansione valida del Checkpoint iniziale crea automaticamente la Participation qualora non esista già.
+
 ---
 
 # 2. Tabella `wp_qrhunt_checkpoints`
@@ -268,19 +272,11 @@ INDEX (type)
 - checkpoint
 - group
 
-
-### target_type
-
-- checkpoint
-- group
-
 ---
 
 ## Regole di valutazione
 
-Nella versione 1.0 tutte le Dipendenze vengono valutate con logica AND.
-
-La logica OR non è prevista al momento.
+Vedi `validation.md`.
 
 ---
 
@@ -363,8 +359,8 @@ INDEX (status)
 - Una Partecipazione appartiene ad un solo Utente.
 - Una Partecipazione appartiene ad un solo Percorso.
 - La durata del Percorso non viene memorizzata.
-- Tutte le statistiche vengono calcolate dagli Eventi.
-
+- Lo stato corrente della progressione viene determinato dalla tabella `wp_qrhunt_participation_checkpoints`.
+- Le statistiche storiche vengono calcolate a partire dagli Eventi.
 ---
 
 ## Note
@@ -377,7 +373,72 @@ L'integrità referenziale è garantita dal plugin.
 
 ---
 
-# 6. Tabella `wp_qrhunt_events`
+# 6. Tabella `wp_qrhunt_participation_checkpoints`
+
+## Scopo
+
+Contiene lo stato corrente dei Checkpoint validati da ciascuna Partecipazione.
+
+Ogni record rappresenta un Checkpoint validato con successo nell'ambito di una specifica Partecipazione.
+
+Questa tabella rappresenta esclusivamente lo stato corrente della progressione.
+
+Lo storico completo delle scansioni è invece conservato nella tabella `wp_qrhunt_events`.
+
+---
+
+## Struttura
+
+| Campo | Tipo | NULL | Default | Note |
+|-------|------|------|---------|------|
+| participation_id | BIGINT UNSIGNED | NO | | Partecipazione |
+| checkpoint_id | BIGINT UNSIGNED | NO | | Checkpoint validato |
+| validated_at | DATETIME | NO | CURRENT_TIMESTAMP | Data della prima validazione |
+
+---
+
+## Indici
+
+Primary Key
+
+```
+PRIMARY KEY (participation_id, checkpoint_id)
+```
+
+Indici
+
+```
+INDEX (checkpoint_id)
+
+INDEX (validated_at)
+```
+
+---
+
+## Vincoli logici
+
+- Ogni Partecipazione può validare un determinato Checkpoint una sola volta.
+- Ogni record rappresenta esclusivamente una validazione riuscita.
+- I tentativi falliti non vengono registrati in questa tabella.
+- Tutti i Checkpoint devono appartenere al medesimo Path della Partecipazione.
+
+---
+
+## Note
+
+Questa tabella rappresenta esclusivamente lo stato corrente della progressione del giocatore.
+
+Lo storico completo delle scansioni, comprese quelle duplicate o non valide, è conservato nella tabella `wp_qrhunt_events`.
+
+Le Foreign Key non vengono create fisicamente.
+
+L'integrità referenziale è garantita dal plugin.
+
+
+
+---
+
+# 7. Tabella `wp_qrhunt_events`
 
 ## Scopo
 
@@ -397,7 +458,6 @@ Le richieste prive di autenticazione oppure riferite a token inesistenti non ven
 | checkpoint_id | BIGINT UNSIGNED | NO | | Checkpoint interessato |
 | event_type | VARCHAR(30) | NO | | Tipo di Evento |
 | result | VARCHAR(30) | NO | | Esito |
-| message_key | VARCHAR(50) | YES | NULL | Codice del messaggio mostrato all'utente |
 | ip_address | VARCHAR(45) | YES | NULL | IPv4 o IPv6 |
 | user_agent | TEXT | YES | NULL | User Agent del client |
 | created_at | DATETIME | NO | CURRENT_TIMESTAMP | Data e ora dell'Evento |
@@ -482,3 +542,7 @@ Gli Eventi rappresentano la fonte primaria di tutte le statistiche del plugin.
 Le Foreign Key non vengono create fisicamente.
 
 L'integrità referenziale è garantita dal plugin.
+
+Questa tabella rappresenta esclusivamente lo storico delle operazioni effettuate dal sistema.
+
+Non rappresenta lo stato corrente della progressione del giocatore.
