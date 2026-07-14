@@ -148,8 +148,9 @@ Contiene i Gruppi di Checkpoint.
 
 Un Gruppo rappresenta un insieme logico di Checkpoint appartenenti allo stesso Percorso.
 
-I Gruppi consentono di modellare checkpoint obbligatori senza imporre un ordine di visita.
+I Group consentono di definire dipendenze riferite ad un insieme di Checkpoint anziché ad un singolo elemento.
 
+La modalità con cui un Group viene considerato completato è definita dal Validation Engine.
 ---
 
 ## Struttura
@@ -254,80 +255,19 @@ INDEX (type)
 
 ---
 
+
 ## Valori previsti
 
-### Tipi di dipendenza
+### type
 
-QRHunt supporta due tipi di dipendenza.
+- AFTER
+- BEFORE
 
-#### AFTER
+### target_type
 
-`AFTER` rappresenta un **prerequisito**.
+- checkpoint
+- group
 
-Un checkpoint può essere validato solo se il checkpoint o il gruppo indicato è già stato soddisfatto.
-
-Esempi:
-
-- Checkpoint 2 → AFTER → Checkpoint 1
-- Checkpoint 8 → AFTER → Gruppo "Area centrale"
-
-Questo è il tipo di dipendenza da utilizzare nella quasi totalità dei casi.
-
----
-
-#### BEFORE
-
-`BEFORE` rappresenta un **vincolo di ordinamento**, non un prerequisito.
-
-Va utilizzato solo quando un checkpoint è facoltativo ma, se visitato, deve necessariamente precederne un altro.
-
-Esempio:
-
-```
-1 → 2 → 3
-
-4, 5, 6, 7 facoltativi, visitabili in qualsiasi ordine
-
-8 → 9
-```
-
-Vincolo:
-
-> Se il checkpoint 4 viene visitato, deve essere visitato prima del checkpoint 7.
-
-Sono quindi valide le sequenze:
-
-- 5 → 6 → 7
-- 7
-- 5 → 4 → 7
-
-Non è invece valida:
-
-- 5 → 7 → 4
-
-Questa regola **non può essere modellata** utilizzando soltanto `AFTER`.
-
-Infatti, configurando:
-
-```
-7 AFTER 4
-```
-
-il checkpoint 4 diventerebbe obbligatorio, alterando il significato del percorso.
-
-La modellazione corretta è quindi:
-
-```
-4 BEFORE 7
-```
-
----
-
-### Raccomandazione
-
-Utilizzare `AFTER` per tutte le normali regole di progressione del percorso.
-
-Utilizzare `BEFORE` esclusivamente per esprimere vincoli di ordinamento condizionali che non possono essere rappresentati con `AFTER` senza modificare il comportamento del percorso.
 
 ### target_type
 
@@ -353,6 +293,10 @@ L'interpretazione delle Dipendenze è demandata al motore di validazione.
 Le Foreign Key non vengono create fisicamente.
 
 L'integrità referenziale è garantita dal plugin.
+
+L'interpretazione delle dipendenze è demandata al Validation Engine.
+
+Per i dettagli consultare `validation.md`.
 
 ---
 
