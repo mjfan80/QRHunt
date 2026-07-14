@@ -101,6 +101,29 @@ final class ScanService {
 	}
 
 	/**
+	 * Handles a scan identified by token and Participation identifier.
+	 *
+	 * @param string $token            Checkpoint token.
+	 * @param int    $participation_id Participation identifier.
+	 * @return ValidationResult
+	 */
+	public function scan( string $token, int $participation_id ): ValidationResult {
+		$participation = $this->participation_service->get_participation( $participation_id );
+
+		if ( null === $participation ) {
+			throw new \InvalidArgumentException( 'Participation not found.' );
+		}
+
+		$checkpoint = $this->checkpoint_service->get_checkpoint_by_token_with_dependencies( $token );
+
+		if ( null === $checkpoint || null === $checkpoint->get_post_id() ) {
+			throw new \InvalidArgumentException( 'Checkpoint not found.' );
+		}
+
+		return $this->validate( $participation, (int) $checkpoint->get_post_id() );
+	}
+
+	/**
 	 * Builds the Event associated with a scan attempt.
 	 *
 	 * @param Participation    $participation      Participation being validated.

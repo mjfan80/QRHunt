@@ -81,6 +81,26 @@ final class CheckpointRepository {
 	}
 
 	/**
+	 * Gets a Checkpoint by token.
+	 *
+	 * @param string $token Checkpoint token.
+	 * @return Checkpoint|null
+	 */
+	public function find_by_token( string $token ): ?Checkpoint {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_checkpoints suffix.
+		$sql = $this->wpdb->prepare( "SELECT post_id, path_id, group_id, token, created_at, updated_at FROM {$this->table_name} WHERE token = %s", $token );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
+		$row = $this->wpdb->get_row( $sql, ARRAY_A );
+
+		if ( null === $row ) {
+			return null;
+		}
+
+		return $this->hydrate_checkpoint( $row );
+	}
+
+	/**
 	 * Gets all Checkpoints for a Path.
 	 *
 	 * @param int $path_id Path identifier.
@@ -119,6 +139,24 @@ final class CheckpointRepository {
 		}
 
 		$checkpoint->set_dependencies( $this->resolve_dependencies( $post_id ) );
+
+		return $checkpoint;
+	}
+
+	/**
+	 * Gets a Checkpoint by token with its Dependencies.
+	 *
+	 * @param string $token Checkpoint token.
+	 * @return Checkpoint|null
+	 */
+	public function find_by_token_with_dependencies( string $token ): ?Checkpoint {
+		$checkpoint = $this->find_by_token( $token );
+
+		if ( null === $checkpoint ) {
+			return null;
+		}
+
+		$checkpoint->set_dependencies( $this->resolve_dependencies( (int) $checkpoint->get_post_id() ) );
 
 		return $checkpoint;
 	}

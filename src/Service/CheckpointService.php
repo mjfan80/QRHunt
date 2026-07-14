@@ -43,6 +43,16 @@ final class CheckpointService {
 	}
 
 	/**
+	 * Gets a Checkpoint by token.
+	 *
+	 * @param string $token Checkpoint token.
+	 * @return Checkpoint|null
+	 */
+	public function get_checkpoint_by_token( string $token ): ?Checkpoint {
+		return $this->checkpoint_repository->find_by_token( $token );
+	}
+
+	/**
 	 * Gets a Checkpoint with its Dependencies.
 	 *
 	 * @param int $post_id Checkpoint post identifier.
@@ -50,6 +60,16 @@ final class CheckpointService {
 	 */
 	public function get_checkpoint_with_dependencies( int $post_id ): ?Checkpoint {
 		return $this->checkpoint_repository->find_by_post_id_with_dependencies( $post_id );
+	}
+
+	/**
+	 * Gets a Checkpoint by token with its Dependencies.
+	 *
+	 * @param string $token Checkpoint token.
+	 * @return Checkpoint|null
+	 */
+	public function get_checkpoint_by_token_with_dependencies( string $token ): ?Checkpoint {
+		return $this->checkpoint_repository->find_by_token_with_dependencies( $token );
 	}
 
 	/**
