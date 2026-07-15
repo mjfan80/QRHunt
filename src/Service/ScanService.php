@@ -7,6 +7,7 @@
 
 namespace QRHunt\Service;
 
+use QRHunt\Model\Checkpoint;
 use QRHunt\Model\DependencyType;
 use QRHunt\Model\Event;
 use QRHunt\Model\EventResult;
@@ -87,6 +88,33 @@ final class ScanService {
 			throw new \InvalidArgumentException( 'Checkpoint not found.' );
 		}
 
+		return $this->process_scan( $participation, $checkpoint );
+	}
+
+	/**
+	 * Handles a scan for a resolved Checkpoint and Participation.
+	 *
+	 * @param Participation $participation Participation being validated.
+	 * @param Checkpoint    $checkpoint    Resolved Checkpoint.
+	 * @return ValidationResult
+	 */
+	public function scan_checkpoint( Participation $participation, Checkpoint $checkpoint ): ValidationResult {
+		if ( null === $checkpoint->get_post_id() ) {
+			throw new \InvalidArgumentException( 'Checkpoint not found.' );
+		}
+
+		return $this->process_scan( $participation, $checkpoint );
+	}
+
+	/**
+	 * Processes a scan for a resolved Checkpoint and Participation.
+	 *
+	 * @param Participation $participation Participation being validated.
+	 * @param Checkpoint    $checkpoint    Resolved Checkpoint.
+	 * @return ValidationResult
+	 */
+	private function process_scan( Participation $participation, Checkpoint $checkpoint ): ValidationResult {
+		$checkpoint_post_id      = (int) $checkpoint->get_post_id();
 		$participation_progress = $this->participation_progress_builder->build( $participation );
 		$validation_result      = $this->validation_service->validate( $participation, $checkpoint, $participation_progress );
 
@@ -120,7 +148,7 @@ final class ScanService {
 			throw new \InvalidArgumentException( 'Checkpoint not found.' );
 		}
 
-		return $this->validate( $participation, (int) $checkpoint->get_post_id() );
+		return $this->scan_checkpoint( $participation, $checkpoint );
 	}
 
 	/**

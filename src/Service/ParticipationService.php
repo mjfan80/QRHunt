@@ -7,7 +7,9 @@
 
 namespace QRHunt\Service;
 
+use QRHunt\Model\Checkpoint;
 use QRHunt\Model\Participation;
+use QRHunt\Model\ParticipationStatus;
 use QRHunt\Repository\ParticipationRepository;
 
 defined( 'ABSPATH' ) || exit;
@@ -20,13 +22,18 @@ final class ParticipationService {
 	/** @var ParticipationRepository */
 	private $participation_repository;
 
+	/** @var PathService */
+	private $path_service;
+
 	/**
 	 * Creates a Participation service.
 	 *
 	 * @param ParticipationRepository $participation_repository Participation repository.
+	 * @param PathService             $path_service             Path service.
 	 */
-	public function __construct( ParticipationRepository $participation_repository ) {
+	public function __construct( ParticipationRepository $participation_repository, PathService $path_service ) {
 		$this->participation_repository = $participation_repository;
+		$this->path_service             = $path_service;
 	}
 
 	/**
@@ -49,6 +56,49 @@ final class ParticipationService {
 	}
 
 	/**
+	 * Gets a Participation by user and Path.
+	 *
+	 * @param int $user_id User identifier.
+	 * @param int $path_id Path identifier.
+	 * @return Participation|null
+	 */
+	public function get_participation_by_user_and_path( int $user_id, int $path_id ): ?Participation {
+		return $this->participation_repository->find_by_user_and_path( $user_id, $path_id );
+	}
+
+	/**
+	 * Gets or creates the Participation for a Checkpoint scan.
+	 *
+	 * A Participation is created only when the scanned Checkpoint is the
+	 * start Checkpoint of the Path and no valid Participation already exists.
+	 *
+	 * @param int        $user_id    User identifier.
+	 * @param Checkpoint $checkpoint Scanned Checkpoint.
+	 * @return Participation|null
+	 */
+	public function get_participation_for_scan( int $user_id, Checkpoint $checkpoint ): ?Participation {
+		$path_id = $checkpoint->get_path_id();
+
+		if ( null === $path_id || null === $checkpoint->get_post_id() ) {
+			return null;
+		}
+
+		$participation = $this->get_participation_by_user_and_path( $user_id, (int) $path_id );
+
+		if ( null !== $participation ) {
+			return $participation;
+		}
+
+		$path = $this->path_service->get_path( (int) $path_id );
+
+		if ( null === $path || (int) $checkpoint->get_post_id() !== (int) $path->get_start_checkpoint_id() ) {
+			return null;
+		}
+
+		return $this->create_participation( $user_id, (int) $path_id );
+	}
+
+	/**
 	 * Saves a Participation.
 	 *
 	 * @param Participation $participation Participation to save.
@@ -56,6 +106,34 @@ final class ParticipationService {
 	 */
 	public function save_participation( Participation $participation ): void {
 		$this->participation_repository->save( $participation );
+	}
+
+	/**
+	 * Creates a Participation for a user and Path.
+	 *
+	 * @param int $user_id User identifier.
+	 * @param int $path_id Path identifier.
+	 * @return Participation
+	 */
+	public function create_participation( int $user_id, int $path_id ): Participation {
+		$participation = new Participation();
+		$participation->set_user_id( $user_id );
+		$participation->set_path_id( $path_id );
+		$participation->set_status( ParticipationStatus::IN_PROGRESS );
+
+		$this->participation_repository->save( $participation );
+
+		if ( null !== $participation->get_id() ) {
+			return $participation;
+		}
+
+		$stored_participation = $this->participation_repository->find_by_user_and_path( $user_id, $path_id );
+
+		if ( null !== $stored_participation ) {
+			return $stored_participation;
+		}
+
+		return $participation;
 	}
 
 	/**

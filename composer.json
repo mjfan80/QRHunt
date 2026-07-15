@@ -3,7 +3,8 @@
     "description": "Creates interactive experiences based on QR Code checkpoints.",
     "type": "wordpress-plugin",
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "endroid/qr-code": "^6.0"
     },
     "autoload": {
         "psr-4": {

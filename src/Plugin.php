@@ -12,6 +12,8 @@ use QRHunt\Controller\DependencyController;
 use QRHunt\Controller\GroupController;
 use QRHunt\Controller\ParticipationController;
 use QRHunt\Controller\PathController;
+use QRHunt\Controller\PlayerFlowController;
+use QRHunt\Controller\QrCodeController;
 use QRHunt\Controller\ScanRestController;
 use QRHunt\Repository\CheckpointRepository;
 use QRHunt\Repository\DependencyRepository;
@@ -28,6 +30,7 @@ use QRHunt\Service\ParticipationCheckpointService;
 use QRHunt\Service\ParticipationProgressBuilder;
 use QRHunt\Service\ParticipationService;
 use QRHunt\Service\PathService;
+use QRHunt\Service\QrCodeService;
 use QRHunt\Service\ScanService;
 use QRHunt\Service\ValidationService;
 
@@ -52,6 +55,12 @@ final class Plugin {
 
 	/** @var ScanRestController|null */
 	private $scan_rest_controller;
+
+	/** @var PlayerFlowController|null */
+	private $player_flow_controller;
+
+	/** @var QrCodeController|null */
+	private $qr_code_controller;
 
 	/** @var ScanService|null */
 	private $scan_service;
@@ -83,6 +92,9 @@ final class Plugin {
 	/** @var ValidationService|null */
 	private $validation_service;
 
+	/** @var QrCodeService|null */
+	private $qr_code_service;
+
 	/** @var CheckpointRepository|null */
 	private $checkpoint_repository;
 
@@ -112,17 +124,23 @@ final class Plugin {
 	public function register_hooks(): void {
 		add_action( 'plugins_loaded', array( $this, 'initialize' ) );
 		add_action( 'init', array( $this, 'register_post_types' ) );
+		add_action( 'init', array( $this, 'register_rewrite_rules' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 		add_action( 'admin_menu', array( $this, 'register_groups_page' ) );
 		add_action( 'admin_menu', array( $this, 'register_participations_page' ) );
+		add_action( 'admin_menu', array( $this, 'register_qr_codes_page' ) );
 		add_action( 'admin_post_qrhunt_save_group', array( $this, 'save_group' ) );
 		add_action( 'admin_post_qrhunt_delete_group', array( $this, 'delete_group' ) );
 		add_action( 'admin_post_qrhunt_save_participation', array( $this, 'save_participation' ) );
 		add_action( 'admin_post_qrhunt_delete_participation', array( $this, 'delete_participation' ) );
+		add_action( 'admin_post_qrhunt_download_qr_code', array( $this, 'download_qr_code' ) );
+		add_action( 'admin_post_qrhunt_print_path_qr_codes', array( $this, 'print_path_qr_codes' ) );
 		add_action( 'save_post_qrhunt_path', array( $this, 'synchronize_path' ), 10, 2 );
 		add_action( 'add_meta_boxes_qrhunt_checkpoint', array( $this, 'register_checkpoint_metabox' ) );
 		add_action( 'save_post_qrhunt_checkpoint', array( $this, 'save_checkpoint_path' ), 10, 2 );
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
+		add_action( 'template_redirect', array( $this, 'handle_player_flow' ), 0 );
+		add_filter( 'query_vars', array( $this, 'register_query_vars' ) );
 	}
 
 	/**
@@ -144,6 +162,15 @@ final class Plugin {
 
 		$path_post_type = new PathPostType();
 		$path_post_type->register();
+	}
+
+	/**
+	 * Registers the plugin rewrite rules.
+	 *
+	 * @return void
+	 */
+	public function register_rewrite_rules(): void {
+		PlayerFlowController::register_rewrite_rules();
 	}
 
 	/**
@@ -193,6 +220,15 @@ final class Plugin {
 	}
 
 	/**
+	 * Registers the QR Codes admin page.
+	 *
+	 * @return void
+	 */
+	public function register_qr_codes_page(): void {
+		$this->get_qr_code_controller()->register_page();
+	}
+
+	/**
 	 * Saves a Participation.
 	 *
 	 * @return void
@@ -208,6 +244,24 @@ final class Plugin {
 	 */
 	public function delete_participation(): void {
 		$this->get_participation_controller()->delete();
+	}
+
+	/**
+	 * Downloads a QR code asset.
+	 *
+	 * @return void
+	 */
+	public function download_qr_code(): void {
+		$this->get_qr_code_controller()->download();
+	}
+
+	/**
+	 * Prints all QR codes for a Path.
+	 *
+	 * @return void
+	 */
+	public function print_path_qr_codes(): void {
+		$this->get_qr_code_controller()->print_path();
 	}
 
 	/**
@@ -248,6 +302,27 @@ final class Plugin {
 	 */
 	public function register_rest_routes(): void {
 		$this->get_scan_rest_controller()->register_routes();
+	}
+
+	/**
+	 * Registers the plugin query vars.
+	 *
+	 * @param array<int, string> $query_vars Query vars.
+	 * @return array<int, string>
+	 */
+	public function register_query_vars( array $query_vars ): array {
+		$query_vars[] = PlayerFlowController::QUERY_VAR;
+
+		return $query_vars;
+	}
+
+	/**
+	 * Handles the public player flow.
+	 *
+	 * @return void
+	 */
+	public function handle_player_flow(): void {
+		$this->get_player_flow_controller()->handle_request();
 	}
 
 	/**
@@ -317,6 +392,40 @@ final class Plugin {
 		}
 
 		return $this->scan_rest_controller;
+	}
+
+	/**
+	 * Creates the player flow controller.
+	 *
+	 * @return PlayerFlowController
+	 */
+	private function get_player_flow_controller(): PlayerFlowController {
+		if ( null === $this->player_flow_controller ) {
+			$this->player_flow_controller = new PlayerFlowController(
+				$this->get_checkpoint_service(),
+				$this->get_participation_service(),
+				$this->get_scan_service()
+			);
+		}
+
+		return $this->player_flow_controller;
+	}
+
+	/**
+	 * Creates the QR code controller.
+	 *
+	 * @return QrCodeController
+	 */
+	private function get_qr_code_controller(): QrCodeController {
+		if ( null === $this->qr_code_controller ) {
+			$this->qr_code_controller = new QrCodeController(
+				$this->get_checkpoint_service(),
+				$this->get_path_service(),
+				$this->get_qr_code_service()
+			);
+		}
+
+		return $this->qr_code_controller;
 	}
 
 	/**
@@ -399,7 +508,10 @@ final class Plugin {
 	 */
 	private function get_participation_service(): ParticipationService {
 		if ( null === $this->participation_service ) {
-			$this->participation_service = new ParticipationService( $this->get_participation_repository() );
+			$this->participation_service = new ParticipationService(
+				$this->get_participation_repository(),
+				$this->get_path_service()
+			);
 		}
 
 		return $this->participation_service;
@@ -459,6 +571,19 @@ final class Plugin {
 		}
 
 		return $this->validation_service;
+	}
+
+	/**
+	 * Creates the QR code service.
+	 *
+	 * @return QrCodeService
+	 */
+	private function get_qr_code_service(): QrCodeService {
+		if ( null === $this->qr_code_service ) {
+			$this->qr_code_service = new QrCodeService();
+		}
+
+		return $this->qr_code_service;
 	}
 
 	/**

@@ -74,6 +74,33 @@ final class ParticipationRepository {
 	}
 
 	/**
+	 * Gets a Participation by user and Path.
+	 *
+	 * @param int $user_id User identifier.
+	 * @param int $path_id Path identifier.
+	 * @return Participation|null
+	 */
+	public function find_by_user_and_path( int $user_id, int $path_id ): ?Participation {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		$sql = $this->wpdb->prepare(
+			"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE user_id = %d AND path_id = %d",
+			$user_id,
+			$path_id
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
+		$row = $this->wpdb->get_row( $sql, ARRAY_A );
+
+		if ( null === $row ) {
+			return null;
+		}
+
+		$participations = $this->hydrate_participations( array( $row ) );
+
+		return $participations[0];
+	}
+
+	/**
 	 * Saves a Participation.
 	 *
 	 * @param Participation $participation Participation to save.
@@ -92,6 +119,7 @@ final class ParticipationRepository {
 				$data,
 				array( '%d', '%d', '%s' )
 			);
+			$participation->set_id( 0 === (int) $this->wpdb->insert_id ? null : (int) $this->wpdb->insert_id );
 
 			return;
 		}
