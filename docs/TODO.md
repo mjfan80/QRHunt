@@ -15,26 +15,26 @@
 - [x] CRUD Percorsi
 - [x] CRUD Gruppi
 - [x] Gestione Dipendenze
+- [x] Gestione QR Code
 - [ ] Dashboard
 
-# Public API
+# Public Flow
 
-- [ ] Routing
-- [ ] Token Resolution
-- [ ] Participation API
-- [ ] Scan API
+- [x] Public Routing
+- [x] Token Resolution
+- [x] Player Flow
+- [ ] Public UI
 
 # Features
 
 - [ ] Partecipazioni
-- [ ] QR Code
 - [ ] Esportazione
 
 # Quality
 
 - [ ] Test
 - [ ] Internazionalizzazione
-- [ ] Plugin Check
+- [x] Plugin Check
 - [ ] Documentation Review
 
 # Release
