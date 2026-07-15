@@ -38,6 +38,72 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Plugin {
 
+	/** @var GroupController|null */
+	private $group_controller;
+
+	/** @var ParticipationController|null */
+	private $participation_controller;
+
+	/** @var PathController|null */
+	private $path_controller;
+
+	/** @var CheckpointController|null */
+	private $checkpoint_controller;
+
+	/** @var ScanRestController|null */
+	private $scan_rest_controller;
+
+	/** @var ScanService|null */
+	private $scan_service;
+
+	/** @var CheckpointService|null */
+	private $checkpoint_service;
+
+	/** @var DependencyService|null */
+	private $dependency_service;
+
+	/** @var GroupService|null */
+	private $group_service;
+
+	/** @var PathService|null */
+	private $path_service;
+
+	/** @var ParticipationService|null */
+	private $participation_service;
+
+	/** @var ParticipationCheckpointService|null */
+	private $participation_checkpoint_service;
+
+	/** @var ParticipationProgressBuilder|null */
+	private $participation_progress_builder;
+
+	/** @var EventService|null */
+	private $event_service;
+
+	/** @var ValidationService|null */
+	private $validation_service;
+
+	/** @var CheckpointRepository|null */
+	private $checkpoint_repository;
+
+	/** @var DependencyRepository|null */
+	private $dependency_repository;
+
+	/** @var GroupRepository|null */
+	private $group_repository;
+
+	/** @var ParticipationCheckpointRepository|null */
+	private $participation_checkpoint_repository;
+
+	/** @var ParticipationRepository|null */
+	private $participation_repository;
+
+	/** @var PathRepository|null */
+	private $path_repository;
+
+	/** @var EventRepository|null */
+	private $event_repository;
+
 	/**
 	 * Registers WordPress hooks for the plugin.
 	 *
@@ -190,7 +256,11 @@ final class Plugin {
 	 * @return GroupController
 	 */
 	private function get_group_controller(): GroupController {
-		return new GroupController( $this->get_group_service(), $this->get_path_service() );
+		if ( null === $this->group_controller ) {
+			$this->group_controller = new GroupController( $this->get_group_service(), $this->get_path_service() );
+		}
+
+		return $this->group_controller;
 	}
 
 	/**
@@ -199,7 +269,11 @@ final class Plugin {
 	 * @return ParticipationController
 	 */
 	private function get_participation_controller(): ParticipationController {
-		return new ParticipationController( $this->get_participation_service(), $this->get_path_service() );
+		if ( null === $this->participation_controller ) {
+			$this->participation_controller = new ParticipationController( $this->get_participation_service(), $this->get_path_service() );
+		}
+
+		return $this->participation_controller;
 	}
 
 	/**
@@ -208,7 +282,11 @@ final class Plugin {
 	 * @return PathController
 	 */
 	private function get_path_controller(): PathController {
-		return new PathController( $this->get_path_service() );
+		if ( null === $this->path_controller ) {
+			$this->path_controller = new PathController( $this->get_path_service() );
+		}
+
+		return $this->path_controller;
 	}
 
 	/**
@@ -217,11 +295,15 @@ final class Plugin {
 	 * @return CheckpointController
 	 */
 	private function get_checkpoint_controller(): CheckpointController {
-		$checkpoint_service    = $this->get_checkpoint_service();
-		$group_service         = $this->get_group_service();
-		$dependency_controller = new DependencyController( $this->get_dependency_service(), $checkpoint_service, $group_service );
+		if ( null === $this->checkpoint_controller ) {
+			$checkpoint_service    = $this->get_checkpoint_service();
+			$group_service         = $this->get_group_service();
+			$dependency_controller = new DependencyController( $this->get_dependency_service(), $checkpoint_service, $group_service );
 
-		return new CheckpointController( $checkpoint_service, $dependency_controller, $group_service, $this->get_path_service() );
+			$this->checkpoint_controller = new CheckpointController( $checkpoint_service, $dependency_controller, $group_service, $this->get_path_service() );
+		}
+
+		return $this->checkpoint_controller;
 	}
 
 	/**
@@ -230,7 +312,11 @@ final class Plugin {
 	 * @return ScanRestController
 	 */
 	private function get_scan_rest_controller(): ScanRestController {
-		return new ScanRestController( $this->get_scan_service() );
+		if ( null === $this->scan_rest_controller ) {
+			$this->scan_rest_controller = new ScanRestController( $this->get_scan_service() );
+		}
+
+		return $this->scan_rest_controller;
 	}
 
 	/**
@@ -239,15 +325,19 @@ final class Plugin {
 	 * @return ScanService
 	 */
 	private function get_scan_service(): ScanService {
-		return new ScanService(
-			$this->get_checkpoint_service(),
-			$this->get_participation_progress_builder(),
-			$this->get_validation_service(),
-			$this->get_participation_checkpoint_service(),
-			$this->get_event_service(),
-			$this->get_path_service(),
-			$this->get_participation_service()
-		);
+		if ( null === $this->scan_service ) {
+			$this->scan_service = new ScanService(
+				$this->get_checkpoint_service(),
+				$this->get_participation_progress_builder(),
+				$this->get_validation_service(),
+				$this->get_participation_checkpoint_service(),
+				$this->get_event_service(),
+				$this->get_path_service(),
+				$this->get_participation_service()
+			);
+		}
+
+		return $this->scan_service;
 	}
 
 	/**
@@ -256,7 +346,11 @@ final class Plugin {
 	 * @return CheckpointService
 	 */
 	private function get_checkpoint_service(): CheckpointService {
-		return new CheckpointService( $this->get_checkpoint_repository() );
+		if ( null === $this->checkpoint_service ) {
+			$this->checkpoint_service = new CheckpointService( $this->get_checkpoint_repository() );
+		}
+
+		return $this->checkpoint_service;
 	}
 
 	/**
@@ -265,7 +359,11 @@ final class Plugin {
 	 * @return DependencyService
 	 */
 	private function get_dependency_service(): DependencyService {
-		return new DependencyService( $this->get_dependency_repository() );
+		if ( null === $this->dependency_service ) {
+			$this->dependency_service = new DependencyService( $this->get_dependency_repository() );
+		}
+
+		return $this->dependency_service;
 	}
 
 	/**
@@ -274,7 +372,11 @@ final class Plugin {
 	 * @return GroupService
 	 */
 	private function get_group_service(): GroupService {
-		return new GroupService( $this->get_group_repository() );
+		if ( null === $this->group_service ) {
+			$this->group_service = new GroupService( $this->get_group_repository() );
+		}
+
+		return $this->group_service;
 	}
 
 	/**
@@ -283,9 +385,11 @@ final class Plugin {
 	 * @return PathService
 	 */
 	private function get_path_service(): PathService {
-		global $wpdb;
+		if ( null === $this->path_service ) {
+			$this->path_service = new PathService( $this->get_path_repository() );
+		}
 
-		return new PathService( new PathRepository( $wpdb ) );
+		return $this->path_service;
 	}
 
 	/**
@@ -294,9 +398,11 @@ final class Plugin {
 	 * @return ParticipationService
 	 */
 	private function get_participation_service(): ParticipationService {
-		global $wpdb;
+		if ( null === $this->participation_service ) {
+			$this->participation_service = new ParticipationService( $this->get_participation_repository() );
+		}
 
-		return new ParticipationService( new ParticipationRepository( $wpdb ) );
+		return $this->participation_service;
 	}
 
 	/**
@@ -305,7 +411,11 @@ final class Plugin {
 	 * @return ParticipationCheckpointService
 	 */
 	private function get_participation_checkpoint_service(): ParticipationCheckpointService {
-		return new ParticipationCheckpointService( $this->get_participation_checkpoint_repository() );
+		if ( null === $this->participation_checkpoint_service ) {
+			$this->participation_checkpoint_service = new ParticipationCheckpointService( $this->get_participation_checkpoint_repository() );
+		}
+
+		return $this->participation_checkpoint_service;
 	}
 
 	/**
@@ -314,11 +424,15 @@ final class Plugin {
 	 * @return ParticipationProgressBuilder
 	 */
 	private function get_participation_progress_builder(): ParticipationProgressBuilder {
-		return new ParticipationProgressBuilder(
-			$this->get_participation_checkpoint_repository(),
-			$this->get_checkpoint_repository(),
-			$this->get_group_repository()
-		);
+		if ( null === $this->participation_progress_builder ) {
+			$this->participation_progress_builder = new ParticipationProgressBuilder(
+				$this->get_participation_checkpoint_repository(),
+				$this->get_checkpoint_repository(),
+				$this->get_group_repository()
+			);
+		}
+
+		return $this->participation_progress_builder;
 	}
 
 	/**
@@ -327,9 +441,11 @@ final class Plugin {
 	 * @return EventService
 	 */
 	private function get_event_service(): EventService {
-		global $wpdb;
+		if ( null === $this->event_service ) {
+			$this->event_service = new EventService( $this->get_event_repository() );
+		}
 
-		return new EventService( new EventRepository( $wpdb ) );
+		return $this->event_service;
 	}
 
 	/**
@@ -338,7 +454,11 @@ final class Plugin {
 	 * @return ValidationService
 	 */
 	private function get_validation_service(): ValidationService {
-		return new ValidationService();
+		if ( null === $this->validation_service ) {
+			$this->validation_service = new ValidationService();
+		}
+
+		return $this->validation_service;
 	}
 
 	/**
@@ -347,9 +467,13 @@ final class Plugin {
 	 * @return CheckpointRepository
 	 */
 	private function get_checkpoint_repository(): CheckpointRepository {
-		global $wpdb;
+		if ( null === $this->checkpoint_repository ) {
+			global $wpdb;
 
-		return new CheckpointRepository( $wpdb, $this->get_dependency_repository(), $this->get_group_repository() );
+			$this->checkpoint_repository = new CheckpointRepository( $wpdb, $this->get_dependency_repository(), $this->get_group_repository() );
+		}
+
+		return $this->checkpoint_repository;
 	}
 
 	/**
@@ -358,9 +482,13 @@ final class Plugin {
 	 * @return DependencyRepository
 	 */
 	private function get_dependency_repository(): DependencyRepository {
-		global $wpdb;
+		if ( null === $this->dependency_repository ) {
+			global $wpdb;
 
-		return new DependencyRepository( $wpdb );
+			$this->dependency_repository = new DependencyRepository( $wpdb );
+		}
+
+		return $this->dependency_repository;
 	}
 
 	/**
@@ -369,9 +497,13 @@ final class Plugin {
 	 * @return GroupRepository
 	 */
 	private function get_group_repository(): GroupRepository {
-		global $wpdb;
+		if ( null === $this->group_repository ) {
+			global $wpdb;
 
-		return new GroupRepository( $wpdb );
+			$this->group_repository = new GroupRepository( $wpdb );
+		}
+
+		return $this->group_repository;
 	}
 
 	/**
@@ -380,8 +512,57 @@ final class Plugin {
 	 * @return ParticipationCheckpointRepository
 	 */
 	private function get_participation_checkpoint_repository(): ParticipationCheckpointRepository {
-		global $wpdb;
+		if ( null === $this->participation_checkpoint_repository ) {
+			global $wpdb;
 
-		return new ParticipationCheckpointRepository( $wpdb );
+			$this->participation_checkpoint_repository = new ParticipationCheckpointRepository( $wpdb );
+		}
+
+		return $this->participation_checkpoint_repository;
+	}
+
+	/**
+	 * Creates the Participation repository.
+	 *
+	 * @return ParticipationRepository
+	 */
+	private function get_participation_repository(): ParticipationRepository {
+		if ( null === $this->participation_repository ) {
+			global $wpdb;
+
+			$this->participation_repository = new ParticipationRepository( $wpdb );
+		}
+
+		return $this->participation_repository;
+	}
+
+	/**
+	 * Creates the Path repository.
+	 *
+	 * @return PathRepository
+	 */
+	private function get_path_repository(): PathRepository {
+		if ( null === $this->path_repository ) {
+			global $wpdb;
+
+			$this->path_repository = new PathRepository( $wpdb );
+		}
+
+		return $this->path_repository;
+	}
+
+	/**
+	 * Creates the Event repository.
+	 *
+	 * @return EventRepository
+	 */
+	private function get_event_repository(): EventRepository {
+		if ( null === $this->event_repository ) {
+			global $wpdb;
+
+			$this->event_repository = new EventRepository( $wpdb );
+		}
+
+		return $this->event_repository;
 	}
 }
