@@ -82,6 +82,25 @@ final class CheckpointService {
 		return $this->checkpoint_repository->find_by_path( $path_id );
 	}
 
+	/**
+	 * Counts Checkpoints.
+	 *
+	 * @return int
+	 */
+	public function count_checkpoints(): int {
+		return $this->checkpoint_repository->count_all();
+	}
+
+	/**
+	 * Gets the title of a Checkpoint.
+	 *
+	 * @param int $post_id Checkpoint post identifier.
+	 * @return string
+	 */
+	public function get_checkpoint_title( int $post_id ): string {
+		return $this->checkpoint_repository->find_title_by_post_id( $post_id );
+	}
+
 	public function save_path( Checkpoint $checkpoint ): void {
 		$this->checkpoint_repository->save_path( $checkpoint );
 	}

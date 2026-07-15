@@ -38,4 +38,14 @@ final class EventService {
 	public function save_event( Event $event ): void {
 		$this->event_repository->save( $event );
 	}
+
+	/**
+	 * Gets recent Events.
+	 *
+	 * @param int $limit Maximum number of events.
+	 * @return array<int, Event>
+	 */
+	public function get_recent_events( int $limit ): array {
+		return $this->event_repository->find_recent( $limit );
+	}
 }

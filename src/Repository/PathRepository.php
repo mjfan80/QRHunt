@@ -103,6 +103,19 @@ final class PathRepository {
 		return $path;
 	}
 
+	/**
+	 * Counts Paths.
+	 *
+	 * @return int
+	 */
+	public function count_all(): int {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_paths suffix.
+		$count = $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name}" );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return (int) $count;
+	}
+
 	public function save( Path $path ): void {
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_paths suffix.
 		$sql = $this->wpdb->prepare( "INSERT INTO {$this->table_name} (post_id, name, description, status) VALUES (%d, %s, %s, %s) ON DUPLICATE KEY UPDATE name = VALUES(name), description = VALUES(description), status = VALUES(status), updated_at = CURRENT_TIMESTAMP", $path->get_post_id(), $path->get_name(), $path->get_description(), $path->get_status() );

@@ -14,6 +14,18 @@ defined( 'ABSPATH' ) || exit;
  */
 final class AdminMenu {
 
+	/** @var callable */
+	private $dashboard_callback;
+
+	/**
+	 * Creates an admin menu registrar.
+	 *
+	 * @param callable $dashboard_callback Dashboard callback.
+	 */
+	public function __construct( callable $dashboard_callback ) {
+		$this->dashboard_callback = $dashboard_callback;
+	}
+
 	/**
 	 * Registers the QRHunt administration menu.
 	 *
@@ -25,7 +37,7 @@ final class AdminMenu {
 			__( 'QRHunt', 'qrhunt' ),
 			'edit_posts',
 			'qrhunt',
-			array( $this, 'render_dashboard' ),
+			$this->dashboard_callback,
 			'dashicons-location-alt',
 			26
 		);
@@ -35,7 +47,7 @@ final class AdminMenu {
 			__( 'Paths', 'qrhunt' ),
 			__( 'Paths', 'qrhunt' ),
 			'edit_posts',
-			'edit.php?post_type=qrhunt_path'
+			'edit.php?post_type=' . PathPostType::POST_TYPE
 		);
 
 		add_submenu_page(
@@ -43,20 +55,7 @@ final class AdminMenu {
 			__( 'Checkpoints', 'qrhunt' ),
 			__( 'Checkpoints', 'qrhunt' ),
 			'edit_posts',
-			'edit.php?post_type=qrhunt_checkpoint'
+			'edit.php?post_type=' . CheckpointPostType::POST_TYPE
 		);
-	}
-
-	/**
-	 * Renders the placeholder dashboard page.
-	 *
-	 * @return void
-	 */
-	public function render_dashboard(): void {
-		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'QRHunt', 'qrhunt' ); ?></h1>
-		</div>
-		<?php
 	}
 }

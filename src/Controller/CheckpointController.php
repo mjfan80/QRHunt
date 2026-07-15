@@ -7,6 +7,7 @@
 
 namespace QRHunt\Controller;
 
+use QRHunt\CheckpointPostType;
 use QRHunt\Model\Checkpoint;
 use QRHunt\Service\CheckpointService;
 use QRHunt\Service\GroupService;
@@ -29,7 +30,7 @@ final class CheckpointController {
 	}
 
 	public function register_metabox(): void {
-		add_meta_box( 'qrhunt-checkpoint-path', __( 'Path', 'qrhunt' ), array( $this, 'render_path_metabox' ), 'qrhunt_checkpoint', 'side' );
+		add_meta_box( 'qrhunt-checkpoint-path', __( 'Path', 'qrhunt' ), array( $this, 'render_path_metabox' ), CheckpointPostType::POST_TYPE, 'side' );
 	}
 
 	public function render_path_metabox( \WP_Post $post ): void {

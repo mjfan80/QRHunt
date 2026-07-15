@@ -8,6 +8,7 @@
 namespace QRHunt;
 
 use QRHunt\Controller\CheckpointController;
+use QRHunt\Controller\DashboardController;
 use QRHunt\Controller\DependencyController;
 use QRHunt\Controller\GroupController;
 use QRHunt\Controller\ParticipationController;
@@ -23,6 +24,7 @@ use QRHunt\Repository\ParticipationCheckpointRepository;
 use QRHunt\Repository\ParticipationRepository;
 use QRHunt\Repository\PathRepository;
 use QRHunt\Service\CheckpointService;
+use QRHunt\Service\DashboardService;
 use QRHunt\Service\DependencyService;
 use QRHunt\Service\EventService;
 use QRHunt\Service\GroupService;
@@ -53,6 +55,9 @@ final class Plugin {
 	/** @var CheckpointController|null */
 	private $checkpoint_controller;
 
+	/** @var DashboardController|null */
+	private $dashboard_controller;
+
 	/** @var ScanRestController|null */
 	private $scan_rest_controller;
 
@@ -70,6 +75,9 @@ final class Plugin {
 
 	/** @var DependencyService|null */
 	private $dependency_service;
+
+	/** @var DashboardService|null */
+	private $dashboard_service;
 
 	/** @var GroupService|null */
 	private $group_service;
@@ -135,9 +143,9 @@ final class Plugin {
 		add_action( 'admin_post_qrhunt_delete_participation', array( $this, 'delete_participation' ) );
 		add_action( 'admin_post_qrhunt_download_qr_code', array( $this, 'download_qr_code' ) );
 		add_action( 'admin_post_qrhunt_print_path_qr_codes', array( $this, 'print_path_qr_codes' ) );
-		add_action( 'save_post_qrhunt_path', array( $this, 'synchronize_path' ), 10, 2 );
-		add_action( 'add_meta_boxes_qrhunt_checkpoint', array( $this, 'register_checkpoint_metabox' ) );
-		add_action( 'save_post_qrhunt_checkpoint', array( $this, 'save_checkpoint_path' ), 10, 2 );
+		add_action( 'save_post_' . PathPostType::POST_TYPE, array( $this, 'synchronize_path' ), 10, 2 );
+		add_action( 'add_meta_boxes_' . CheckpointPostType::POST_TYPE, array( $this, 'register_checkpoint_metabox' ) );
+		add_action( 'save_post_' . CheckpointPostType::POST_TYPE, array( $this, 'save_checkpoint_path' ), 10, 2 );
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 		add_action( 'template_redirect', array( $this, 'handle_player_flow' ), 0 );
 		add_filter( 'query_vars', array( $this, 'register_query_vars' ) );
@@ -179,7 +187,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public function register_admin_menu(): void {
-		$admin_menu = new AdminMenu();
+		$admin_menu = new AdminMenu( array( $this->get_dashboard_controller(), 'render_page' ) );
 		$admin_menu->register();
 	}
 
@@ -382,6 +390,19 @@ final class Plugin {
 	}
 
 	/**
+	 * Creates the dashboard controller.
+	 *
+	 * @return DashboardController
+	 */
+	private function get_dashboard_controller(): DashboardController {
+		if ( null === $this->dashboard_controller ) {
+			$this->dashboard_controller = new DashboardController( $this->get_dashboard_service() );
+		}
+
+		return $this->dashboard_controller;
+	}
+
+	/**
 	 * Creates the scan REST controller.
 	 *
 	 * @return ScanRestController
@@ -473,6 +494,25 @@ final class Plugin {
 		}
 
 		return $this->dependency_service;
+	}
+
+	/**
+	 * Creates the dashboard service.
+	 *
+	 * @return DashboardService
+	 */
+	private function get_dashboard_service(): DashboardService {
+		if ( null === $this->dashboard_service ) {
+			$this->dashboard_service = new DashboardService(
+				$this->get_path_service(),
+				$this->get_checkpoint_service(),
+				$this->get_group_service(),
+				$this->get_participation_service(),
+				$this->get_event_service()
+			);
+		}
+
+		return $this->dashboard_service;
 	}
 
 	/**

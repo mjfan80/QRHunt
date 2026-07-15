@@ -14,6 +14,8 @@ defined( 'ABSPATH' ) || exit;
  */
 final class PathPostType {
 
+	public const POST_TYPE = 'qrhunt_path';
+
 	/**
 	 * Registers the Path custom post type.
 	 *
@@ -21,7 +23,7 @@ final class PathPostType {
 	 */
 	public function register(): void {
 		register_post_type(
-			'qrhunt_path',
+			self::POST_TYPE,
 			array(
 				'labels'              => $this->get_labels(),
 				'public'              => false,

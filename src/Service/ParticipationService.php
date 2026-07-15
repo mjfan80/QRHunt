@@ -67,6 +67,15 @@ final class ParticipationService {
 	}
 
 	/**
+	 * Counts Participations.
+	 *
+	 * @return int
+	 */
+	public function count_participations(): int {
+		return $this->participation_repository->count_all();
+	}
+
+	/**
 	 * Gets or creates the Participation for a Checkpoint scan.
 	 *
 	 * A Participation is created only when the scanned Checkpoint is the

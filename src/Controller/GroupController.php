@@ -8,6 +8,7 @@ use QRHunt\Service\PathService;
 defined( 'ABSPATH' ) || exit;
 
 final class GroupController {
+	public const PAGE_SLUG = 'qrhunt-groups';
 	private $group_service;
 	private $path_service;
 
@@ -17,7 +18,7 @@ final class GroupController {
 	}
 
 	public function register_page(): void {
-		add_submenu_page( 'qrhunt', __( 'Groups', 'qrhunt' ), __( 'Groups', 'qrhunt' ), 'edit_posts', 'qrhunt-groups', array( $this, 'render_page' ) );
+		add_submenu_page( 'qrhunt', __( 'Groups', 'qrhunt' ), __( 'Groups', 'qrhunt' ), 'edit_posts', self::PAGE_SLUG, array( $this, 'render_page' ) );
 	}
 
 	public function render_page(): void {
@@ -112,7 +113,7 @@ final class GroupController {
 							<td><?php echo esc_html( $path_names[ $group->get_path_id() ] ?? '' ); ?></td>
 							<td><?php echo esc_html( (string) $group->get_completion_mode() ); ?></td>
 							<td>
-								<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=qrhunt-groups&group_id=' . $group->get_id() ) ); ?>">
+								<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::PAGE_SLUG . '&group_id=' . $group->get_id() ) ); ?>">
 									<?php esc_html_e( 'Edit', 'qrhunt' ); ?>
 								</a>
 								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
@@ -151,7 +152,7 @@ final class GroupController {
 
 		$this->group_service->save_group( $group );
 
-		wp_safe_redirect( admin_url( 'admin.php?page=qrhunt-groups' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=' . self::PAGE_SLUG ) );
 		exit;
 	}
 
@@ -164,7 +165,7 @@ final class GroupController {
 
 		$this->group_service->delete_group( $id );
 
-		wp_safe_redirect( admin_url( 'admin.php?page=qrhunt-groups' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=' . self::PAGE_SLUG ) );
 		exit;
 	}
 

@@ -14,6 +14,8 @@ defined( 'ABSPATH' ) || exit;
  */
 final class CheckpointPostType {
 
+	public const POST_TYPE = 'qrhunt_checkpoint';
+
 	/**
 	 * Registers the Checkpoint custom post type.
 	 *
@@ -21,7 +23,7 @@ final class CheckpointPostType {
 	 */
 	public function register(): void {
 		register_post_type(
-			'qrhunt_checkpoint',
+			self::POST_TYPE,
 			array(
 				'labels'              => $this->get_labels(),
 				'public'              => false,

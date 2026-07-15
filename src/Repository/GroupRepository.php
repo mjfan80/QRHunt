@@ -54,6 +54,14 @@ final class GroupRepository {
 		return $groups[0];
 	}
 
+	public function count_all(): int {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_checkpoint_groups suffix.
+		$count = $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name}" );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return (int) $count;
+	}
+
 	public function save( Group $group ): void {
 		$data = array(
 			'path_id'         => $group->get_path_id(),

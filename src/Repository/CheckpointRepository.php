@@ -126,6 +126,29 @@ final class CheckpointRepository {
 	}
 
 	/**
+	 * Counts Checkpoints.
+	 *
+	 * @return int
+	 */
+	public function count_all(): int {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_checkpoints suffix.
+		$count = $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name}" );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return (int) $count;
+	}
+
+	/**
+	 * Gets the title of a Checkpoint post.
+	 *
+	 * @param int $post_id Checkpoint post identifier.
+	 * @return string
+	 */
+	public function find_title_by_post_id( int $post_id ): string {
+		return (string) get_the_title( $post_id );
+	}
+
+	/**
 	 * Gets a Checkpoint with its Dependencies.
 	 *
 	 * @param int $post_id Checkpoint post identifier.
