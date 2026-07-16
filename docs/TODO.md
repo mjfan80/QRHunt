@@ -16,7 +16,7 @@
 - [x] CRUD Gruppi
 - [x] Gestione Dipendenze
 - [x] Gestione QR Code
-- [ ] Dashboard
+- [x] Dashboard
 
 # Public Flow
 
