@@ -36,6 +36,7 @@
 - [ ] Internazionalizzazione
 - [x] Plugin Check
 - [ ] Documentation Review
+- [ ] Replace temporary inline styles with the dedicated Public UI stylesheet.
 
 # Release
 

@@ -36,6 +36,7 @@ Prima di qualsiasi modifica va sempre verificata la coerenza tra documentazione 
 - CRUD Gruppi
 - Gestione Dipendenze
 - Gestione QR Code
+- Dashboard
 
 ## Public Flow
 
@@ -156,14 +157,14 @@ Funziona:
 - Download QR
 - Stampa QR
 - Plugin Check pulito
+- Dashboard amministrativa
+- Riepilogo percorsi/checkpoint/gruppi/partecipazioni
+- Ultime scansioni (da testare in realtà)
+- Quick actions
 
 ---
 
 # TODO
-
-## Administration
-
-- Dashboard
 
 ## Public
 

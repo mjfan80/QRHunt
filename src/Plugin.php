@@ -425,7 +425,9 @@ final class Plugin {
 			$this->player_flow_controller = new PlayerFlowController(
 				$this->get_checkpoint_service(),
 				$this->get_participation_service(),
-				$this->get_scan_service()
+				$this->get_scan_service(),
+				$this->get_path_service(),
+				$this->get_participation_progress_builder()
 			);
 		}
 
