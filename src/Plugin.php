@@ -143,6 +143,7 @@ final class Plugin {
 		add_action( 'admin_post_qrhunt_delete_participation', array( $this, 'delete_participation' ) );
 		add_action( 'admin_post_qrhunt_download_qr_code', array( $this, 'download_qr_code' ) );
 		add_action( 'admin_post_qrhunt_print_path_qr_codes', array( $this, 'print_path_qr_codes' ) );
+		add_action( 'add_meta_boxes_' . PathPostType::POST_TYPE, array( $this, 'register_path_metabox' ) );
 		add_action( 'save_post_' . PathPostType::POST_TYPE, array( $this, 'synchronize_path' ), 10, 2 );
 		add_action( 'add_meta_boxes_' . CheckpointPostType::POST_TYPE, array( $this, 'register_checkpoint_metabox' ) );
 		add_action( 'save_post_' . CheckpointPostType::POST_TYPE, array( $this, 'save_checkpoint_path' ), 10, 2 );
@@ -273,6 +274,15 @@ final class Plugin {
 	}
 
 	/**
+	 * Registers the Path metabox.
+	 *
+	 * @return void
+	 */
+	public function register_path_metabox(): void {
+		$this->get_path_controller()->register_metabox();
+	}
+
+	/**
 	 * Synchronizes a Path after post save.
 	 *
 	 * @param int      $post_id Post identifier.
@@ -366,7 +376,7 @@ final class Plugin {
 	 */
 	private function get_path_controller(): PathController {
 		if ( null === $this->path_controller ) {
-			$this->path_controller = new PathController( $this->get_path_service() );
+			$this->path_controller = new PathController( $this->get_path_service(), $this->get_checkpoint_service() );
 		}
 
 		return $this->path_controller;

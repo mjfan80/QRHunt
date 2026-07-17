@@ -90,10 +90,7 @@ final class PlayerFlowController {
 	 * @return void
 	 */
 	public function handle_request(): void {
-		error_log( 'QRHunt PlayerFlowController::handle_request start' );
-
 		$token = get_query_var( self::QUERY_VAR, '' );
-		error_log( 'QRHunt PlayerFlowController::handle_request token=' . ( is_string( $token ) ? $token : '[non-string]' ) );
 
 		if ( ! is_string( $token ) || '' === $token ) {
 			return;
@@ -231,8 +228,6 @@ final class PlayerFlowController {
 			return $template;
 		}
 
-		error_log( 'QRHunt PlayerFlowController::filter_template_include template=' . $template );
-
 		return dirname( __DIR__, 2 ) . '/templates/public-checkpoint.php';
 	}
 
@@ -287,15 +282,6 @@ final class PlayerFlowController {
 	 */
 	private function prepare_template_response( array $view_context, int $status_code ): void {
 		global $wp_query;
-
-		error_log(
-			sprintf(
-				'QRHunt PlayerFlowController::prepare_template_response status=%1$d is_404=%2$s title=%3$s',
-				$status_code,
-				! empty( $view_context['is_404'] ) ? 'true' : 'false',
-				isset( $view_context['page_title'] ) ? (string) $view_context['page_title'] : ''
-			)
-		);
 
 		$this->current_view_context = $view_context;
 

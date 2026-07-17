@@ -49,6 +49,16 @@ final class PathService {
 	}
 
 	/**
+	 * Gets a Path by WordPress post identifier.
+	 *
+	 * @param int $post_id WordPress post identifier.
+	 * @return Path|null
+	 */
+	public function get_path_by_post_id( int $post_id ): ?Path {
+		return $this->path_repository->find_by_post_id( $post_id );
+	}
+
+	/**
 	 * Counts Paths.
 	 *
 	 * @return int
