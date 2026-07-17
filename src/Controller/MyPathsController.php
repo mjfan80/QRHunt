@@ -266,6 +266,10 @@ final class MyPathsController {
 	 * @return string
 	 */
 	private function get_action_url( Participation $participation ): string {
+		if ( ParticipationStatus::CANCELLED === $participation->get_status() ) {
+			return '';
+		}
+
 		$path_id = $participation->get_path_id();
 
 		if ( null === $path_id ) {

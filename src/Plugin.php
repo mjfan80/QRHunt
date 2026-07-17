@@ -143,8 +143,7 @@ final class Plugin {
 		add_action( 'admin_menu', array( $this, 'register_qr_codes_page' ) );
 		add_action( 'admin_post_qrhunt_save_group', array( $this, 'save_group' ) );
 		add_action( 'admin_post_qrhunt_delete_group', array( $this, 'delete_group' ) );
-		add_action( 'admin_post_qrhunt_save_participation', array( $this, 'save_participation' ) );
-		add_action( 'admin_post_qrhunt_delete_participation', array( $this, 'delete_participation' ) );
+		add_action( 'admin_post_qrhunt_cancel_participation', array( $this, 'cancel_participation' ) );
 		add_action( 'admin_post_qrhunt_download_qr_code', array( $this, 'download_qr_code' ) );
 		add_action( 'admin_post_qrhunt_print_path_qr_codes', array( $this, 'print_path_qr_codes' ) );
 		add_action( 'add_meta_boxes_' . PathPostType::POST_TYPE, array( $this, 'register_path_metabox' ) );
@@ -244,21 +243,12 @@ final class Plugin {
 	}
 
 	/**
-	 * Saves a Participation.
+	 * Cancels a Participation.
 	 *
 	 * @return void
 	 */
-	public function save_participation(): void {
-		$this->get_participation_controller()->save();
-	}
-
-	/**
-	 * Deletes a Participation.
-	 *
-	 * @return void
-	 */
-	public function delete_participation(): void {
-		$this->get_participation_controller()->delete();
+	public function cancel_participation(): void {
+		$this->get_participation_controller()->cancel();
 	}
 
 	/**
@@ -379,7 +369,13 @@ final class Plugin {
 	 */
 	private function get_participation_controller(): ParticipationController {
 		if ( null === $this->participation_controller ) {
-			$this->participation_controller = new ParticipationController( $this->get_participation_service(), $this->get_path_service() );
+			$this->participation_controller = new ParticipationController(
+				$this->get_participation_service(),
+				$this->get_path_service(),
+				$this->get_participation_progress_builder(),
+				$this->get_event_service(),
+				$this->get_checkpoint_service()
+			);
 		}
 
 		return $this->participation_controller;

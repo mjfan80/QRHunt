@@ -46,6 +46,20 @@ final class ParticipationService {
 	}
 
 	/**
+	 * Gets Participations matching admin filters.
+	 *
+	 * @param int    $path_id Path identifier, or 0 for all Paths.
+	 * @param int    $user_id User identifier, or 0 for all users.
+	 * @param string $status  Participation status, or empty for all statuses.
+	 * @return array<int, Participation>
+	 */
+	public function get_participations_by_filters( int $path_id, int $user_id, string $status ): array {
+		$status = $this->is_valid_status( $status ) ? $status : '';
+
+		return $this->participation_repository->find_by_filters( $path_id, $user_id, $status );
+	}
+
+	/**
 	 * Gets a Participation by identifier.
 	 *
 	 * @param int $id Participation identifier.
@@ -124,6 +138,30 @@ final class ParticipationService {
 	 * @return void
 	 */
 	public function save_participation( Participation $participation ): void {
+		$status = (string) $participation->get_status();
+
+		if ( ! $this->is_valid_status( $status ) ) {
+			throw new \InvalidArgumentException( 'Invalid Participation status.' );
+		}
+
+		if ( null === $participation->get_id() ) {
+			if ( ParticipationStatus::IN_PROGRESS !== $status ) {
+				throw new \InvalidArgumentException( 'Invalid Participation transition.' );
+			}
+
+			$this->participation_repository->save( $participation );
+			return;
+		}
+
+		$current_participation = $this->get_participation( (int) $participation->get_id() );
+
+		if (
+			null !== $current_participation
+			&& ! $this->can_transition_status( (string) $current_participation->get_status(), $status )
+		) {
+			throw new \InvalidArgumentException( 'Invalid Participation transition.' );
+		}
+
 		$this->participation_repository->save( $participation );
 	}
 
@@ -140,7 +178,7 @@ final class ParticipationService {
 		$participation->set_path_id( $path_id );
 		$participation->set_status( ParticipationStatus::IN_PROGRESS );
 
-		$this->participation_repository->save( $participation );
+		$this->save_participation( $participation );
 
 		if ( null !== $participation->get_id() ) {
 			return $participation;
@@ -156,12 +194,65 @@ final class ParticipationService {
 	}
 
 	/**
-	 * Deletes a Participation.
+	 * Cancels a Participation without deleting historical data.
 	 *
 	 * @param int $id Participation identifier.
 	 * @return void
 	 */
-	public function delete_participation( int $id ): void {
-		$this->participation_repository->delete( $id );
+	public function cancel_participation( int $id ): void {
+		$participation = $this->get_participation( $id );
+
+		if ( null === $participation || ParticipationStatus::CANCELLED === $participation->get_status() ) {
+			return;
+		}
+
+		$participation->set_status( ParticipationStatus::CANCELLED );
+		$this->save_participation( $participation );
+	}
+
+	/**
+	 * Checks if a status is supported.
+	 *
+	 * @param string $status Participation status.
+	 * @return bool
+	 */
+	public function is_valid_status( string $status ): bool {
+		return in_array(
+			$status,
+			array(
+				ParticipationStatus::IN_PROGRESS,
+				ParticipationStatus::FINISHED,
+				ParticipationStatus::COMPLETED,
+				ParticipationStatus::CANCELLED,
+			),
+			true
+		);
+	}
+
+	/**
+	 * Checks if a status transition is allowed by the Participation lifecycle.
+	 *
+	 * @param string $current_status Current stored status.
+	 * @param string $next_status    Requested next status.
+	 * @return bool
+	 */
+	private function can_transition_status( string $current_status, string $next_status ): bool {
+		if ( $current_status === $next_status ) {
+			return true;
+		}
+
+		if ( ParticipationStatus::CANCELLED === $next_status ) {
+			return true;
+		}
+
+		if ( ParticipationStatus::IN_PROGRESS !== $current_status ) {
+			return false;
+		}
+
+		return in_array(
+			$next_status,
+			array( ParticipationStatus::FINISHED, ParticipationStatus::COMPLETED ),
+			true
+		);
 	}
 }

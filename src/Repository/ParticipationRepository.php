@@ -8,6 +8,7 @@
 namespace QRHunt\Repository;
 
 use QRHunt\Model\Participation;
+use QRHunt\Model\ParticipationStatus;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -41,6 +42,107 @@ final class ParticipationRepository {
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
 		$rows = $this->wpdb->get_results(
 			"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} ORDER BY id ASC",
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return $this->hydrate_participations( $rows );
+	}
+
+	/**
+	 * Finds Participations matching optional admin filters.
+	 *
+	 * @param int    $path_id Path identifier, or 0 for all Paths.
+	 * @param int    $user_id User identifier, or 0 for all users.
+	 * @param string $status  Participation status, or empty for all statuses.
+	 * @return array<int, Participation>
+	 */
+	public function find_by_filters( int $path_id, int $user_id, string $status ): array {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		if ( 0 !== $path_id && 0 !== $user_id && '' !== $status ) {
+			$sql  = $this->wpdb->prepare(
+				"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE path_id = %d AND user_id = %d AND status = %s ORDER BY updated_at DESC, id DESC",
+				$path_id,
+				$user_id,
+				$status
+			);
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql is prepared immediately above.
+			$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+			return $this->hydrate_participations( $rows );
+		}
+
+		if ( 0 !== $path_id && 0 !== $user_id ) {
+			$sql  = $this->wpdb->prepare(
+				"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE path_id = %d AND user_id = %d ORDER BY updated_at DESC, id DESC",
+				$path_id,
+				$user_id
+			);
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql is prepared immediately above.
+			$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+			return $this->hydrate_participations( $rows );
+		}
+
+		if ( 0 !== $path_id && '' !== $status ) {
+			$sql  = $this->wpdb->prepare(
+				"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE path_id = %d AND status = %s ORDER BY updated_at DESC, id DESC",
+				$path_id,
+				$status
+			);
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql is prepared immediately above.
+			$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+			return $this->hydrate_participations( $rows );
+		}
+
+		if ( 0 !== $user_id && '' !== $status ) {
+			$sql  = $this->wpdb->prepare(
+				"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE user_id = %d AND status = %s ORDER BY updated_at DESC, id DESC",
+				$user_id,
+				$status
+			);
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql is prepared immediately above.
+			$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+			return $this->hydrate_participations( $rows );
+		}
+
+		if ( 0 !== $path_id ) {
+			$sql  = $this->wpdb->prepare(
+				"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE path_id = %d ORDER BY updated_at DESC, id DESC",
+				$path_id
+			);
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql is prepared immediately above.
+			$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+			return $this->hydrate_participations( $rows );
+		}
+
+		if ( 0 !== $user_id ) {
+			$sql  = $this->wpdb->prepare(
+				"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE user_id = %d ORDER BY updated_at DESC, id DESC",
+				$user_id
+			);
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql is prepared immediately above.
+			$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+			return $this->hydrate_participations( $rows );
+		}
+
+		if ( '' !== $status ) {
+			$sql  = $this->wpdb->prepare(
+				"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE status = %s ORDER BY updated_at DESC, id DESC",
+				$status
+			);
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql is prepared immediately above.
+			$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+			return $this->hydrate_participations( $rows );
+		}
+
+		$rows = $this->wpdb->get_results(
+			"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} ORDER BY updated_at DESC, id DESC",
 			ARRAY_A
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -140,17 +242,37 @@ final class ParticipationRepository {
 	 * @return void
 	 */
 	public function save( Participation $participation ): void {
-		$data = array(
-			'user_id' => $participation->get_user_id(),
-			'path_id' => $participation->get_path_id(),
-			'status'  => $participation->get_status(),
+		$status = $participation->get_status();
+		$data   = array(
+			'user_id'      => $participation->get_user_id(),
+			'path_id'      => $participation->get_path_id(),
+			'status'       => $status,
+			'started_at'   => $participation->get_started_at(),
+			'finished_at'  => $participation->get_finished_at(),
+			'cancelled_at' => $participation->get_cancelled_at(),
+			'updated_at'   => current_time( 'mysql' ),
 		);
+
+		if ( null === $participation->get_started_at() && ParticipationStatus::IN_PROGRESS === $status ) {
+			$data['started_at'] = current_time( 'mysql' );
+		}
+
+		if (
+			null === $participation->get_finished_at()
+			&& in_array( $status, array( ParticipationStatus::FINISHED, ParticipationStatus::COMPLETED ), true )
+		) {
+			$data['finished_at'] = current_time( 'mysql' );
+		}
+
+		if ( null === $participation->get_cancelled_at() && ParticipationStatus::CANCELLED === $status ) {
+			$data['cancelled_at'] = current_time( 'mysql' );
+		}
 
 		if ( null === $participation->get_id() ) {
 			$this->wpdb->insert(
 				$this->table_name,
 				$data,
-				array( '%d', '%d', '%s' )
+				array( '%d', '%d', '%s', '%s', '%s', '%s', '%s' )
 			);
 			$participation->set_id( 0 === (int) $this->wpdb->insert_id ? null : (int) $this->wpdb->insert_id );
 
@@ -161,21 +283,7 @@ final class ParticipationRepository {
 			$this->table_name,
 			$data,
 			array( 'id' => $participation->get_id() ),
-			array( '%d', '%d', '%s' ),
-			array( '%d' )
-		);
-	}
-
-	/**
-	 * Deletes a Participation.
-	 *
-	 * @param int $id Participation identifier.
-	 * @return void
-	 */
-	public function delete( int $id ): void {
-		$this->wpdb->delete(
-			$this->table_name,
-			array( 'id' => $id ),
+			array( '%d', '%d', '%s', '%s', '%s', '%s', '%s' ),
 			array( '%d' )
 		);
 	}

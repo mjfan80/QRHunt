@@ -114,6 +114,16 @@ final class ScanService {
 	 * @return ValidationResult
 	 */
 	private function process_scan( Participation $participation, Checkpoint $checkpoint ): ValidationResult {
+		if (
+			in_array(
+				$participation->get_status(),
+				array( ParticipationStatus::CANCELLED, ParticipationStatus::FINISHED, ParticipationStatus::COMPLETED ),
+				true
+			)
+		) {
+			return ValidationResult::create_invalid( array() );
+		}
+
 		$checkpoint_post_id      = (int) $checkpoint->get_post_id();
 		$participation_progress = $this->participation_progress_builder->build( $participation );
 		$validation_result      = $this->validation_service->validate( $participation, $checkpoint, $participation_progress );

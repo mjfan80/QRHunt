@@ -69,6 +69,36 @@ final class EventRepository {
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
 		$rows = $this->wpdb->get_results( $sql, ARRAY_A );
 
+		return $this->hydrate_events( $rows );
+	}
+
+	/**
+	 * Gets Events for a Participation.
+	 *
+	 * @param int $participation_id Participation identifier.
+	 * @return array<int, Event>
+	 */
+	public function find_by_participation( int $participation_id ): array {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_events suffix.
+		$sql = $this->wpdb->prepare(
+			"SELECT id, participation_id, checkpoint_id, event_type, result, ip_address, user_agent, created_at FROM {$this->table_name} WHERE participation_id = %d ORDER BY created_at DESC, id DESC",
+			$participation_id
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
+		$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+		return $this->hydrate_events( $rows );
+	}
+
+	/**
+	 * Hydrates Event models.
+	 *
+	 * @param array<int, array<string, mixed>> $rows Database rows.
+	 * @return array<int, Event>
+	 */
+	private function hydrate_events( array $rows ): array {
 		$events = array();
 
 		foreach ( $rows as $row ) {

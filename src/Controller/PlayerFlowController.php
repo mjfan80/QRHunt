@@ -143,6 +143,42 @@ final class PlayerFlowController {
 			return;
 		}
 
+		if ( ParticipationStatus::CANCELLED === $participation->get_status() ) {
+			$this->prepare_template_response(
+				$this->build_error_view_context(
+					$checkpoint,
+					$participation,
+					__( 'Validation failed', 'qrhunt' ),
+					__( 'This Participation has been cancelled.', 'qrhunt' ),
+					array(),
+					false,
+					true
+				),
+				200
+			);
+
+			return;
+		}
+
+		if (
+			in_array(
+				$participation->get_status(),
+				array( ParticipationStatus::FINISHED, ParticipationStatus::COMPLETED ),
+				true
+			)
+		) {
+			$this->prepare_template_response(
+				$this->build_success_view_context(
+					$checkpoint,
+					$participation,
+					$this->participation_progress_builder->build( $participation )
+				),
+				200
+			);
+
+			return;
+		}
+
 		$progress_before      = $this->participation_progress_builder->build( $participation );
 		$validation_result    = $this->scan_service->scan_checkpoint( $participation, $checkpoint );
 		$stored_participation = $this->participation_service->get_participation( (int) $participation->get_id() );

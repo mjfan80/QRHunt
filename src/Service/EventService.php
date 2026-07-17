@@ -48,4 +48,14 @@ final class EventService {
 	public function get_recent_events( int $limit ): array {
 		return $this->event_repository->find_recent( $limit );
 	}
+
+	/**
+	 * Gets Events for a Participation.
+	 *
+	 * @param int $participation_id Participation identifier.
+	 * @return array<int, Event>
+	 */
+	public function get_events_by_participation( int $participation_id ): array {
+		return $this->event_repository->find_by_participation( $participation_id );
+	}
 }
