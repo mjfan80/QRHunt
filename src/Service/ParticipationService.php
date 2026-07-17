@@ -67,6 +67,16 @@ final class ParticipationService {
 	}
 
 	/**
+	 * Gets Participations by user.
+	 *
+	 * @param int $user_id User identifier.
+	 * @return array<int, Participation>
+	 */
+	public function get_participations_by_user( int $user_id ): array {
+		return $this->participation_repository->find_by_user( $user_id );
+	}
+
+	/**
 	 * Counts Participations.
 	 *
 	 * @return int

@@ -421,7 +421,7 @@ final class PlayerFlowController {
 	}
 
 	/**
-	 * Gets the reserved public URL for the future My Paths page.
+	 * Gets the public URL for the My Paths page.
 	 *
 	 * @return string
 	 */
@@ -429,7 +429,7 @@ final class PlayerFlowController {
 		$url = home_url( '/qrhunt/my-paths/' );
 
 		/**
-		 * Filters the future My Paths public URL.
+		 * Filters the My Paths public URL.
 		 *
 		 * @param string $url Default URL.
 		 */

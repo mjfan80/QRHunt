@@ -101,6 +101,26 @@ final class ParticipationRepository {
 	}
 
 	/**
+	 * Gets Participations by user.
+	 *
+	 * @param int $user_id User identifier.
+	 * @return array<int, Participation>
+	 */
+	public function find_by_user( int $user_id ): array {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		$sql = $this->wpdb->prepare(
+			"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE user_id = %d ORDER BY updated_at DESC, id DESC",
+			$user_id
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
+		$rows = $this->wpdb->get_results( $sql, ARRAY_A );
+
+		return $this->hydrate_participations( $rows );
+	}
+
+	/**
 	 * Counts Participations.
 	 *
 	 * @return int

@@ -11,6 +11,7 @@ use QRHunt\Controller\CheckpointController;
 use QRHunt\Controller\DashboardController;
 use QRHunt\Controller\DependencyController;
 use QRHunt\Controller\GroupController;
+use QRHunt\Controller\MyPathsController;
 use QRHunt\Controller\ParticipationController;
 use QRHunt\Controller\PathController;
 use QRHunt\Controller\PlayerFlowController;
@@ -63,6 +64,9 @@ final class Plugin {
 
 	/** @var PlayerFlowController|null */
 	private $player_flow_controller;
+
+	/** @var MyPathsController|null */
+	private $my_paths_controller;
 
 	/** @var QrCodeController|null */
 	private $qr_code_controller;
@@ -149,6 +153,7 @@ final class Plugin {
 		add_action( 'save_post_' . CheckpointPostType::POST_TYPE, array( $this, 'save_checkpoint_path' ), 10, 2 );
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 		add_action( 'template_redirect', array( $this, 'handle_player_flow' ), 0 );
+		add_action( 'template_redirect', array( $this, 'handle_my_paths' ), 0 );
 		add_filter( 'query_vars', array( $this, 'register_query_vars' ) );
 	}
 
@@ -180,6 +185,7 @@ final class Plugin {
 	 */
 	public function register_rewrite_rules(): void {
 		PlayerFlowController::register_rewrite_rules();
+		MyPathsController::register_rewrite_rules();
 	}
 
 	/**
@@ -330,6 +336,7 @@ final class Plugin {
 	 */
 	public function register_query_vars( array $query_vars ): array {
 		$query_vars[] = PlayerFlowController::QUERY_VAR;
+		$query_vars[] = MyPathsController::QUERY_VAR;
 
 		return $query_vars;
 	}
@@ -341,6 +348,15 @@ final class Plugin {
 	 */
 	public function handle_player_flow(): void {
 		$this->get_player_flow_controller()->handle_request();
+	}
+
+	/**
+	 * Handles the public My Paths page.
+	 *
+	 * @return void
+	 */
+	public function handle_my_paths(): void {
+		$this->get_my_paths_controller()->handle_request();
 	}
 
 	/**
@@ -442,6 +458,25 @@ final class Plugin {
 		}
 
 		return $this->player_flow_controller;
+	}
+
+	/**
+	 * Creates the My Paths controller.
+	 *
+	 * @return MyPathsController
+	 */
+	private function get_my_paths_controller(): MyPathsController {
+		if ( null === $this->my_paths_controller ) {
+			$this->my_paths_controller = new MyPathsController(
+				$this->get_participation_service(),
+				$this->get_path_service(),
+				$this->get_checkpoint_service(),
+				$this->get_participation_progress_builder(),
+				$this->get_qr_code_service()
+			);
+		}
+
+		return $this->my_paths_controller;
 	}
 
 	/**
