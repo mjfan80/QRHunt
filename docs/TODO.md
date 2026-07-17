@@ -23,7 +23,8 @@
 - [x] Public Routing
 - [x] Token Resolution
 - [x] Player Flow
-- [ ] Public UI
+- [x] Public UI
+- [x] My Paths
 
 # Features
 
@@ -36,7 +37,7 @@
 - [ ] Internazionalizzazione
 - [x] Plugin Check
 - [ ] Documentation Review
-- [ ] Replace temporary inline styles with the dedicated Public UI stylesheet.
+- [X] Replace temporary inline styles with the dedicated Public UI stylesheet.
 
 # Release
 

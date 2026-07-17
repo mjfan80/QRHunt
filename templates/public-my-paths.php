@@ -16,7 +16,7 @@ $qrhunt_items      = isset( $qrhunt_context['items'] ) && is_array( $qrhunt_cont
 get_header();
 ?>
 <main id="primary" class="site-main qrhunt-public-my-paths">
-	<div class="qrhunt-public-my-paths__content" style="max-width: 720px; margin: 2rem auto; padding: 0 1rem;">
+	<div class="qrhunt-public-my-paths__content">
 		<h1><?php echo esc_html( $qrhunt_page_title ); ?></h1>
 
 		<?php if ( empty( $qrhunt_items ) ) : ?>

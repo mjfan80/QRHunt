@@ -172,10 +172,28 @@ final class MyPathsController {
 		status_header( 200 );
 		nocache_headers();
 
+		$this->enqueue_public_styles();
+
 		set_query_var( 'qrhunt_public_my_paths_context', $view_context );
 
 		add_filter( 'body_class', array( $this, 'filter_body_class' ) );
 		add_filter( 'template_include', array( $this, 'filter_template_include' ), 99 );
+	}
+
+	/**
+	 * Enqueues the public UI stylesheet.
+	 *
+	 * @return void
+	 */
+	private function enqueue_public_styles(): void {
+		$stylesheet_path = dirname( __DIR__, 2 ) . '/assets/css/public-ui.css';
+
+		wp_enqueue_style(
+			'qrhunt-public-ui',
+			plugins_url( 'assets/css/public-ui.css', dirname( __DIR__, 2 ) . '/qrhunt.php' ),
+			array(),
+			(string) filemtime( $stylesheet_path )
+		);
 	}
 
 	/**

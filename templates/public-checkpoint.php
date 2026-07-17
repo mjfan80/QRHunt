@@ -27,7 +27,7 @@ $qrhunt_checkpoint_content = isset( $qrhunt_context['checkpoint_content'] ) ? (s
 get_header();
 ?>
 <main id="primary" class="site-main qrhunt-public-checkpoint">
-	<div class="qrhunt-public-checkpoint__content" style="max-width: 720px; margin: 2rem auto; padding: 0 1rem;">
+	<div class="qrhunt-public-checkpoint__content">
 		<h1><?php echo esc_html( $qrhunt_page_title ); ?></h1>
 
 		<?php if ( '' !== $qrhunt_banner_message ) : ?>
