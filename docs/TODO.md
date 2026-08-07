@@ -29,7 +29,7 @@
 # Features
 
 - [x] Partecipazioni
-- [ ] Esportazione
+- [x] Esportazione
 
 # Quality
 

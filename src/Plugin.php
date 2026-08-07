@@ -10,6 +10,7 @@ namespace QRHunt;
 use QRHunt\Controller\CheckpointController;
 use QRHunt\Controller\DashboardController;
 use QRHunt\Controller\DependencyController;
+use QRHunt\Controller\ExportController;
 use QRHunt\Controller\GroupController;
 use QRHunt\Controller\MyPathsController;
 use QRHunt\Controller\ParticipationController;
@@ -28,6 +29,7 @@ use QRHunt\Service\CheckpointService;
 use QRHunt\Service\DashboardService;
 use QRHunt\Service\DependencyService;
 use QRHunt\Service\EventService;
+use QRHunt\Service\ExportService;
 use QRHunt\Service\GroupService;
 use QRHunt\Service\ParticipationCheckpointService;
 use QRHunt\Service\ParticipationProgressBuilder;
@@ -71,6 +73,9 @@ final class Plugin {
 	/** @var QrCodeController|null */
 	private $qr_code_controller;
 
+	/** @var ExportController|null */
+	private $export_controller;
+
 	/** @var ScanService|null */
 	private $scan_service;
 
@@ -107,6 +112,9 @@ final class Plugin {
 	/** @var QrCodeService|null */
 	private $qr_code_service;
 
+	/** @var ExportService|null */
+	private $export_service;
+
 	/** @var CheckpointRepository|null */
 	private $checkpoint_repository;
 
@@ -141,11 +149,13 @@ final class Plugin {
 		add_action( 'admin_menu', array( $this, 'register_groups_page' ) );
 		add_action( 'admin_menu', array( $this, 'register_participations_page' ) );
 		add_action( 'admin_menu', array( $this, 'register_qr_codes_page' ) );
+		add_action( 'admin_menu', array( $this, 'register_exports_page' ) );
 		add_action( 'admin_post_qrhunt_save_group', array( $this, 'save_group' ) );
 		add_action( 'admin_post_qrhunt_delete_group', array( $this, 'delete_group' ) );
 		add_action( 'admin_post_qrhunt_cancel_participation', array( $this, 'cancel_participation' ) );
 		add_action( 'admin_post_qrhunt_download_qr_code', array( $this, 'download_qr_code' ) );
 		add_action( 'admin_post_qrhunt_print_path_qr_codes', array( $this, 'print_path_qr_codes' ) );
+		add_action( 'admin_post_qrhunt_export_csv', array( $this, 'export_csv' ) );
 		add_action( 'add_meta_boxes_' . PathPostType::POST_TYPE, array( $this, 'register_path_metabox' ) );
 		add_action( 'save_post_' . PathPostType::POST_TYPE, array( $this, 'synchronize_path' ), 10, 2 );
 		add_action( 'add_meta_boxes_' . CheckpointPostType::POST_TYPE, array( $this, 'register_checkpoint_metabox' ) );
@@ -243,6 +253,15 @@ final class Plugin {
 	}
 
 	/**
+	 * Registers the Exports admin page.
+	 *
+	 * @return void
+	 */
+	public function register_exports_page(): void {
+		$this->get_export_controller()->register_page();
+	}
+
+	/**
 	 * Cancels a Participation.
 	 *
 	 * @return void
@@ -267,6 +286,15 @@ final class Plugin {
 	 */
 	public function print_path_qr_codes(): void {
 		$this->get_qr_code_controller()->print_path();
+	}
+
+	/**
+	 * Downloads a CSV export.
+	 *
+	 * @return void
+	 */
+	public function export_csv(): void {
+		$this->get_export_controller()->download();
 	}
 
 	/**
@@ -493,6 +521,24 @@ final class Plugin {
 	}
 
 	/**
+	 * Creates the export controller.
+	 *
+	 * @return ExportController
+	 */
+	private function get_export_controller(): ExportController {
+		if ( null === $this->export_controller ) {
+			$this->export_controller = new ExportController(
+				$this->get_export_service(),
+				$this->get_path_service(),
+				$this->get_participation_service(),
+				$this->get_checkpoint_service()
+			);
+		}
+
+		return $this->export_controller;
+	}
+
+	/**
 	 * Creates the scan service.
 	 *
 	 * @return ScanService
@@ -667,6 +713,25 @@ final class Plugin {
 		}
 
 		return $this->qr_code_service;
+	}
+
+	/**
+	 * Creates the export service.
+	 *
+	 * @return ExportService
+	 */
+	private function get_export_service(): ExportService {
+		if ( null === $this->export_service ) {
+			$this->export_service = new ExportService(
+				$this->get_participation_service(),
+				$this->get_event_service(),
+				$this->get_path_service(),
+				$this->get_checkpoint_service(),
+				$this->get_participation_progress_builder()
+			);
+		}
+
+		return $this->export_service;
 	}
 
 	/**
