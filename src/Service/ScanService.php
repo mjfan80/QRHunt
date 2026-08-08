@@ -128,7 +128,7 @@ final class ScanService {
 		$participation_progress = $this->participation_progress_builder->build( $participation );
 		$validation_result      = $this->validation_service->validate( $participation, $checkpoint, $participation_progress );
 
-		$this->event_service->save_event( $this->build_scan_event( $participation, $checkpoint_post_id, $validation_result ) );
+		$this->event_service->save_event( $this->build_scan_event( $participation, $checkpoint_post_id, $validation_result, $participation_progress ) );
 
 		if ( $validation_result->is_valid() ) {
 			$this->participation_checkpoint_service->save_validated_checkpoint( (int) $participation->get_id(), $checkpoint_post_id );
@@ -164,17 +164,18 @@ final class ScanService {
 	/**
 	 * Builds the Event associated with a scan attempt.
 	 *
-	 * @param Participation    $participation      Participation being validated.
-	 * @param int              $checkpoint_post_id Checkpoint post identifier.
-	 * @param ValidationResult $validation_result  Validation result.
+	 * @param Participation         $participation          Participation being validated.
+	 * @param int                   $checkpoint_post_id     Checkpoint post identifier.
+	 * @param ValidationResult      $validation_result      Validation result.
+	 * @param ParticipationProgress $participation_progress Participation progress before the scan.
 	 * @return Event
 	 */
-	private function build_scan_event( Participation $participation, int $checkpoint_post_id, ValidationResult $validation_result ): Event {
+	private function build_scan_event( Participation $participation, int $checkpoint_post_id, ValidationResult $validation_result, ParticipationProgress $participation_progress ): Event {
 		$event = new Event();
 		$event->set_participation_id( $participation->get_id() );
 		$event->set_checkpoint_id( $checkpoint_post_id );
 		$event->set_event_type( EventType::QR_SCAN );
-		$event->set_result( $this->resolve_event_result( $validation_result ) );
+		$event->set_result( $this->resolve_event_result( $validation_result, $checkpoint_post_id, $participation_progress ) );
 		$event->set_ip_address( null );
 		$event->set_user_agent( null );
 
@@ -184,12 +185,18 @@ final class ScanService {
 	/**
 	 * Resolves the Event result from a Validation result.
 	 *
-	 * @param ValidationResult $validation_result Validation result.
+	 * @param ValidationResult      $validation_result      Validation result.
+	 * @param int                   $checkpoint_post_id     Checkpoint post identifier.
+	 * @param ParticipationProgress $participation_progress Participation progress before the scan.
 	 * @return string
 	 */
-	private function resolve_event_result( ValidationResult $validation_result ): string {
+	private function resolve_event_result( ValidationResult $validation_result, int $checkpoint_post_id, ParticipationProgress $participation_progress ): string {
 		if ( $validation_result->is_valid() ) {
 			return EventResult::ACCEPTED;
+		}
+
+		if ( in_array( $checkpoint_post_id, $participation_progress->get_validated_checkpoint_ids(), true ) ) {
+			return EventResult::DUPLICATE;
 		}
 
 		foreach ( $validation_result->get_failed_dependencies() as $violation ) {

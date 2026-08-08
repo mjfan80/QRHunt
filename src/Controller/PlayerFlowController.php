@@ -121,6 +121,26 @@ final class PlayerFlowController {
 			auth_redirect();
 		}
 
+		$path_id = $checkpoint->get_path_id();
+		$path    = null === $path_id ? null : $this->path_service->get_path( (int) $path_id );
+
+		if ( null === $path || ! $this->path_service->is_path_available_for_scan( $path ) ) {
+			$this->prepare_template_response(
+				$this->build_error_view_context(
+					$checkpoint,
+					null,
+					__( 'Validation failed', 'qrhunt' ),
+					__( 'This Path is not available.', 'qrhunt' ),
+					array(),
+					false,
+					true
+				),
+				200
+			);
+
+			return;
+		}
+
 		$participation = $this->participation_service->get_participation_for_scan(
 			get_current_user_id(),
 			$checkpoint
@@ -185,6 +205,15 @@ final class PlayerFlowController {
 		$participation        = $stored_participation instanceof Participation ? $stored_participation : $participation;
 
 		if ( $validation_result->is_valid() ) {
+			$this->prepare_template_response(
+				$this->build_success_view_context( $checkpoint, $participation, $progress_before ),
+				200
+			);
+
+			return;
+		}
+
+		if ( in_array( (int) $checkpoint->get_post_id(), $progress_before->get_validated_checkpoint_ids(), true ) ) {
 			$this->prepare_template_response(
 				$this->build_success_view_context( $checkpoint, $participation, $progress_before ),
 				200

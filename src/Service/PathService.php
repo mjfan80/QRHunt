@@ -59,6 +59,32 @@ final class PathService {
 	}
 
 	/**
+	 * Determines whether a Path can be started or scanned at the current time.
+	 *
+	 * @param Path $path Path to evaluate.
+	 * @return bool
+	 */
+	public function is_path_available_for_scan( Path $path ): bool {
+		if ( ! in_array( $path->get_status(), array( 'publish', 'published' ), true ) ) {
+			return false;
+		}
+
+		$current_time = current_time( 'mysql' );
+		$opening_date = $path->get_opening_date();
+		$closing_date = $path->get_closing_date();
+
+		if ( null !== $opening_date && '' !== $opening_date && $current_time < $opening_date ) {
+			return false;
+		}
+
+		if ( null !== $closing_date && '' !== $closing_date && $current_time > $closing_date ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Counts Paths.
 	 *
 	 * @return int

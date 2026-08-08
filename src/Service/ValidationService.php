@@ -32,11 +32,52 @@ final class ValidationService {
 	 * @return ValidationResult
 	 */
 	public function validate( Participation $participation, Checkpoint $checkpoint, ParticipationProgress $participation_state ): ValidationResult {
-		unset( $participation );
+		if ( $participation->get_path_id() !== $checkpoint->get_path_id() ) {
+			return ValidationResult::create_invalid( array() );
+		}
+
+		if ( in_array( $checkpoint->get_post_id(), $participation_state->get_validated_checkpoint_ids(), true ) ) {
+			return ValidationResult::create_invalid( array() );
+		}
+
+		$failed_dependencies = $this->get_failed_dependencies_by_type(
+			$checkpoint,
+			$participation_state,
+			DependencyType::AFTER
+		);
+
+		if ( ! empty( $failed_dependencies ) ) {
+			return ValidationResult::create_invalid( $failed_dependencies );
+		}
+
+		$failed_dependencies = $this->get_failed_dependencies_by_type(
+			$checkpoint,
+			$participation_state,
+			DependencyType::BEFORE
+		);
+
+		return empty( $failed_dependencies )
+			? ValidationResult::create_valid()
+			: ValidationResult::create_invalid( $failed_dependencies );
+	}
+
+	/**
+	 * Gets unsatisfied Dependencies of one type.
+	 *
+	 * @param Checkpoint            $checkpoint          Checkpoint being validated.
+	 * @param ParticipationProgress $participation_state Current Participation state.
+	 * @param string                $type                Dependency type.
+	 * @return array<int, DependencyViolation>
+	 */
+	private function get_failed_dependencies_by_type( Checkpoint $checkpoint, ParticipationProgress $participation_state, string $type ): array {
 
 		$failed_dependencies = array();
 
 		foreach ( $checkpoint->get_dependencies() as $dependency ) {
+			if ( $type !== $dependency->get_type() ) {
+				continue;
+			}
+
 			if ( $this->is_dependency_satisfied( $dependency, $participation_state ) ) {
 				continue;
 			}
@@ -49,11 +90,7 @@ final class ValidationService {
 			);
 		}
 
-		if ( empty( $failed_dependencies ) ) {
-			return ValidationResult::create_valid();
-		}
-
-		return ValidationResult::create_invalid( $failed_dependencies );
+		return $failed_dependencies;
 	}
 
 	/**
