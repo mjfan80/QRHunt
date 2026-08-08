@@ -51,8 +51,8 @@ final class PlayerFlowControllerTest extends IntegrationTestCase {
 		wp_set_current_user( $user_id );
 
 		global $wpdb, $wp_query;
-		$participation_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_participations" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name contains only the WordPress prefix and fixed QRHunt suffix.
-		$event_count         = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_events" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name contains only the WordPress prefix and fixed QRHunt suffix.
+		$participation_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_participations" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test asserts that the Player Flow does not persist a Participation.
+		$event_count         = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_events" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test asserts that the Player Flow does not persist an Event.
 		$wp_query->query_vars[ PlayerFlowController::QUERY_VAR ] = $checkpoint->get_token();
 
 		$controller = new PlayerFlowController(
@@ -66,7 +66,7 @@ final class PlayerFlowControllerTest extends IntegrationTestCase {
 		$context = get_query_var( 'qrhunt_public_ui_context' );
 
 		self::assertSame( 'This Path is not available.', $context['message'] );
-		self::assertSame( $participation_count, (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_participations" ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name contains only the WordPress prefix and fixed QRHunt suffix.
-		self::assertSame( $event_count, (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_events" ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name contains only the WordPress prefix and fixed QRHunt suffix.
+		self::assertSame( $participation_count, (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_participations" ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test compares the persisted Participation count after the Player Flow.
+		self::assertSame( $event_count, (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_events" ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test compares the persisted Event count after the Player Flow.
 	}
 }

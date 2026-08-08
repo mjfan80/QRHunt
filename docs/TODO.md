@@ -33,7 +33,7 @@
 
 # Quality
 
-- [ ] Test
+- [x] Test
 - [ ] Internazionalizzazione
 - [x] Plugin Check
 - [ ] Documentation Review

@@ -64,8 +64,7 @@ abstract class IntegrationTestCase extends \WP_UnitTestCase {
 		);
 
 		foreach ( $tables as $table ) {
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table is selected from a fixed list of QRHunt test table suffixes.
-			$wpdb->query( "DELETE FROM {$wpdb->prefix}{$table}" );
+			$wpdb->query( "DELETE FROM {$wpdb->prefix}{$table}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- This integration-test teardown clears only the fixed QRHunt tables in the dedicated test database.
 		}
 	}
 
@@ -127,7 +126,7 @@ abstract class IntegrationTestCase extends \WP_UnitTestCase {
 		$path = $services['path_service']->get_path_by_post_id( $post_id );
 
 		global $wpdb;
-		$wpdb->update(
+		$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- This integration-test fixture needs opening and closing dates, which the current Path admin fixture API does not persist.
 			$wpdb->prefix . 'qrhunt_paths',
 			array(
 				'opening_date' => $values['opening_date'] ?? null,

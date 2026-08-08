@@ -22,8 +22,12 @@ final class ExportServiceTest extends IntegrationTestCase {
 		$services      = $this->get_services();
 		$path          = $this->create_path( array( 'name' => 'Selected Path' ) );
 		$checkpoint    = $this->create_checkpoint( (int) $path->get_id() );
+		$finish        = $this->create_checkpoint( (int) $path->get_id() );
 		$user_id       = self::factory()->user->create( array( 'display_name' => 'Player' ) );
 		$participation = $this->create_participation( $user_id, (int) $path->get_id() );
+		$path->set_start_checkpoint_id( (int) $checkpoint->get_post_id() );
+		$path->set_finish_checkpoint_id( (int) $finish->get_post_id() );
+		$services['path_service']->save_path( $path );
 		$services['scan_service']->scan_checkpoint( $participation, $checkpoint );
 		$export = new ExportService(
 			$services['participation_service'],

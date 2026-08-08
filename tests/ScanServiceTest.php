@@ -47,7 +47,11 @@ final class ScanServiceTest extends IntegrationTestCase {
 		$services      = $this->get_services();
 		$path          = $this->create_path();
 		$checkpoint    = $this->create_checkpoint( (int) $path->get_id() );
+		$finish        = $this->create_checkpoint( (int) $path->get_id() );
 		$participation = $this->create_participation( self::factory()->user->create(), (int) $path->get_id() );
+		$path->set_start_checkpoint_id( (int) $checkpoint->get_post_id() );
+		$path->set_finish_checkpoint_id( (int) $finish->get_post_id() );
+		$services['path_service']->save_path( $path );
 
 		$services['scan_service']->scan_checkpoint( $participation, $checkpoint );
 		$result = $services['scan_service']->scan_checkpoint( $participation, $checkpoint );
@@ -55,7 +59,10 @@ final class ScanServiceTest extends IntegrationTestCase {
 
 		self::assertFalse( $result->is_valid() );
 		self::assertCount( 1, $services['progress_builder']->build( $participation )->get_validated_checkpoint_ids() );
+		self::assertSame( ParticipationStatus::IN_PROGRESS, $services['participation_service']->get_participation( (int) $participation->get_id() )->get_status() );
+		self::assertCount( 2, $events );
 		self::assertSame( EventResult::DUPLICATE, $events[0]->get_result() );
+		self::assertSame( EventResult::ACCEPTED, $events[1]->get_result() );
 	}
 
 	/**

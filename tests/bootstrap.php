@@ -2,38 +2,57 @@
 /**
  * PHPUnit bootstrap for the WordPress integration suite.
  *
+ * This file runs before WordPress defines ABSPATH. Restrict direct web requests
+ * while allowing the PHPUnit CLI process to initialize the WordPress test suite.
+ *
  * @package QRHunt
  */
 
-$tests_dir = getenv( 'WP_TESTS_DIR' );
+if ( 'cli' !== PHP_SAPI ) {
+	defined( 'ABSPATH' ) || exit;
+}
 
-if ( false === $tests_dir || '' === $tests_dir ) {
-	fwrite( STDERR, "WP_TESTS_DIR must point to the WordPress test library.\n" );
+$qrhunt_tests_dir = getenv( 'WP_TESTS_DIR' );
+
+if ( false === $qrhunt_tests_dir || '' === $qrhunt_tests_dir ) {
+	echo "WP_TESTS_DIR must point to the WordPress test library.\n";
 	exit( 1 );
 }
 
-$config_file = rtrim( $tests_dir, '\\/' ) . '/wp-tests-config.php';
+$qrhunt_tests_dir         = rtrim( $qrhunt_tests_dir, '\\/' );
+$qrhunt_config_candidates = array(
+	$qrhunt_tests_dir . '/wp-tests-config.php',
+	dirname( $qrhunt_tests_dir, 2 ) . '/wp-tests-config.php',
+);
+$qrhunt_config_file       = '';
 
-if ( ! is_readable( $config_file ) ) {
-	fwrite( STDERR, "wp-tests-config.php was not found in WP_TESTS_DIR.\n" );
+foreach ( $qrhunt_config_candidates as $qrhunt_config_candidate ) {
+	if ( is_readable( $qrhunt_config_candidate ) ) {
+		$qrhunt_config_file = $qrhunt_config_candidate;
+		break;
+	}
+}
+
+if ( '' === $qrhunt_config_file ) {
+	echo "wp-tests-config.php was not found in WP_TESTS_DIR or its wordpress-develop root.\n";
 	exit( 1 );
 }
 
 if ( '1' !== getenv( 'QRHUNT_TESTS_ALLOW_DB_RESET' ) ) {
-	fwrite( STDERR, "Set QRHUNT_TESTS_ALLOW_DB_RESET=1 only for a dedicated test database.\n" );
+	echo "Set QRHUNT_TESTS_ALLOW_DB_RESET=1 only for a dedicated test database.\n";
 	exit( 1 );
 }
 
-require_once $config_file;
+require_once $qrhunt_config_file;
 
-$expected_database = getenv( 'QRHUNT_TEST_DB' );
+$qrhunt_expected_database = getenv( 'QRHUNT_TEST_DB' );
 
-if ( false === $expected_database || '' === $expected_database || ! defined( 'DB_NAME' ) || DB_NAME !== $expected_database ) {
-	fwrite( STDERR, "QRHUNT_TEST_DB must match the dedicated DB_NAME declared in wp-tests-config.php.\n" );
+if ( false === $qrhunt_expected_database || '' === $qrhunt_expected_database || ! defined( 'DB_NAME' ) || DB_NAME !== $qrhunt_expected_database ) {
+	echo "QRHUNT_TEST_DB must match the dedicated DB_NAME declared in wp-tests-config.php.\n";
 	exit( 1 );
 }
 
-require_once rtrim( $tests_dir, '\\/' ) . '/includes/functions.php';
+require_once $qrhunt_tests_dir . '/includes/functions.php';
 
 tests_add_filter(
 	'muplugins_loaded',
@@ -42,6 +61,6 @@ tests_add_filter(
 	}
 );
 
-require rtrim( $tests_dir, '\\/' ) . '/includes/bootstrap.php';
+require $qrhunt_tests_dir . '/includes/bootstrap.php';
 
 require_once __DIR__ . '/IntegrationTestCase.php';
