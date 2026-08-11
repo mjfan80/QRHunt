@@ -76,9 +76,11 @@ final class ScanRestController {
 				(int) $request->get_param( 'participation_id' )
 			);
 		} catch ( \InvalidArgumentException $exception ) {
+			unset( $exception );
+
 			return new \WP_Error(
 				'qrhunt_scan_not_found',
-				$exception->getMessage(),
+				__( 'The requested checkpoint or participation could not be found.', 'qrhunt' ),
 				array( 'status' => 404 )
 			);
 		}

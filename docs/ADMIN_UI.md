@@ -205,7 +205,7 @@ Configurazioni previste.
 
 ## Internazionalizzazione
 
-Configurazione della lingua del plugin.
+QRHunt utilizza il locale nativo di WordPress. Non dispone di un selettore di lingua proprietario. La versione 1.0 viene distribuita con inglese come lingua sorgente e traduzione italiana inclusa.
 
 ---
 

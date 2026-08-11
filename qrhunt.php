@@ -8,6 +8,7 @@
  * Author: mjfan80
  * License: GPL-2.0-or-later
  * Text Domain: qrhunt
+ * Domain Path: /languages
  *
  * @package QRHunt
  */

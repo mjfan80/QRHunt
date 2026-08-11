@@ -9,6 +9,8 @@ namespace QRHunt\Controller;
 
 use QRHunt\Model\Participation;
 use QRHunt\Model\ParticipationStatus;
+use QRHunt\Model\EventResult;
+use QRHunt\Model\EventType;
 use QRHunt\Service\CheckpointService;
 use QRHunt\Service\EventService;
 use QRHunt\Service\ParticipationProgressBuilder;
@@ -250,8 +252,8 @@ final class ParticipationController {
 					<tr>
 						<td><?php echo esc_html( $this->format_datetime( $event->get_created_at() ) ); ?></td>
 						<td><?php echo esc_html( null === $event->get_checkpoint_id() ? '' : $this->checkpoint_service->get_checkpoint_title( (int) $event->get_checkpoint_id() ) ); ?></td>
-						<td><?php echo esc_html( (string) $event->get_event_type() ); ?></td>
-						<td><?php echo esc_html( (string) $event->get_result() ); ?></td>
+						<td><?php echo esc_html( $this->get_event_type_labels()[ (string) $event->get_event_type() ] ?? (string) $event->get_event_type() ); ?></td>
+						<td><?php echo esc_html( $this->get_event_result_labels()[ (string) $event->get_result() ] ?? (string) $event->get_result() ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
@@ -306,6 +308,33 @@ final class ParticipationController {
 			ParticipationStatus::FINISHED    => __( 'Finished', 'qrhunt' ),
 			ParticipationStatus::COMPLETED   => __( 'Completed', 'qrhunt' ),
 			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'qrhunt' ),
+		);
+	}
+
+	/**
+	 * Gets Event type labels.
+	 *
+	 * @return array<string, string>
+	 */
+	private function get_event_type_labels(): array {
+		return array(
+			EventType::QR_SCAN => __( 'QR Code scan', 'qrhunt' ),
+		);
+	}
+
+	/**
+	 * Gets Event result labels.
+	 *
+	 * @return array<string, string>
+	 */
+	private function get_event_result_labels(): array {
+		return array(
+			EventResult::ACCEPTED                => __( 'Accepted', 'qrhunt' ),
+			EventResult::DUPLICATE               => __( 'Duplicate', 'qrhunt' ),
+			EventResult::BEFORE_FAILED           => __( 'Before Failed', 'qrhunt' ),
+			EventResult::AFTER_FAILED            => __( 'After Failed', 'qrhunt' ),
+			EventResult::PATH_CLOSED             => __( 'Path Closed', 'qrhunt' ),
+			EventResult::PARTICIPATION_CANCELLED => __( 'Participation Cancelled', 'qrhunt' ),
 		);
 	}
 

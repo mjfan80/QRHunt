@@ -242,7 +242,7 @@ final class MyPathsController {
 
 		return array(
 			'path_name'      => (string) $path->get_name(),
-			'status'         => (string) $participation->get_status(),
+			'status'         => $this->get_status_label( (string) $participation->get_status() ),
 			'progress_label' => 0 === $total_checkpoints
 				? __( 'No checkpoints', 'qrhunt' )
 				: sprintf(
@@ -297,5 +297,22 @@ final class MyPathsController {
 		}
 
 		return $this->qr_code_service->build_public_url( (string) $checkpoint->get_token() );
+	}
+
+	/**
+	 * Gets the localized label for a Participation status.
+	 *
+	 * @param string $status Participation status.
+	 * @return string
+	 */
+	private function get_status_label( string $status ): string {
+		$labels = array(
+			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'qrhunt' ),
+			ParticipationStatus::FINISHED    => __( 'Finished', 'qrhunt' ),
+			ParticipationStatus::COMPLETED   => __( 'Completed', 'qrhunt' ),
+			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'qrhunt' ),
+		);
+
+		return $labels[ $status ] ?? $status;
 	}
 }

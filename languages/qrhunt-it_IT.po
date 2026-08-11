@@ -1,0 +1,761 @@
+# Copyright (C) 2026 mjfan80
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: QRHunt 0.1.0\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: qrhunt\n"
+
+#. Plugin Name of the plugin
+#: qrhunt.php
+#: src/AdminMenu.php:36
+#: src/AdminMenu.php:37
+msgid "QRHunt"
+msgstr "QRHunt"
+
+#. Description of the plugin
+#: qrhunt.php
+msgid "Creates interactive experiences based on QR Code checkpoints."
+msgstr "Crea esperienze interattive basate su checkpoint con codici QR."
+
+#. Author of the plugin
+#: qrhunt.php
+msgid "mjfan80"
+msgstr "mjfan80"
+
+#: src/AdminMenu.php:47
+#: src/AdminMenu.php:48
+#: src/Service/DashboardService.php:65
+msgid "Paths"
+msgstr "Percorsi"
+
+#: src/AdminMenu.php:55
+#: src/AdminMenu.php:56
+#: src/Service/DashboardService.php:69
+msgid "Checkpoints"
+msgstr "Punti di controllo"
+
+#: src/CheckpointPostType.php:51
+msgctxt "Post type general name"
+msgid "Checkpoints"
+msgstr "Punti di controllo"
+
+#: src/CheckpointPostType.php:52
+msgctxt "Post type singular name"
+msgid "Checkpoint"
+msgstr "Punto di controllo"
+
+#: src/CheckpointPostType.php:53
+msgctxt "Admin Menu text"
+msgid "Checkpoints"
+msgstr "Punti di controllo"
+
+#: src/CheckpointPostType.php:54
+msgctxt "Add New on Toolbar"
+msgid "Checkpoint"
+msgstr "Punto di controllo"
+
+#: src/CheckpointPostType.php:55
+#: src/PathPostType.php:56
+msgid "Add New"
+msgstr "Aggiungi nuovo"
+
+#: src/CheckpointPostType.php:56
+msgid "Add New Checkpoint"
+msgstr "Aggiungi nuovo punto di controllo"
+
+#: src/CheckpointPostType.php:57
+#: src/Controller/DashboardController.php:81
+msgid "New Checkpoint"
+msgstr "Nuovo punto di controllo"
+
+#: src/CheckpointPostType.php:58
+msgid "Edit Checkpoint"
+msgstr "Modifica punto di controllo"
+
+#: src/CheckpointPostType.php:59
+msgid "View Checkpoint"
+msgstr "Visualizza punto di controllo"
+
+#: src/CheckpointPostType.php:60
+#: src/Controller/ExportController.php:116
+msgid "All Checkpoints"
+msgstr "Tutti i punti di controllo"
+
+#: src/CheckpointPostType.php:61
+msgid "Search Checkpoints"
+msgstr "Cerca punti di controllo"
+
+#: src/CheckpointPostType.php:62
+msgid "No checkpoints found."
+msgstr "Nessun punto di controllo trovato."
+
+#: src/CheckpointPostType.php:63
+msgid "No checkpoints found in Trash."
+msgstr "Nessun punto di controllo trovato nel cestino."
+
+#: src/CheckpointPostType.php:64
+msgctxt "Overrides the “Featured Image” phrase"
+msgid "Featured image"
+msgstr "Immagine in evidenza"
+
+#: src/CheckpointPostType.php:65
+msgctxt "Overrides the “Set featured image” phrase"
+msgid "Set featured image"
+msgstr "Imposta immagine in evidenza"
+
+#: src/CheckpointPostType.php:66
+msgctxt "Overrides the “Remove featured image” phrase"
+msgid "Remove featured image"
+msgstr "Rimuovi immagine in evidenza"
+
+#: src/CheckpointPostType.php:67
+msgctxt "Overrides the “Use as featured image” phrase"
+msgid "Use as featured image"
+msgstr "Usa come immagine in evidenza"
+
+#: src/CheckpointPostType.php:68
+msgid "Filter checkpoints list"
+msgstr "Filtra elenco punti di controllo"
+
+#: src/CheckpointPostType.php:69
+msgid "Checkpoints list navigation"
+msgstr "Navigazione elenco punti di controllo"
+
+#: src/CheckpointPostType.php:70
+msgid "Checkpoints list"
+msgstr "Elenco punti di controllo"
+
+#: src/Controller/CheckpointController.php:33
+#: src/Controller/CheckpointController.php:44
+#: src/Controller/DashboardController.php:97
+#: src/Controller/ExportController.php:214
+#: src/Controller/GroupController.php:53
+#: src/Controller/GroupController.php:103
+#: src/Controller/ParticipationController.php:116
+#: src/Controller/ParticipationController.php:153
+#: src/Controller/ParticipationController.php:231
+#: src/Controller/PlayerFlowController.php:416
+#: src/Controller/QrCodeController.php:81
+#: templates/public-my-paths.php:28
+msgid "Path"
+msgstr "Percorso"
+
+#: src/Controller/CheckpointController.php:46
+#: src/Controller/GroupController.php:57
+#: src/Controller/QrCodeController.php:85
+msgid "Select a Path"
+msgstr "Seleziona un percorso"
+
+#: src/Controller/CheckpointController.php:52
+#: src/Controller/DependencyController.php:224
+msgid "Group"
+msgstr "Gruppo"
+
+#: src/Controller/CheckpointController.php:54
+#: src/Controller/CheckpointController.php:83
+msgid "No Group"
+msgstr "Nessun gruppo"
+
+#: src/Controller/CheckpointController.php:58
+#: src/Controller/QrCodeController.php:110
+msgid "Token"
+msgstr "Token"
+
+#: src/Controller/CheckpointController.php:61
+msgid "The token will be generated when the Checkpoint is first saved."
+msgstr "Il token verrà generato al primo salvataggio del punto di controllo."
+
+#: src/Controller/DashboardController.php:44
+msgid "QRHunt Dashboard"
+msgstr "Bacheca QRHunt"
+
+#: src/Controller/DashboardController.php:47
+msgid "Overview of the plugin and the latest recorded scans."
+msgstr "Panoramica del plugin e delle ultime scansioni registrate."
+
+#: src/Controller/DashboardController.php:52
+msgid "Summary"
+msgstr "Riepilogo"
+
+#: src/Controller/DashboardController.php:57
+msgid "Item"
+msgstr "Elemento"
+
+#: src/Controller/DashboardController.php:58
+msgid "Count"
+msgstr "Conteggio"
+
+#: src/Controller/DashboardController.php:74
+msgid "Quick actions"
+msgstr "Azioni rapide"
+
+#: src/Controller/DashboardController.php:78
+#: src/PathPostType.php:58
+msgid "New Path"
+msgstr "Nuovo percorso"
+
+#: src/Controller/DashboardController.php:84
+msgid "New Group"
+msgstr "Nuovo gruppo"
+
+#: src/Controller/DashboardController.php:91
+msgid "Latest scans"
+msgstr "Ultime scansioni"
+
+#: src/Controller/DashboardController.php:96
+#: src/Controller/ParticipationController.php:244
+msgid "Date"
+msgstr "Data"
+
+#: src/Controller/DashboardController.php:98
+#: src/Controller/DependencyController.php:223
+#: src/Controller/ExportController.php:114
+#: src/Controller/ParticipationController.php:245
+#: src/Controller/PlayerFlowController.php:394
+#: src/Controller/PlayerFlowController.php:453
+#: templates/public-checkpoint.php:13
+msgid "Checkpoint"
+msgstr "Punto di controllo"
+
+#: src/Controller/DashboardController.php:99
+#: src/Controller/ExportController.php:123
+#: src/Controller/ParticipationController.php:247
+msgid "Result"
+msgstr "Esito"
+
+#: src/Controller/DashboardController.php:105
+msgid "No scans recorded yet."
+msgstr "Nessuna scansione registrata."
+
+#: src/Controller/DashboardController.php:134
+#: src/Controller/ExportController.php:268
+#: src/Controller/ParticipationController.php:332
+msgid "Accepted"
+msgstr "Accettato"
+
+#: src/Controller/DashboardController.php:135
+#: src/Controller/ExportController.php:269
+#: src/Controller/ParticipationController.php:333
+msgid "Duplicate"
+msgstr "Duplicato"
+
+#: src/Controller/DashboardController.php:136
+#: src/Controller/ExportController.php:270
+#: src/Controller/ParticipationController.php:334
+msgid "Before Failed"
+msgstr "Vincolo «PRIMA» violato"
+
+#: src/Controller/DashboardController.php:137
+#: src/Controller/ExportController.php:271
+#: src/Controller/ParticipationController.php:335
+msgid "After Failed"
+msgstr "Prerequisito non soddisfatto"
+
+#: src/Controller/DashboardController.php:138
+#: src/Controller/ExportController.php:272
+#: src/Controller/ParticipationController.php:336
+msgid "Path Closed"
+msgstr "Percorso chiuso"
+
+#: src/Controller/DashboardController.php:139
+#: src/Controller/ExportController.php:273
+#: src/Controller/ParticipationController.php:337
+msgid "Participation Cancelled"
+msgstr "Partecipazione annullata"
+
+#: src/Controller/DependencyController.php:75
+msgid "Dependencies"
+msgstr "Dipendenze"
+
+#: src/Controller/DependencyController.php:82
+msgid "Add Dependency"
+msgstr "Aggiungi dipendenza"
+
+#: src/Controller/DependencyController.php:219
+msgid "BEFORE"
+msgstr "PRIMA"
+
+#: src/Controller/DependencyController.php:220
+msgid "AFTER"
+msgstr "DOPO"
+
+#: src/Controller/DependencyController.php:227
+#: src/Controller/PathController.php:77
+#: src/Controller/PathController.php:89
+msgid "Select a Checkpoint"
+msgstr "Seleziona un punto di controllo"
+
+#: src/Controller/DependencyController.php:246
+msgid "Select a Group"
+msgstr "Seleziona un gruppo"
+
+#: src/Controller/DependencyController.php:260
+#: src/Controller/GroupController.php:123
+msgid "Delete"
+msgstr "Elimina"
+
+#: src/Controller/ExportController.php:64
+#: src/Controller/ExportController.php:65
+#: src/Controller/ExportController.php:88
+msgid "Exports"
+msgstr "Esportazioni"
+
+#: src/Controller/ExportController.php:90
+#: src/Controller/ParticipationController.php:73
+#: src/Controller/ParticipationController.php:74
+#: src/Controller/ParticipationController.php:112
+#: src/Service/DashboardService.php:77
+msgid "Participations"
+msgstr "Partecipazioni"
+
+#: src/Controller/ExportController.php:97
+#: src/Controller/ParticipationController.php:136
+#: src/Controller/ParticipationController.php:154
+#: src/Controller/ParticipationController.php:232
+msgid "Status"
+msgstr "Stato"
+
+#: src/Controller/ExportController.php:99
+#: src/Controller/ParticipationController.php:138
+msgid "All Statuses"
+msgstr "Tutti gli stati"
+
+#: src/Controller/ExportController.php:104
+msgid "Export Participations CSV"
+msgstr "Esporta partecipazioni CSV"
+
+#: src/Controller/ExportController.php:107
+msgid "Events"
+msgstr "Eventi"
+
+#: src/Controller/ExportController.php:125
+msgid "All Results"
+msgstr "Tutti gli esiti"
+
+#: src/Controller/ExportController.php:130
+msgid "From"
+msgstr "Da"
+
+#: src/Controller/ExportController.php:132
+msgid "To"
+msgstr "A"
+
+#: src/Controller/ExportController.php:134
+msgid "Export Events CSV"
+msgstr "Esporta eventi CSV"
+
+#: src/Controller/ExportController.php:137
+msgid "Path Statistics"
+msgstr "Statistiche percorso"
+
+#: src/Controller/ExportController.php:143
+msgid "Export Path Statistics CSV"
+msgstr "Esporta statistiche percorso CSV"
+
+#: src/Controller/ExportController.php:156
+#: src/Controller/ExportController.php:201
+#: src/Controller/GroupController.php:136
+#: src/Controller/GroupController.php:163
+#: src/Controller/ParticipationController.php:207
+#: src/Controller/QrCodeController.php:149
+#: src/Controller/QrCodeController.php:156
+#: src/Controller/QrCodeController.php:162
+#: src/Controller/QrCodeController.php:193
+#: src/Controller/QrCodeController.php:200
+msgid "Invalid request."
+msgstr "Richiesta non valida."
+
+#: src/Controller/ExportController.php:216
+#: src/Controller/ParticipationController.php:118
+#: src/PathPostType.php:61
+msgid "All Paths"
+msgstr "Tutti i percorsi"
+
+#: src/Controller/ExportController.php:235
+#: src/Controller/ParticipationController.php:126
+#: src/Controller/ParticipationController.php:152
+#: src/Controller/ParticipationController.php:230
+msgid "User"
+msgstr "Utente"
+
+#: src/Controller/ExportController.php:237
+#: src/Controller/ParticipationController.php:128
+msgid "All Users"
+msgstr "Tutti gli utenti"
+
+#: src/Controller/ExportController.php:254
+#: src/Controller/MyPathsController.php:310
+#: src/Controller/ParticipationController.php:307
+#: src/Controller/PlayerFlowController.php:521
+msgid "In Progress"
+msgstr "In corso"
+
+#: src/Controller/ExportController.php:255
+#: src/Controller/MyPathsController.php:311
+#: src/Controller/ParticipationController.php:308
+#: src/Controller/PlayerFlowController.php:522
+msgid "Finished"
+msgstr "Terminata"
+
+#: src/Controller/ExportController.php:256
+#: src/Controller/MyPathsController.php:312
+#: src/Controller/ParticipationController.php:309
+#: src/Controller/PlayerFlowController.php:523
+msgid "Completed"
+msgstr "Completata"
+
+#: src/Controller/ExportController.php:257
+#: src/Controller/MyPathsController.php:313
+#: src/Controller/ParticipationController.php:310
+#: src/Controller/PlayerFlowController.php:524
+msgid "Cancelled"
+msgstr "Annullata"
+
+#: src/Controller/GroupController.php:21
+#: src/Controller/GroupController.php:40
+#: src/Service/DashboardService.php:73
+msgid "Groups"
+msgstr "Gruppi"
+
+#: src/Controller/GroupController.php:32
+msgid "Edit Group"
+msgstr "Modifica gruppo"
+
+#: src/Controller/GroupController.php:32
+#: src/Controller/GroupController.php:33
+msgid "Add Group"
+msgstr "Aggiungi gruppo"
+
+#: src/Controller/GroupController.php:33
+msgid "Update Group"
+msgstr "Aggiorna gruppo"
+
+#: src/Controller/GroupController.php:68
+#: src/Controller/GroupController.php:101
+#: src/Controller/QrCodeController.php:109
+msgid "Name"
+msgstr "Nome"
+
+#: src/Controller/GroupController.php:76
+#: src/Controller/GroupController.php:102
+msgid "Description"
+msgstr "Descrizione"
+
+#: src/Controller/GroupController.php:84
+#: src/Controller/GroupController.php:104
+msgid "Completion Mode"
+msgstr "Modalità di completamento"
+
+#: src/Controller/GroupController.php:88
+msgid "ALL"
+msgstr "TUTTI"
+
+#: src/Controller/GroupController.php:89
+msgid "ANY"
+msgstr "QUALSIASI"
+
+#: src/Controller/GroupController.php:105
+#: src/Controller/ParticipationController.php:159
+#: src/Controller/QrCodeController.php:111
+msgid "Actions"
+msgstr "Azioni"
+
+#: src/Controller/GroupController.php:117
+msgid "Edit"
+msgstr "Modifica"
+
+#: src/Controller/MyPathsController.php:103
+#: templates/public-checkpoint.php:80
+#: templates/public-my-paths.php:13
+msgid "My paths"
+msgstr "I miei percorsi"
+
+#: src/Controller/MyPathsController.php:247
+msgid "No checkpoints"
+msgstr "Nessun punto di controllo"
+
+#. translators: 1: visited checkpoints, 2: total checkpoints.
+#: src/Controller/MyPathsController.php:250
+#: src/Controller/PlayerFlowController.php:421
+#, php-format
+msgid "%1$d / %2$d checkpoints"
+msgstr "%1$d / %2$d punti di controllo"
+
+#: src/Controller/ParticipationController.php:146
+msgid "Filter"
+msgstr "Filtra"
+
+#: src/Controller/ParticipationController.php:155
+#: src/Controller/ParticipationController.php:234
+msgid "Started at"
+msgstr "Iniziata il"
+
+#: src/Controller/ParticipationController.php:156
+#: src/Controller/ParticipationController.php:235
+msgid "Finished at"
+msgstr "Terminata il"
+
+#: src/Controller/ParticipationController.php:157
+#: src/Controller/ParticipationController.php:236
+msgid "Cancelled at"
+msgstr "Annullata il"
+
+#: src/Controller/ParticipationController.php:158
+msgid "Validated Checkpoints"
+msgstr "Punti di controllo validati"
+
+#: src/Controller/ParticipationController.php:175
+msgid "View"
+msgstr "Visualizza"
+
+#: src/Controller/ParticipationController.php:182
+msgid "Cancel"
+msgstr "Annulla"
+
+#: src/Controller/ParticipationController.php:227
+msgid "Participation detail"
+msgstr "Dettaglio partecipazione"
+
+#: src/Controller/ParticipationController.php:233
+msgid "Created at"
+msgstr "Creata il"
+
+#: src/Controller/ParticipationController.php:240
+msgid "History"
+msgstr "Cronologia"
+
+#: src/Controller/ParticipationController.php:246
+msgid "Type"
+msgstr "Tipo"
+
+#: src/Controller/ParticipationController.php:321
+msgid "QR Code scan"
+msgstr "Scansione codice QR"
+
+#: src/Controller/PathController.php:44
+msgid "Path Checkpoints"
+msgstr "Punti di controllo del percorso"
+
+#: src/Controller/PathController.php:75
+msgid "Start Checkpoint"
+msgstr "Punto di controllo iniziale"
+
+#: src/Controller/PathController.php:87
+msgid "Finish Checkpoint"
+msgstr "Punto di controllo finale"
+
+#: src/Controller/PathController.php:100
+msgid "Save this Path and assign Checkpoints to it before selecting start and finish Checkpoints."
+msgstr "Salva questo percorso e assegna i punti di controllo prima di selezionare quelli iniziale e finale."
+
+#: src/Controller/PlayerFlowController.php:108
+#: src/Controller/PlayerFlowController.php:132
+#: src/Controller/PlayerFlowController.php:154
+#: src/Controller/PlayerFlowController.php:171
+#: src/Controller/PlayerFlowController.php:229
+msgid "Validation failed"
+msgstr "Validazione non riuscita"
+
+#: src/Controller/PlayerFlowController.php:109
+msgid "QR Code not valid."
+msgstr "Codice QR non valido."
+
+#: src/Controller/PlayerFlowController.php:133
+msgid "This Path is not available."
+msgstr "Questo percorso non è disponibile."
+
+#: src/Controller/PlayerFlowController.php:155
+msgid "No active Participation was found for this Path."
+msgstr "Non è stata trovata alcuna partecipazione attiva per questo percorso."
+
+#: src/Controller/PlayerFlowController.php:172
+msgid "This Participation has been cancelled."
+msgstr "Questa partecipazione è stata annullata."
+
+#: src/Controller/PlayerFlowController.php:230
+msgid "Checkpoint could not be validated."
+msgstr "Il punto di controllo non può essere validato."
+
+#. translators: %s: group name.
+#: src/Controller/PlayerFlowController.php:313
+#, php-format
+msgid "You must complete the group \"%s\" first."
+msgstr "Devi prima completare il gruppo \"%s\"."
+
+#. translators: %s: checkpoint name.
+#: src/Controller/PlayerFlowController.php:318
+#, php-format
+msgid "You must complete the checkpoint \"%s\" first."
+msgstr "Devi prima completare il punto di controllo \"%s\"."
+
+#. translators: %s: group name.
+#: src/Controller/PlayerFlowController.php:328
+#, php-format
+msgid "This checkpoint is no longer available because the group \"%s\" has already been completed."
+msgstr "Questo punto di controllo non è più disponibile perché il gruppo \"%s\" è già stato completato."
+
+#. translators: %s: checkpoint name.
+#: src/Controller/PlayerFlowController.php:333
+#, php-format
+msgid "This checkpoint is no longer available because the checkpoint \"%s\" has already been completed."
+msgstr "Questo punto di controllo non è più disponibile perché il punto di controllo \"%s\" è già stato completato."
+
+#: src/Controller/PlayerFlowController.php:408
+msgid "Validation succeeded"
+msgstr "Validazione riuscita"
+
+#: src/Controller/PlayerFlowController.php:484
+msgid "This Path was already completed."
+msgstr "Questo percorso era già stato completato."
+
+#: src/Controller/PlayerFlowController.php:491
+msgid "Path completed."
+msgstr "Percorso completato."
+
+#: src/Controller/PlayerFlowController.php:498
+msgid "Checkpoint already visited."
+msgstr "Punto di controllo già visitato."
+
+#: src/Controller/PlayerFlowController.php:504
+msgid "Checkpoint registered."
+msgstr "Punto di controllo registrato."
+
+#: src/Controller/PlayerFlowController.php:516
+#: templates/public-checkpoint.php:17
+msgid "Not started"
+msgstr "Non iniziata"
+
+#: src/Controller/QrCodeController.php:52
+#: src/Controller/QrCodeController.php:53
+#: src/Controller/QrCodeController.php:73
+msgid "QR Codes"
+msgstr "Codici QR"
+
+#: src/Controller/QrCodeController.php:92
+msgid "Load Checkpoints"
+msgstr "Carica punti di controllo"
+
+#: src/Controller/QrCodeController.php:102
+msgid "Print Path"
+msgstr "Stampa percorso"
+
+#: src/Controller/QrCodeController.php:117
+msgid "No Checkpoints found for the selected Path."
+msgstr "Nessun punto di controllo trovato per il percorso selezionato."
+
+#: src/Controller/QrCodeController.php:126
+msgid "Download PNG"
+msgstr "Scarica PNG"
+
+#: src/Controller/QrCodeController.php:129
+msgid "Download SVG"
+msgstr "Scarica SVG"
+
+#: src/Controller/QrCodeController.php:168
+msgid "Checkpoint not found."
+msgstr "Punto di controllo non trovato."
+
+#: src/Controller/QrCodeController.php:206
+msgid "Path not found."
+msgstr "Percorso non trovato."
+
+#: src/Controller/ScanRestController.php:83
+msgid "The requested checkpoint or participation could not be found."
+msgstr "Il punto di controllo o la partecipazione richiesti non sono stati trovati."
+
+#: src/PathPostType.php:52
+msgctxt "Post type general name"
+msgid "Paths"
+msgstr "Percorsi"
+
+#: src/PathPostType.php:53
+msgctxt "Post type singular name"
+msgid "Path"
+msgstr "Percorso"
+
+#: src/PathPostType.php:54
+msgctxt "Admin Menu text"
+msgid "Paths"
+msgstr "Percorsi"
+
+#: src/PathPostType.php:55
+msgctxt "Add New on Toolbar"
+msgid "Path"
+msgstr "Percorso"
+
+#: src/PathPostType.php:57
+msgid "Add New Path"
+msgstr "Aggiungi nuovo percorso"
+
+#: src/PathPostType.php:59
+msgid "Edit Path"
+msgstr "Modifica percorso"
+
+#: src/PathPostType.php:60
+msgid "View Path"
+msgstr "Visualizza percorso"
+
+#: src/PathPostType.php:62
+msgid "Search Paths"
+msgstr "Cerca percorsi"
+
+#: src/PathPostType.php:63
+msgid "No paths found."
+msgstr "Nessun percorso trovato."
+
+#: src/PathPostType.php:64
+msgid "No paths found in Trash."
+msgstr "Nessun percorso trovato nel cestino."
+
+#: src/PathPostType.php:65
+msgid "Filter paths list"
+msgstr "Filtra elenco percorsi"
+
+#: src/PathPostType.php:66
+msgid "Paths list navigation"
+msgstr "Navigazione elenco percorsi"
+
+#: src/PathPostType.php:67
+msgid "Paths list"
+msgstr "Elenco percorsi"
+
+#: templates/public-checkpoint.php:41
+msgid "Path progress"
+msgstr "Avanzamento percorso"
+
+#: templates/public-checkpoint.php:48
+msgid "Validation outcome:"
+msgstr "Esito della validazione:"
+
+#: templates/public-checkpoint.php:56
+msgid "Participation status:"
+msgstr "Stato partecipazione:"
+
+#: templates/public-checkpoint.php:62
+msgid "Validation details"
+msgstr "Dettagli validazione"
+
+#: templates/public-checkpoint.php:78
+msgid "Player navigation"
+msgstr "Navigazione giocatore"
+
+#: templates/public-my-paths.php:23
+msgid "You do not have any active paths yet."
+msgstr "Non hai ancora percorsi attivi."
+
+#: templates/public-my-paths.php:30
+msgid "Status:"
+msgstr "Stato:"
+
+#: templates/public-my-paths.php:34
+msgid "Progress:"
+msgstr "Avanzamento:"
+
+#: templates/public-my-paths.php:40
+msgid "Open path"
+msgstr "Apri percorso"

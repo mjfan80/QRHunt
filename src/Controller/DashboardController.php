@@ -8,6 +8,7 @@
 namespace QRHunt\Controller;
 
 use QRHunt\CheckpointPostType;
+use QRHunt\Model\EventResult;
 use QRHunt\PathPostType;
 use QRHunt\Service\DashboardService;
 
@@ -109,7 +110,7 @@ final class DashboardController {
 											<td><?php echo esc_html( $event['created_at'] ); ?></td>
 											<td><?php echo esc_html( $event['path_name'] ); ?></td>
 											<td><?php echo esc_html( $event['checkpoint_name'] ); ?></td>
-											<td><?php echo esc_html( $event['result'] ); ?></td>
+											<td><?php echo esc_html( $this->get_event_result_label( $event['result'] ) ); ?></td>
 										</tr>
 									<?php endforeach; ?>
 								<?php endif; ?>
@@ -120,5 +121,24 @@ final class DashboardController {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Gets the localized label for an Event result.
+	 *
+	 * @param string $result Event result.
+	 * @return string
+	 */
+	private function get_event_result_label( string $result ): string {
+		$labels = array(
+			EventResult::ACCEPTED                => __( 'Accepted', 'qrhunt' ),
+			EventResult::DUPLICATE               => __( 'Duplicate', 'qrhunt' ),
+			EventResult::BEFORE_FAILED           => __( 'Before Failed', 'qrhunt' ),
+			EventResult::AFTER_FAILED            => __( 'After Failed', 'qrhunt' ),
+			EventResult::PATH_CLOSED             => __( 'Path Closed', 'qrhunt' ),
+			EventResult::PARTICIPATION_CANCELLED => __( 'Participation Cancelled', 'qrhunt' ),
+		);
+
+		return $labels[ $result ] ?? $result;
 	}
 }

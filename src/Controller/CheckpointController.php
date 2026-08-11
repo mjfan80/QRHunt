@@ -58,7 +58,7 @@ final class CheckpointController {
 			<label for="qrhunt-checkpoint-token"><?php esc_html_e( 'Token', 'qrhunt' ); ?></label>
 			<?php if ( null === $checkpoint ) : ?>
 				<input id="qrhunt-checkpoint-token" type="text" value="" readonly="readonly" />
-				<span class="description"><?php esc_html_e( 'Il token verrà generato al primo salvataggio.', 'qrhunt' ); ?></span>
+				<span class="description"><?php esc_html_e( 'The token will be generated when the Checkpoint is first saved.', 'qrhunt' ); ?></span>
 			<?php else : ?>
 				<input id="qrhunt-checkpoint-token" type="text" value="<?php echo esc_attr( $checkpoint->get_token() ); ?>" readonly="readonly" />
 			<?php endif; ?>

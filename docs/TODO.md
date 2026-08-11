@@ -34,7 +34,7 @@
 # Quality
 
 - [x] Test
-- [ ] Internazionalizzazione
+- [x] Internazionalizzazione
 - [x] Plugin Check
 - [ ] Documentation Review
 - [X] Replace temporary inline styles with the dedicated Public UI stylesheet.

@@ -14,6 +14,7 @@ $qrhunt_page_title         = isset( $qrhunt_context['page_title'] ) ? (string) $
 $qrhunt_validation_outcome = isset( $qrhunt_context['validation_outcome'] ) ? (string) $qrhunt_context['validation_outcome'] : '';
 $qrhunt_message            = isset( $qrhunt_context['message'] ) ? (string) $qrhunt_context['message'] : '';
 $qrhunt_participation      = $qrhunt_context['participation'] ?? null;
+$qrhunt_participation_status_label = isset( $qrhunt_context['participation_status_label'] ) ? (string) $qrhunt_context['participation_status_label'] : __( 'Not started', 'qrhunt' );
 $qrhunt_violation_messages = isset( $qrhunt_context['violation_messages'] ) && is_array( $qrhunt_context['violation_messages'] ) ? $qrhunt_context['violation_messages'] : array();
 $qrhunt_render_content     = ! empty( $qrhunt_context['render_content'] );
 $qrhunt_banner_message     = isset( $qrhunt_context['banner_message'] ) ? (string) $qrhunt_context['banner_message'] : '';
@@ -53,7 +54,7 @@ get_header();
 
 		<p>
 			<strong><?php esc_html_e( 'Participation status:', 'qrhunt' ); ?></strong>
-			<?php echo esc_html( null === $qrhunt_participation ? __( 'Not started', 'qrhunt' ) : (string) $qrhunt_participation->get_status() ); ?>
+			<?php echo esc_html( $qrhunt_participation_status_label ); ?>
 		</p>
 
 		<?php if ( ! empty( $qrhunt_violation_messages ) ) : ?>

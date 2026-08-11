@@ -31,7 +31,8 @@ $runtimeFiles = @(
 $runtimeDirectories = @(
 	'src',
 	'templates',
-	'assets'
+	'assets',
+	'languages'
 )
 
 foreach ($runtimeFile in $runtimeFiles) {

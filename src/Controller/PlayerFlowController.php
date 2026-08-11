@@ -408,6 +408,7 @@ final class PlayerFlowController {
 			'validation_outcome'  => __( 'Validation succeeded', 'qrhunt' ),
 			'message'             => '',
 			'participation'       => $participation,
+			'participation_status_label' => $this->get_participation_status_label( $participation ),
 			'violation_messages'  => array(),
 			'render_content'      => true,
 			'banner_message'      => $banner['message'],
@@ -453,6 +454,7 @@ final class PlayerFlowController {
 			'validation_outcome'  => $validation_outcome,
 			'message'             => $message,
 			'participation'       => $participation,
+			'participation_status_label' => $this->get_participation_status_label( $participation ),
 			'violation_messages'  => $violation_messages,
 			'render_content'      => $show_content,
 			'banner_message'      => '',
@@ -501,6 +503,28 @@ final class PlayerFlowController {
 			'modifier' => 'checkpoint-registered',
 			'message'  => __( 'Checkpoint registered.', 'qrhunt' ),
 		);
+	}
+
+	/**
+	 * Gets the localized label for a Participation status.
+	 *
+	 * @param Participation|null $participation Participation, if available.
+	 * @return string
+	 */
+	private function get_participation_status_label( ?Participation $participation ): string {
+		if ( null === $participation ) {
+			return __( 'Not started', 'qrhunt' );
+		}
+
+		$status = (string) $participation->get_status();
+		$labels = array(
+			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'qrhunt' ),
+			ParticipationStatus::FINISHED    => __( 'Finished', 'qrhunt' ),
+			ParticipationStatus::COMPLETED   => __( 'Completed', 'qrhunt' ),
+			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'qrhunt' ),
+		);
+
+		return $labels[ $status ] ?? $status;
 	}
 
 	/**

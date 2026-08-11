@@ -36,6 +36,8 @@ WordPress rimane responsabile della gestione di:
 - traduzioni;
 - amministrazione.
 
+QRHunt utilizza il locale nativo del sito o dell'utente WordPress. Non definisce una preferenza di lingua proprietaria. La versione 1.0 distribuisce l'inglese come lingua sorgente e include la traduzione italiana.
+
 QRHunt implementa esclusivamente la logica del gioco.
 
 ---
