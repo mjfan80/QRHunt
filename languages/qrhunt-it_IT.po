@@ -969,6 +969,37 @@ msgstr "Avvisi"
 msgid "Statistics"
 msgstr "Statistiche"
 
+#: src/Controller/PathController.php:289
+msgid "Configuration"
+msgstr "Configurazione"
+
+#: src/Controller/PathController.php:448
+msgid "✓ OK"
+msgstr "✓ OK"
+
+#. translators: %s: number of configuration warnings.
+#: src/Controller/PathController.php:454
+#: src/Controller/PathController.php:475
+#, php-format
+msgid "⚠ %s warning"
+msgid_plural "⚠ %s warnings"
+msgstr[0] "⚠ %s avviso"
+msgstr[1] "⚠ %s avvisi"
+
+#. translators: %s: number of blocking configuration errors.
+#: src/Controller/PathController.php:461
+#, php-format
+msgid "✕ %s error"
+msgid_plural "✕ %s errors"
+msgstr[0] "✕ %s errore"
+msgstr[1] "✕ %s errori"
+
+#. translators: 1: error summary, 2: warning summary.
+#: src/Controller/PathController.php:471
+#, php-format
+msgid "%1$s · %2$s"
+msgstr "%1$s · %2$s"
+
 #: src/Controller/PathStatisticsController.php:67
 msgid "The requested Path could not be found."
 msgstr "Il Percorso richiesto non è stato trovato."
