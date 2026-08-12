@@ -46,9 +46,9 @@ Ogni flusso rappresenta il comportamento atteso del sistema.
 1. Il plugin risolve il token.
 2. Recupera il Checkpoint.
 3. Recupera il Percorso.
-4. Crea la Partecipazione.
-5. Valida il Checkpoint.
-6. Registra l'Evento.
+4. Valida il Checkpoint iniziale senza persistere una Partecipazione.
+5. Se la validazione riesce, crea la Partecipazione e registra il Checkpoint.
+6. Registra l'Evento `accepted` associato alla Partecipazione.
 7. Mostra il contenuto del Checkpoint.
 
 ## Risultato
@@ -56,6 +56,8 @@ Ogni flusso rappresenta il comportamento atteso del sistema.
 - Partecipazione creata.
 - Primo Checkpoint validato.
 - Evento registrato.
+
+Se la validazione del Checkpoint iniziale fallisce, non vengono create né la Partecipazione né un Evento.
 
 ---
 

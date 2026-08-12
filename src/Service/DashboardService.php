@@ -8,6 +8,7 @@
 namespace QRHunt\Service;
 
 use QRHunt\Model\Event;
+use QRHunt\Model\EventResult;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -66,6 +67,10 @@ final class DashboardService {
 				'value' => $this->path_service->count_paths(),
 			),
 			array(
+				'label' => __( 'Active Paths', 'qrhunt' ),
+				'value' => $this->path_service->count_active_paths(),
+			),
+			array(
 				'label' => __( 'Checkpoints', 'qrhunt' ),
 				'value' => $this->checkpoint_service->count_checkpoints(),
 			),
@@ -76,6 +81,22 @@ final class DashboardService {
 			array(
 				'label' => __( 'Participations', 'qrhunt' ),
 				'value' => $this->participation_service->count_participations(),
+			),
+			array(
+				'label' => __( 'Active Participations', 'qrhunt' ),
+				'value' => $this->participation_service->count_active_participations(),
+			),
+			array(
+				'label' => __( 'Total scans', 'qrhunt' ),
+				'value' => $this->event_service->count_events(),
+			),
+			array(
+				'label' => __( 'Invalid scans', 'qrhunt' ),
+				'value' => $this->event_service->count_events_by_result( EventResult::BEFORE_FAILED ) + $this->event_service->count_events_by_result( EventResult::AFTER_FAILED ),
+			),
+			array(
+				'label' => __( 'Duplicate scans', 'qrhunt' ),
+				'value' => $this->event_service->count_events_by_result( EventResult::DUPLICATE ),
 			),
 		);
 	}

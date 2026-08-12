@@ -14,7 +14,7 @@ Le modalità con cui il flusso viene realizzato (WordPress, REST API, template, 
 
 Per poter partecipare ad un Path il giocatore deve essere autenticato.
 
-La Participation viene normalmente creata automaticamente durante la prima scansione del Checkpoint iniziale del Path, qualora non esista già una Participation attiva per quel giocatore.
+La Participation viene normalmente creata automaticamente dopo la validazione positiva della prima scansione del Checkpoint iniziale del Path, qualora non esista già una Participation attiva per quel giocatore.
 
 Se una Participation valida è già presente, il sistema la riutilizza e il giocatore prosegue normalmente il percorso.
 
@@ -42,7 +42,7 @@ Prima di elaborare la scansione il sistema verifica se il giocatore è autentica
 
 Successivamente il sistema ricerca una Participation associata al giocatore.
 
-Se la scansione riguarda il Checkpoint iniziale e non esiste ancora una Participation valida, questa viene creata automaticamente.
+Se la scansione riguarda il Checkpoint iniziale e non esiste ancora una Participation valida, il sistema valida prima il Checkpoint. La Participation viene creata soltanto se la validazione riesce.
 
 Negli altri casi il sistema riutilizza la Participation esistente.
 
@@ -67,9 +67,7 @@ Se la validazione ha esito positivo il sistema:
 - aggiorna la progressione della Participation;
 - aggiorna lo stato della Participation, se necessario.
 
-Se la valiodazione ha esito negativo il sistema:
-
-- registra l'Event corrispondente;
+Se la validazione ha esito negativo per una Participation già esistente il sistema registra l'Event corrispondente. Se fallisce la prima validazione del Checkpoint iniziale, non viene invece creata alcuna Participation né registrato alcun Event.
 
 
 Il dettaglio della logica di validazione è descritto nel documento `VALIDATION.md`.

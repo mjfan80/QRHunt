@@ -60,6 +60,25 @@ final class EventService {
 	}
 
 	/**
+	 * Counts all Events.
+	 *
+	 * @return int
+	 */
+	public function count_events(): int {
+		return $this->event_repository->count_all();
+	}
+
+	/**
+	 * Counts Events by result.
+	 *
+	 * @param string $result Event result.
+	 * @return int
+	 */
+	public function count_events_by_result( string $result ): int {
+		return $this->event_repository->count_by_result( $result );
+	}
+
+	/**
 	 * Gets Events matching admin filters.
 	 *
 	 * @param int    $path_id       Path identifier, or 0 for all Paths.

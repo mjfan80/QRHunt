@@ -1,12 +1,15 @@
-# Copyright (C) 2026 mjfan80
-# This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
 "Project-Id-Version: QRHunt 0.1.0\n"
-"Language: it_IT\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-08-12T11:35:14+00:00\n"
+"PO-Revision-Date: 2026-08-12T11:35:14+00:00\n"
+"Language: it_IT\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: qrhunt\n"
 
@@ -29,13 +32,13 @@ msgstr "mjfan80"
 
 #: src/AdminMenu.php:47
 #: src/AdminMenu.php:48
-#: src/Service/DashboardService.php:65
+#: src/Service/DashboardService.php:66
 msgid "Paths"
 msgstr "Percorsi"
 
 #: src/AdminMenu.php:55
 #: src/AdminMenu.php:56
-#: src/Service/DashboardService.php:69
+#: src/Service/DashboardService.php:74
 msgid "Checkpoints"
 msgstr "Punti di controllo"
 
@@ -139,7 +142,7 @@ msgstr "Elenco punti di controllo"
 #: src/Controller/ParticipationController.php:116
 #: src/Controller/ParticipationController.php:153
 #: src/Controller/ParticipationController.php:231
-#: src/Controller/PlayerFlowController.php:416
+#: src/Controller/PlayerFlowController.php:449
 #: src/Controller/QrCodeController.php:81
 #: templates/public-my-paths.php:28
 msgid "Path"
@@ -216,8 +219,8 @@ msgstr "Data"
 #: src/Controller/DependencyController.php:223
 #: src/Controller/ExportController.php:114
 #: src/Controller/ParticipationController.php:245
-#: src/Controller/PlayerFlowController.php:394
-#: src/Controller/PlayerFlowController.php:453
+#: src/Controller/PlayerFlowController.php:427
+#: src/Controller/PlayerFlowController.php:486
 #: templates/public-checkpoint.php:13
 msgid "Checkpoint"
 msgstr "Punto di controllo"
@@ -285,8 +288,8 @@ msgid "AFTER"
 msgstr "DOPO"
 
 #: src/Controller/DependencyController.php:227
-#: src/Controller/PathController.php:77
-#: src/Controller/PathController.php:89
+#: src/Controller/PathController.php:88
+#: src/Controller/PathController.php:108
 msgid "Select a Checkpoint"
 msgstr "Seleziona un punto di controllo"
 
@@ -309,7 +312,7 @@ msgstr "Esportazioni"
 #: src/Controller/ParticipationController.php:73
 #: src/Controller/ParticipationController.php:74
 #: src/Controller/ParticipationController.php:112
-#: src/Service/DashboardService.php:77
+#: src/Service/DashboardService.php:82
 msgid "Participations"
 msgstr "Partecipazioni"
 
@@ -391,34 +394,34 @@ msgstr "Tutti gli utenti"
 #: src/Controller/ExportController.php:254
 #: src/Controller/MyPathsController.php:310
 #: src/Controller/ParticipationController.php:307
-#: src/Controller/PlayerFlowController.php:521
+#: src/Controller/PlayerFlowController.php:554
 msgid "In Progress"
 msgstr "In corso"
 
 #: src/Controller/ExportController.php:255
 #: src/Controller/MyPathsController.php:311
 #: src/Controller/ParticipationController.php:308
-#: src/Controller/PlayerFlowController.php:522
+#: src/Controller/PlayerFlowController.php:555
 msgid "Finished"
 msgstr "Terminata"
 
 #: src/Controller/ExportController.php:256
 #: src/Controller/MyPathsController.php:312
 #: src/Controller/ParticipationController.php:309
-#: src/Controller/PlayerFlowController.php:523
+#: src/Controller/PlayerFlowController.php:556
 msgid "Completed"
 msgstr "Completata"
 
 #: src/Controller/ExportController.php:257
 #: src/Controller/MyPathsController.php:313
 #: src/Controller/ParticipationController.php:310
-#: src/Controller/PlayerFlowController.php:524
+#: src/Controller/PlayerFlowController.php:557
 msgid "Cancelled"
 msgstr "Annullata"
 
 #: src/Controller/GroupController.php:21
 #: src/Controller/GroupController.php:40
-#: src/Service/DashboardService.php:73
+#: src/Service/DashboardService.php:78
 msgid "Groups"
 msgstr "Gruppi"
 
@@ -481,7 +484,7 @@ msgstr "Nessun punto di controllo"
 
 #. translators: 1: visited checkpoints, 2: total checkpoints.
 #: src/Controller/MyPathsController.php:250
-#: src/Controller/PlayerFlowController.php:421
+#: src/Controller/PlayerFlowController.php:454
 #, php-format
 msgid "%1$d / %2$d checkpoints"
 msgstr "%1$d / %2$d punti di controllo"
@@ -537,27 +540,28 @@ msgstr "Tipo"
 msgid "QR Code scan"
 msgstr "Scansione codice QR"
 
-#: src/Controller/PathController.php:44
+#: src/Controller/PathController.php:53
 msgid "Path Checkpoints"
 msgstr "Punti di controllo del percorso"
 
-#: src/Controller/PathController.php:75
+#: src/Controller/PathController.php:86
 msgid "Start Checkpoint"
 msgstr "Punto di controllo iniziale"
 
-#: src/Controller/PathController.php:87
+#: src/Controller/PathController.php:106
 msgid "Finish Checkpoint"
 msgstr "Punto di controllo finale"
 
-#: src/Controller/PathController.php:100
+#: src/Controller/PathController.php:119
 msgid "Save this Path and assign Checkpoints to it before selecting start and finish Checkpoints."
 msgstr "Salva questo percorso e assegna i punti di controllo prima di selezionare quelli iniziale e finale."
 
 #: src/Controller/PlayerFlowController.php:108
 #: src/Controller/PlayerFlowController.php:132
-#: src/Controller/PlayerFlowController.php:154
 #: src/Controller/PlayerFlowController.php:171
-#: src/Controller/PlayerFlowController.php:229
+#: src/Controller/PlayerFlowController.php:187
+#: src/Controller/PlayerFlowController.php:204
+#: src/Controller/PlayerFlowController.php:262
 msgid "Validation failed"
 msgstr "Validazione non riuscita"
 
@@ -569,63 +573,64 @@ msgstr "Codice QR non valido."
 msgid "This Path is not available."
 msgstr "Questo percorso non è disponibile."
 
-#: src/Controller/PlayerFlowController.php:155
+#: src/Controller/PlayerFlowController.php:188
 msgid "No active Participation was found for this Path."
 msgstr "Non è stata trovata alcuna partecipazione attiva per questo percorso."
 
-#: src/Controller/PlayerFlowController.php:172
+#: src/Controller/PlayerFlowController.php:205
 msgid "This Participation has been cancelled."
 msgstr "Questa partecipazione è stata annullata."
 
-#: src/Controller/PlayerFlowController.php:230
+#: src/Controller/PlayerFlowController.php:172
+#: src/Controller/PlayerFlowController.php:263
 msgid "Checkpoint could not be validated."
 msgstr "Il punto di controllo non può essere validato."
 
 #. translators: %s: group name.
-#: src/Controller/PlayerFlowController.php:313
+#: src/Controller/PlayerFlowController.php:346
 #, php-format
 msgid "You must complete the group \"%s\" first."
 msgstr "Devi prima completare il gruppo \"%s\"."
 
 #. translators: %s: checkpoint name.
-#: src/Controller/PlayerFlowController.php:318
+#: src/Controller/PlayerFlowController.php:351
 #, php-format
 msgid "You must complete the checkpoint \"%s\" first."
 msgstr "Devi prima completare il punto di controllo \"%s\"."
 
 #. translators: %s: group name.
-#: src/Controller/PlayerFlowController.php:328
+#: src/Controller/PlayerFlowController.php:361
 #, php-format
 msgid "This checkpoint is no longer available because the group \"%s\" has already been completed."
 msgstr "Questo punto di controllo non è più disponibile perché il gruppo \"%s\" è già stato completato."
 
 #. translators: %s: checkpoint name.
-#: src/Controller/PlayerFlowController.php:333
+#: src/Controller/PlayerFlowController.php:366
 #, php-format
 msgid "This checkpoint is no longer available because the checkpoint \"%s\" has already been completed."
 msgstr "Questo punto di controllo non è più disponibile perché il punto di controllo \"%s\" è già stato completato."
 
-#: src/Controller/PlayerFlowController.php:408
+#: src/Controller/PlayerFlowController.php:441
 msgid "Validation succeeded"
 msgstr "Validazione riuscita"
 
-#: src/Controller/PlayerFlowController.php:484
+#: src/Controller/PlayerFlowController.php:517
 msgid "This Path was already completed."
 msgstr "Questo percorso era già stato completato."
 
-#: src/Controller/PlayerFlowController.php:491
+#: src/Controller/PlayerFlowController.php:524
 msgid "Path completed."
 msgstr "Percorso completato."
 
-#: src/Controller/PlayerFlowController.php:498
+#: src/Controller/PlayerFlowController.php:531
 msgid "Checkpoint already visited."
 msgstr "Punto di controllo già visitato."
 
-#: src/Controller/PlayerFlowController.php:504
+#: src/Controller/PlayerFlowController.php:537
 msgid "Checkpoint registered."
 msgstr "Punto di controllo registrato."
 
-#: src/Controller/PlayerFlowController.php:516
+#: src/Controller/PlayerFlowController.php:549
 #: templates/public-checkpoint.php:17
 msgid "Not started"
 msgstr "Non iniziata"
@@ -663,10 +668,6 @@ msgstr "Punto di controllo non trovato."
 #: src/Controller/QrCodeController.php:206
 msgid "Path not found."
 msgstr "Percorso non trovato."
-
-#: src/Controller/ScanRestController.php:83
-msgid "The requested checkpoint or participation could not be found."
-msgstr "Il punto di controllo o la partecipazione richiesti non sono stati trovati."
 
 #: src/PathPostType.php:52
 msgctxt "Post type general name"
@@ -759,3 +760,96 @@ msgstr "Avanzamento:"
 #: templates/public-my-paths.php:40
 msgid "Open path"
 msgstr "Apri percorso"
+
+#: src/Controller/PathController.php:98
+msgid "Opening date"
+msgstr ""
+
+#: src/Controller/PathController.php:102
+msgid "Closing date"
+msgstr ""
+
+#: src/Controller/PathController.php:249
+msgid "The Path was saved as a draft because its configuration is not publishable."
+msgstr ""
+
+#: src/Controller/SettingsController.php:30
+#: src/Controller/SettingsController.php:31
+msgid "Settings"
+msgstr ""
+
+#: src/Controller/SettingsController.php:83
+msgid "QRHunt Settings"
+msgstr ""
+
+#: src/Controller/SettingsController.php:86
+msgid "Privacy"
+msgstr ""
+
+#: src/Controller/SettingsController.php:89
+msgid "Event data"
+msgstr ""
+
+#: src/Controller/SettingsController.php:93
+msgid "Record IP address for new Events"
+msgstr ""
+
+#: src/Controller/SettingsController.php:98
+msgid "Record User Agent for new Events"
+msgstr ""
+
+#: src/Service/DashboardService.php:70
+msgid "Active Paths"
+msgstr ""
+
+#: src/Service/DashboardService.php:86
+msgid "Active Participations"
+msgstr ""
+
+#: src/Service/DashboardService.php:90
+msgid "Total scans"
+msgstr ""
+
+#: src/Service/DashboardService.php:94
+msgid "Invalid scans"
+msgstr ""
+
+#: src/Service/DashboardService.php:98
+msgid "Duplicate scans"
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:53
+msgid "The Path must be saved before it can be published."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:70
+msgid "A Path must have a start Checkpoint belonging to the Path."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:74
+msgid "A Path must have a finish Checkpoint belonging to the Path."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:78
+msgid "The start and finish Checkpoints must be different."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:100
+msgid "The Path dependencies contain a cycle."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:118
+msgid "A dependency has an invalid target."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:124
+msgid "A dependency references a Checkpoint that does not belong to this Path."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:132
+msgid "A dependency has an invalid target type."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:139
+msgid "A dependency references a Group that does not belong to this Path."
+msgstr ""

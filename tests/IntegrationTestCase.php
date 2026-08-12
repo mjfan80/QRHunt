@@ -27,6 +27,8 @@ use QRHunt\Service\ParticipationCheckpointService;
 use QRHunt\Service\ParticipationProgressBuilder;
 use QRHunt\Service\ParticipationService;
 use QRHunt\Service\PathService;
+use QRHunt\Service\PathConfigurationValidator;
+use QRHunt\Service\PrivacyService;
 use QRHunt\Service\ValidationService;
 use QRHunt\Service\ScanService;
 
@@ -98,7 +100,8 @@ abstract class IntegrationTestCase extends \WP_UnitTestCase {
 			'progress_builder'             => $progress_builder,
 			'event_service'                => $event_service,
 			'path_service'                 => $path_service,
-			'scan_service'                 => new ScanService( $checkpoint_service, $progress_builder, new ValidationService(), new ParticipationCheckpointService( $participation_checkpoint_repository ), $event_service, $path_service, $participation_service ),
+			'path_configuration_validator' => new PathConfigurationValidator( $checkpoint_service, new \QRHunt\Service\DependencyService( $dependency_repository ), new GroupService( $group_repository ) ),
+			'scan_service'                 => new ScanService( $checkpoint_service, $progress_builder, new ValidationService(), new ParticipationCheckpointService( $participation_checkpoint_repository ), $event_service, $path_service, $participation_service, new PrivacyService() ),
 		);
 	}
 
@@ -122,22 +125,11 @@ abstract class IntegrationTestCase extends \WP_UnitTestCase {
 		$path->set_name( $values['name'] ?? 'Path' );
 		$path->set_description( '' );
 		$path->set_status( $values['status'] ?? 'publish' );
+		$path->set_opening_date( $values['opening_date'] ?? null );
+		$path->set_closing_date( $values['closing_date'] ?? null );
 		$services['path_service']->save_path( $path );
-		$path = $services['path_service']->get_path_by_post_id( $post_id );
 
-		global $wpdb;
-		$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- This integration-test fixture needs opening and closing dates, which the current Path admin fixture API does not persist.
-			$wpdb->prefix . 'qrhunt_paths',
-			array(
-				'opening_date' => $values['opening_date'] ?? null,
-				'closing_date' => $values['closing_date'] ?? null,
-			),
-			array( 'id' => $path->get_id() ),
-			array( '%s', '%s' ),
-			array( '%d' )
-		);
-
-		return $services['path_service']->get_path( (int) $path->get_id() );
+		return $services['path_service']->get_path_by_post_id( $post_id );
 	}
 
 	/**

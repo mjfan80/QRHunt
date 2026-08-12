@@ -35,7 +35,7 @@ Recupero del Path
 
 ↓
 
-Recupero o creazione della Participation
+Recupero della Participation
 
 ↓
 
@@ -51,8 +51,8 @@ Validazione fallita?
    │         │
    ▼         ▼
 
-Registrazione   Registrazione
-Event           Checkpoint
+Restituzione    Registrazione
+ValidationResult Checkpoint
                 nella Participation
 
                 ↓
@@ -62,8 +62,11 @@ Event           Checkpoint
 
                 ↓
 
-                Registrazione
-                Event
+                Creazione Participation
+
+                ↓
+
+                Registrazione Event
 
                 ↓
 
@@ -96,7 +99,9 @@ Tutte le operazioni successive vengono effettuate esclusivamente all'interno del
 
 Il sistema ricerca una Participation relativa all'utente autenticato e al Path individuato.
 
-Se non esiste viene creata automaticamente.
+Se non esiste, solo il Checkpoint iniziale può avviare il Path. Il sistema lo valida usando una Participation non persistita.
+
+La Participation viene creata soltanto dopo l'accettazione del Checkpoint iniziale. In caso di validazione negativa non vengono persistiti né la Participation né un Event.
 
 Ogni utente può possedere una sola Participation per ciascun Path.
 
@@ -117,7 +122,7 @@ Il Validation Engine non modifica mai lo stato dell'applicazione.
 
 # 5. Validazione fallita
 
-Se il Validation Engine restituisce un risultato negativo:
+Se il Validation Engine restituisce un risultato negativo per una Participation già persistita:
 
 - non viene registrato il Checkpoint nella tabella `wp_qrhunt_participation_checkpoints`;
 - la Participation non viene modificata;
@@ -157,7 +162,9 @@ Le regole che determinano tali stati sono definite dal dominio del plugin.
 
 # 8. Registrazione degli Event
 
-Ogni scansione elaborata genera un Event.
+Ogni scansione che raggiunge la validazione con una Participation persistita genera un Event.
+
+La prima scansione genera un Event solo dopo avere validato il Checkpoint iniziale e persistito la Participation. Le validazioni iniziali fallite non generano Event.
 
 Gli Event rappresentano esclusivamente lo storico delle operazioni effettuate dal sistema.
 

@@ -123,6 +123,8 @@ final class PathRepository {
 			'status'               => $path->get_status(),
 			'start_checkpoint_id'  => $path->get_start_checkpoint_id(),
 			'finish_checkpoint_id' => $path->get_finish_checkpoint_id(),
+			'opening_date'         => $path->get_opening_date(),
+			'closing_date'         => $path->get_closing_date(),
 		);
 
 		if ( null !== $this->find_by_post_id( (int) $path->get_post_id() ) ) {
@@ -132,7 +134,7 @@ final class PathRepository {
 				$this->table_name,
 				$data,
 				array( 'post_id' => $path->get_post_id() ),
-				array( '%d', '%s', '%s', '%s', '%d', '%d', '%s' ),
+				array( '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s' ),
 				array( '%d' )
 			);
 
@@ -142,7 +144,7 @@ final class PathRepository {
 		$this->wpdb->insert(
 			$this->table_name,
 			$data,
-			array( '%d', '%s', '%s', '%s', '%d', '%d' )
+			array( '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s' )
 		);
 	}
 

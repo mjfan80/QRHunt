@@ -14,11 +14,11 @@ use QRHunt\Model\ParticipationStatus;
  */
 final class ParticipationServiceTest extends IntegrationTestCase {
 	/**
-	 * Creates a Participation only from the Path start Checkpoint and reuses it afterwards.
+	 * Retrieves an existing Participation without persisting one during lookup.
 	 *
 	 * @return void
 	 */
-	public function test_creates_participation_only_for_start_checkpoint(): void {
+	public function test_gets_existing_participation_without_creating_one(): void {
 		$services    = $this->get_services();
 		$path        = $this->create_path();
 		$start       = $this->create_checkpoint( (int) $path->get_id() );
@@ -28,10 +28,11 @@ final class ParticipationServiceTest extends IntegrationTestCase {
 		$path->set_start_checkpoint_id( (int) $start->get_post_id() );
 		$services['path_service']->save_path( $path );
 
+		self::assertNull( $services['participation_service']->get_participation_for_scan( $user_id, $start ) );
 		self::assertNull( $services['participation_service']->get_participation_for_scan( $user_id, $other ) );
-		$participation = $services['participation_service']->get_participation_for_scan( $user_id, $start );
 
-		self::assertNotNull( $participation );
+		$participation = $this->create_participation( $user_id, (int) $path->get_id() );
+
 		self::assertSame( ParticipationStatus::IN_PROGRESS, $participation->get_status() );
 		self::assertSame( $participation->get_id(), $services['participation_service']->get_participation_for_scan( $user_id, $other )->get_id() );
 	}

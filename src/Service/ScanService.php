@@ -45,6 +45,9 @@ final class ScanService {
 	/** @var ParticipationService */
 	private $participation_service;
 
+	/** @var PrivacyService */
+	private $privacy_service;
+
 	/**
 	 * Creates a scan service.
 	 *
@@ -55,6 +58,7 @@ final class ScanService {
 	 * @param EventService                   $event_service                    Event service.
 	 * @param PathService                    $path_service                     Path service.
 	 * @param ParticipationService           $participation_service            Participation service.
+	 * @param PrivacyService                 $privacy_service                  Privacy service.
 	 */
 	public function __construct(
 		CheckpointService $checkpoint_service,
@@ -63,7 +67,8 @@ final class ScanService {
 		ParticipationCheckpointService $participation_checkpoint_service,
 		EventService $event_service,
 		PathService $path_service,
-		ParticipationService $participation_service
+		ParticipationService $participation_service,
+		PrivacyService $privacy_service
 	) {
 		$this->checkpoint_service               = $checkpoint_service;
 		$this->participation_progress_builder   = $participation_progress_builder;
@@ -72,6 +77,7 @@ final class ScanService {
 		$this->event_service                    = $event_service;
 		$this->path_service                     = $path_service;
 		$this->participation_service            = $participation_service;
+		$this->privacy_service                  = $privacy_service;
 	}
 
 	/**
@@ -104,6 +110,54 @@ final class ScanService {
 		}
 
 		return $this->process_scan( $participation, $checkpoint );
+	}
+
+	/**
+	 * Validates the first scan of a Path and persists its Participation only
+	 * after the start Checkpoint has been accepted.
+	 *
+	 * @param int        $user_id    Authenticated user identifier.
+	 * @param Checkpoint $checkpoint Resolved Checkpoint.
+	 * @return ValidationResult
+	 */
+	public function start_participation( int $user_id, Checkpoint $checkpoint ): ValidationResult {
+		$path_id            = $checkpoint->get_path_id();
+		$checkpoint_post_id = $checkpoint->get_post_id();
+
+		if ( null === $path_id || null === $checkpoint_post_id ) {
+			throw new \InvalidArgumentException( 'Checkpoint not found.' );
+		}
+
+		$existing_participation = $this->participation_service->get_participation_by_user_and_path( $user_id, (int) $path_id );
+
+		if ( $existing_participation instanceof Participation ) {
+			return $this->process_scan( $existing_participation, $checkpoint );
+		}
+
+		$path = $this->path_service->get_path( (int) $path_id );
+
+		if ( null === $path || (int) $checkpoint_post_id !== (int) $path->get_start_checkpoint_id() ) {
+			throw new \InvalidArgumentException( 'Checkpoint is not the Path start Checkpoint.' );
+		}
+
+		$participation = new Participation();
+		$participation->set_user_id( $user_id );
+		$participation->set_path_id( (int) $path_id );
+		$participation->set_status( ParticipationStatus::IN_PROGRESS );
+
+		$participation_progress = new ParticipationProgress();
+		$validation_result      = $this->validation_service->validate( $participation, $checkpoint, $participation_progress );
+
+		if ( ! $validation_result->is_valid() ) {
+			return $validation_result;
+		}
+
+		$this->participation_service->save_participation( $participation );
+		$this->participation_checkpoint_service->save_validated_checkpoint( (int) $participation->get_id(), (int) $checkpoint_post_id );
+		$this->event_service->save_event( $this->build_scan_event( $participation, (int) $checkpoint_post_id, $validation_result, $participation_progress ) );
+		$this->update_participation_status( $participation, (int) $checkpoint_post_id, $participation_progress );
+
+		return $validation_result;
 	}
 
 	/**
@@ -176,8 +230,8 @@ final class ScanService {
 		$event->set_checkpoint_id( $checkpoint_post_id );
 		$event->set_event_type( EventType::QR_SCAN );
 		$event->set_result( $this->resolve_event_result( $validation_result, $checkpoint_post_id, $participation_progress ) );
-		$event->set_ip_address( null );
-		$event->set_user_agent( null );
+		$event->set_ip_address( $this->privacy_service->get_ip_address() );
+		$event->set_user_agent( $this->privacy_service->get_user_agent() );
 
 		return $event;
 	}

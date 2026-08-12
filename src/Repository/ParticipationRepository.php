@@ -236,6 +236,22 @@ final class ParticipationRepository {
 	}
 
 	/**
+	 * Counts Participations with a status.
+	 *
+	 * @param string $status Participation status.
+	 * @return int
+	 */
+	public function count_by_status( string $status ): int {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		$sql = $this->wpdb->prepare( "SELECT COUNT(*) FROM {$this->table_name} WHERE status = %s", $status );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
+		$count = $this->wpdb->get_var( $sql );
+
+		return (int) $count;
+	}
+
+	/**
 	 * Saves a Participation.
 	 *
 	 * @param Participation $participation Participation to save.

@@ -34,9 +34,12 @@ Informazioni previste:
 
 - numero Percorsi;
 - Percorsi attivi;
+- numero delle Partecipazioni;
 - Partecipazioni attive;
-- ultime scansioni;
-- statistiche sintetiche.
+- numero totale delle scansioni;
+- numero delle scansioni non valide;
+- numero delle scansioni duplicate;
+- ultime scansioni.
 
 ---
 
@@ -191,6 +194,8 @@ Configurazioni previste.
 
 - registra indirizzo IP;
 - registra User Agent.
+
+Le due opzioni sono indipendenti e disattivate per impostazione predefinita. Si applicano esclusivamente agli Eventi creati dopo il salvataggio dell'impostazione.
 
 ---
 

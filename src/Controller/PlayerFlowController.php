@@ -147,6 +147,39 @@ final class PlayerFlowController {
 		);
 
 		if ( null === $participation ) {
+			if ( (int) $checkpoint->get_post_id() === (int) $path->get_start_checkpoint_id() ) {
+				$progress_before   = new ParticipationProgress();
+				$validation_result = $this->scan_service->start_participation( get_current_user_id(), $checkpoint );
+
+				if ( $validation_result->is_valid() ) {
+					$participation = $this->participation_service->get_participation_by_user_and_path( get_current_user_id(), (int) $path->get_id() );
+
+					if ( $participation instanceof Participation ) {
+						$this->prepare_template_response(
+							$this->build_success_view_context( $checkpoint, $participation, $progress_before ),
+							200
+						);
+
+						return;
+					}
+				}
+
+				$this->prepare_template_response(
+					$this->build_error_view_context(
+						$checkpoint,
+						null,
+						__( 'Validation failed', 'qrhunt' ),
+						__( 'Checkpoint could not be validated.', 'qrhunt' ),
+						$this->build_violation_messages( $validation_result->get_failed_dependencies() ),
+						false,
+						true
+					),
+					200
+				);
+
+				return;
+			}
+
 			$this->prepare_template_response(
 				$this->build_error_view_context(
 					$checkpoint,

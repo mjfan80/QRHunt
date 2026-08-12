@@ -17,7 +17,7 @@ use QRHunt\Controller\ParticipationController;
 use QRHunt\Controller\PathController;
 use QRHunt\Controller\PlayerFlowController;
 use QRHunt\Controller\QrCodeController;
-use QRHunt\Controller\ScanRestController;
+use QRHunt\Controller\SettingsController;
 use QRHunt\Repository\CheckpointRepository;
 use QRHunt\Repository\DependencyRepository;
 use QRHunt\Repository\EventRepository;
@@ -33,6 +33,8 @@ use QRHunt\Service\ExportService;
 use QRHunt\Service\GroupService;
 use QRHunt\Service\ParticipationCheckpointService;
 use QRHunt\Service\ParticipationProgressBuilder;
+use QRHunt\Service\PathConfigurationValidator;
+use QRHunt\Service\PrivacyService;
 use QRHunt\Service\ParticipationService;
 use QRHunt\Service\PathService;
 use QRHunt\Service\QrCodeService;
@@ -61,8 +63,9 @@ final class Plugin {
 	/** @var DashboardController|null */
 	private $dashboard_controller;
 
-	/** @var ScanRestController|null */
-	private $scan_rest_controller;
+	/** @var SettingsController|null */
+	private $settings_controller;
+
 
 	/** @var PlayerFlowController|null */
 	private $player_flow_controller;
@@ -87,6 +90,9 @@ final class Plugin {
 
 	/** @var DashboardService|null */
 	private $dashboard_service;
+
+	/** @var PrivacyService|null */
+	private $privacy_service;
 
 	/** @var GroupService|null */
 	private $group_service;
@@ -150,6 +156,8 @@ final class Plugin {
 		add_action( 'admin_menu', array( $this, 'register_participations_page' ) );
 		add_action( 'admin_menu', array( $this, 'register_qr_codes_page' ) );
 		add_action( 'admin_menu', array( $this, 'register_exports_page' ) );
+		add_action( 'admin_menu', array( $this, 'register_settings_page' ) );
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_post_qrhunt_save_group', array( $this, 'save_group' ) );
 		add_action( 'admin_post_qrhunt_delete_group', array( $this, 'delete_group' ) );
 		add_action( 'admin_post_qrhunt_cancel_participation', array( $this, 'cancel_participation' ) );
@@ -158,9 +166,9 @@ final class Plugin {
 		add_action( 'admin_post_qrhunt_export_csv', array( $this, 'export_csv' ) );
 		add_action( 'add_meta_boxes_' . PathPostType::POST_TYPE, array( $this, 'register_path_metabox' ) );
 		add_action( 'save_post_' . PathPostType::POST_TYPE, array( $this, 'synchronize_path' ), 10, 2 );
+		add_action( 'admin_notices', array( $this, 'render_path_configuration_errors' ) );
 		add_action( 'add_meta_boxes_' . CheckpointPostType::POST_TYPE, array( $this, 'register_checkpoint_metabox' ) );
 		add_action( 'save_post_' . CheckpointPostType::POST_TYPE, array( $this, 'save_checkpoint_path' ), 10, 2 );
-		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 		add_action( 'template_redirect', array( $this, 'handle_player_flow' ), 0 );
 		add_action( 'template_redirect', array( $this, 'handle_my_paths' ), 0 );
 		add_filter( 'query_vars', array( $this, 'register_query_vars' ) );
@@ -262,6 +270,24 @@ final class Plugin {
 	}
 
 	/**
+	 * Registers the settings administration page.
+	 *
+	 * @return void
+	 */
+	public function register_settings_page(): void {
+		$this->get_settings_controller()->register_page();
+	}
+
+	/**
+	 * Registers plugin settings with the WordPress Settings API.
+	 *
+	 * @return void
+	 */
+	public function register_settings(): void {
+		$this->get_settings_controller()->register_settings();
+	}
+
+	/**
 	 * Cancels a Participation.
 	 *
 	 * @return void
@@ -318,6 +344,19 @@ final class Plugin {
 	}
 
 	/**
+	 * Renders Path publication validation errors in the administration.
+	 *
+	 * @return void
+	 */
+	public function render_path_configuration_errors(): void {
+		global $pagenow;
+
+		if ( 'post.php' === $pagenow || 'post-new.php' === $pagenow ) {
+			$this->get_path_controller()->render_configuration_errors();
+		}
+	}
+
+	/**
 	 * Registers the Checkpoint metabox.
 	 *
 	 * @return void
@@ -335,15 +374,6 @@ final class Plugin {
 	 */
 	public function save_checkpoint_path( int $post_id, \WP_Post $post ): void {
 		$this->get_checkpoint_controller()->save( $post_id, $post );
-	}
-
-	/**
-	 * Registers plugin REST routes.
-	 *
-	 * @return void
-	 */
-	public function register_rest_routes(): void {
-		$this->get_scan_rest_controller()->register_routes();
 	}
 
 	/**
@@ -416,7 +446,11 @@ final class Plugin {
 	 */
 	private function get_path_controller(): PathController {
 		if ( null === $this->path_controller ) {
-			$this->path_controller = new PathController( $this->get_path_service(), $this->get_checkpoint_service() );
+			$this->path_controller = new PathController(
+				$this->get_path_service(),
+				$this->get_checkpoint_service(),
+				new PathConfigurationValidator( $this->get_checkpoint_service(), $this->get_dependency_service(), $this->get_group_service() )
+			);
 		}
 
 		return $this->path_controller;
@@ -453,16 +487,16 @@ final class Plugin {
 	}
 
 	/**
-	 * Creates the scan REST controller.
+	 * Creates the settings controller.
 	 *
-	 * @return ScanRestController
+	 * @return SettingsController
 	 */
-	private function get_scan_rest_controller(): ScanRestController {
-		if ( null === $this->scan_rest_controller ) {
-			$this->scan_rest_controller = new ScanRestController( $this->get_scan_service() );
+	private function get_settings_controller(): SettingsController {
+		if ( null === $this->settings_controller ) {
+			$this->settings_controller = new SettingsController();
 		}
 
-		return $this->scan_rest_controller;
+		return $this->settings_controller;
 	}
 
 	/**
@@ -552,7 +586,8 @@ final class Plugin {
 				$this->get_participation_checkpoint_service(),
 				$this->get_event_service(),
 				$this->get_path_service(),
-				$this->get_participation_service()
+				$this->get_participation_service(),
+				$this->get_privacy_service()
 			);
 		}
 
@@ -687,6 +722,19 @@ final class Plugin {
 		}
 
 		return $this->event_service;
+	}
+
+	/**
+	 * Creates the privacy settings service.
+	 *
+	 * @return PrivacyService
+	 */
+	private function get_privacy_service(): PrivacyService {
+		if ( null === $this->privacy_service ) {
+			$this->privacy_service = new PrivacyService();
+		}
+
+		return $this->privacy_service;
 	}
 
 	/**

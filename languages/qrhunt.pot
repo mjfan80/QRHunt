@@ -3,13 +3,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: QRHunt 0.1.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/qrhunt\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/QRHunt\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-11T13:29:37+00:00\n"
+"POT-Creation-Date: 2026-08-12T11:33:23+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: qrhunt\n"
@@ -33,13 +33,13 @@ msgstr ""
 
 #: src/AdminMenu.php:47
 #: src/AdminMenu.php:48
-#: src/Service/DashboardService.php:65
+#: src/Service/DashboardService.php:66
 msgid "Paths"
 msgstr ""
 
 #: src/AdminMenu.php:55
 #: src/AdminMenu.php:56
-#: src/Service/DashboardService.php:69
+#: src/Service/DashboardService.php:74
 msgid "Checkpoints"
 msgstr ""
 
@@ -143,7 +143,7 @@ msgstr ""
 #: src/Controller/ParticipationController.php:116
 #: src/Controller/ParticipationController.php:153
 #: src/Controller/ParticipationController.php:231
-#: src/Controller/PlayerFlowController.php:416
+#: src/Controller/PlayerFlowController.php:449
 #: src/Controller/QrCodeController.php:81
 #: templates/public-my-paths.php:28
 msgid "Path"
@@ -220,8 +220,8 @@ msgstr ""
 #: src/Controller/DependencyController.php:223
 #: src/Controller/ExportController.php:114
 #: src/Controller/ParticipationController.php:245
-#: src/Controller/PlayerFlowController.php:394
-#: src/Controller/PlayerFlowController.php:453
+#: src/Controller/PlayerFlowController.php:427
+#: src/Controller/PlayerFlowController.php:486
 #: templates/public-checkpoint.php:13
 msgid "Checkpoint"
 msgstr ""
@@ -289,8 +289,8 @@ msgid "AFTER"
 msgstr ""
 
 #: src/Controller/DependencyController.php:227
-#: src/Controller/PathController.php:77
-#: src/Controller/PathController.php:89
+#: src/Controller/PathController.php:88
+#: src/Controller/PathController.php:108
 msgid "Select a Checkpoint"
 msgstr ""
 
@@ -313,7 +313,7 @@ msgstr ""
 #: src/Controller/ParticipationController.php:73
 #: src/Controller/ParticipationController.php:74
 #: src/Controller/ParticipationController.php:112
-#: src/Service/DashboardService.php:77
+#: src/Service/DashboardService.php:82
 msgid "Participations"
 msgstr ""
 
@@ -395,34 +395,34 @@ msgstr ""
 #: src/Controller/ExportController.php:254
 #: src/Controller/MyPathsController.php:310
 #: src/Controller/ParticipationController.php:307
-#: src/Controller/PlayerFlowController.php:521
+#: src/Controller/PlayerFlowController.php:554
 msgid "In Progress"
 msgstr ""
 
 #: src/Controller/ExportController.php:255
 #: src/Controller/MyPathsController.php:311
 #: src/Controller/ParticipationController.php:308
-#: src/Controller/PlayerFlowController.php:522
+#: src/Controller/PlayerFlowController.php:555
 msgid "Finished"
 msgstr ""
 
 #: src/Controller/ExportController.php:256
 #: src/Controller/MyPathsController.php:312
 #: src/Controller/ParticipationController.php:309
-#: src/Controller/PlayerFlowController.php:523
+#: src/Controller/PlayerFlowController.php:556
 msgid "Completed"
 msgstr ""
 
 #: src/Controller/ExportController.php:257
 #: src/Controller/MyPathsController.php:313
 #: src/Controller/ParticipationController.php:310
-#: src/Controller/PlayerFlowController.php:524
+#: src/Controller/PlayerFlowController.php:557
 msgid "Cancelled"
 msgstr ""
 
 #: src/Controller/GroupController.php:21
 #: src/Controller/GroupController.php:40
-#: src/Service/DashboardService.php:73
+#: src/Service/DashboardService.php:78
 msgid "Groups"
 msgstr ""
 
@@ -485,7 +485,7 @@ msgstr ""
 
 #. translators: 1: visited checkpoints, 2: total checkpoints.
 #: src/Controller/MyPathsController.php:250
-#: src/Controller/PlayerFlowController.php:421
+#: src/Controller/PlayerFlowController.php:454
 #, php-format
 msgid "%1$d / %2$d checkpoints"
 msgstr ""
@@ -541,27 +541,40 @@ msgstr ""
 msgid "QR Code scan"
 msgstr ""
 
-#: src/Controller/PathController.php:44
+#: src/Controller/PathController.php:53
 msgid "Path Checkpoints"
 msgstr ""
 
-#: src/Controller/PathController.php:75
+#: src/Controller/PathController.php:86
 msgid "Start Checkpoint"
 msgstr ""
 
-#: src/Controller/PathController.php:87
+#: src/Controller/PathController.php:98
+msgid "Opening date"
+msgstr ""
+
+#: src/Controller/PathController.php:102
+msgid "Closing date"
+msgstr ""
+
+#: src/Controller/PathController.php:106
 msgid "Finish Checkpoint"
 msgstr ""
 
-#: src/Controller/PathController.php:100
+#: src/Controller/PathController.php:119
 msgid "Save this Path and assign Checkpoints to it before selecting start and finish Checkpoints."
+msgstr ""
+
+#: src/Controller/PathController.php:249
+msgid "The Path was saved as a draft because its configuration is not publishable."
 msgstr ""
 
 #: src/Controller/PlayerFlowController.php:108
 #: src/Controller/PlayerFlowController.php:132
-#: src/Controller/PlayerFlowController.php:154
 #: src/Controller/PlayerFlowController.php:171
-#: src/Controller/PlayerFlowController.php:229
+#: src/Controller/PlayerFlowController.php:187
+#: src/Controller/PlayerFlowController.php:204
+#: src/Controller/PlayerFlowController.php:262
 msgid "Validation failed"
 msgstr ""
 
@@ -573,63 +586,64 @@ msgstr ""
 msgid "This Path is not available."
 msgstr ""
 
-#: src/Controller/PlayerFlowController.php:155
-msgid "No active Participation was found for this Path."
-msgstr ""
-
 #: src/Controller/PlayerFlowController.php:172
-msgid "This Participation has been cancelled."
-msgstr ""
-
-#: src/Controller/PlayerFlowController.php:230
+#: src/Controller/PlayerFlowController.php:263
 msgid "Checkpoint could not be validated."
 msgstr ""
 
+#: src/Controller/PlayerFlowController.php:188
+msgid "No active Participation was found for this Path."
+msgstr ""
+
+#: src/Controller/PlayerFlowController.php:205
+msgid "This Participation has been cancelled."
+msgstr ""
+
 #. translators: %s: group name.
-#: src/Controller/PlayerFlowController.php:313
+#: src/Controller/PlayerFlowController.php:346
 #, php-format
 msgid "You must complete the group \"%s\" first."
 msgstr ""
 
 #. translators: %s: checkpoint name.
-#: src/Controller/PlayerFlowController.php:318
+#: src/Controller/PlayerFlowController.php:351
 #, php-format
 msgid "You must complete the checkpoint \"%s\" first."
 msgstr ""
 
 #. translators: %s: group name.
-#: src/Controller/PlayerFlowController.php:328
+#: src/Controller/PlayerFlowController.php:361
 #, php-format
 msgid "This checkpoint is no longer available because the group \"%s\" has already been completed."
 msgstr ""
 
 #. translators: %s: checkpoint name.
-#: src/Controller/PlayerFlowController.php:333
+#: src/Controller/PlayerFlowController.php:366
 #, php-format
 msgid "This checkpoint is no longer available because the checkpoint \"%s\" has already been completed."
 msgstr ""
 
-#: src/Controller/PlayerFlowController.php:408
+#: src/Controller/PlayerFlowController.php:441
 msgid "Validation succeeded"
 msgstr ""
 
-#: src/Controller/PlayerFlowController.php:484
+#: src/Controller/PlayerFlowController.php:517
 msgid "This Path was already completed."
 msgstr ""
 
-#: src/Controller/PlayerFlowController.php:491
+#: src/Controller/PlayerFlowController.php:524
 msgid "Path completed."
 msgstr ""
 
-#: src/Controller/PlayerFlowController.php:498
+#: src/Controller/PlayerFlowController.php:531
 msgid "Checkpoint already visited."
 msgstr ""
 
-#: src/Controller/PlayerFlowController.php:504
+#: src/Controller/PlayerFlowController.php:537
 msgid "Checkpoint registered."
 msgstr ""
 
-#: src/Controller/PlayerFlowController.php:516
+#: src/Controller/PlayerFlowController.php:549
 #: templates/public-checkpoint.php:17
 msgid "Not started"
 msgstr ""
@@ -668,8 +682,29 @@ msgstr ""
 msgid "Path not found."
 msgstr ""
 
-#: src/Controller/ScanRestController.php:83
-msgid "The requested checkpoint or participation could not be found."
+#: src/Controller/SettingsController.php:30
+#: src/Controller/SettingsController.php:31
+msgid "Settings"
+msgstr ""
+
+#: src/Controller/SettingsController.php:83
+msgid "QRHunt Settings"
+msgstr ""
+
+#: src/Controller/SettingsController.php:86
+msgid "Privacy"
+msgstr ""
+
+#: src/Controller/SettingsController.php:89
+msgid "Event data"
+msgstr ""
+
+#: src/Controller/SettingsController.php:93
+msgid "Record IP address for new Events"
+msgstr ""
+
+#: src/Controller/SettingsController.php:98
+msgid "Record User Agent for new Events"
 msgstr ""
 
 #: src/PathPostType.php:52
@@ -726,6 +761,62 @@ msgstr ""
 
 #: src/PathPostType.php:67
 msgid "Paths list"
+msgstr ""
+
+#: src/Service/DashboardService.php:70
+msgid "Active Paths"
+msgstr ""
+
+#: src/Service/DashboardService.php:86
+msgid "Active Participations"
+msgstr ""
+
+#: src/Service/DashboardService.php:90
+msgid "Total scans"
+msgstr ""
+
+#: src/Service/DashboardService.php:94
+msgid "Invalid scans"
+msgstr ""
+
+#: src/Service/DashboardService.php:98
+msgid "Duplicate scans"
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:53
+msgid "The Path must be saved before it can be published."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:70
+msgid "A Path must have a start Checkpoint belonging to the Path."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:74
+msgid "A Path must have a finish Checkpoint belonging to the Path."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:78
+msgid "The start and finish Checkpoints must be different."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:100
+msgid "The Path dependencies contain a cycle."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:118
+msgid "A dependency has an invalid target."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:124
+msgid "A dependency references a Checkpoint that does not belong to this Path."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:132
+msgid "A dependency has an invalid target type."
+msgstr ""
+
+#: src/Service/PathConfigurationValidator.php:139
+msgid "A dependency references a Group that does not belong to this Path."
 msgstr ""
 
 #: templates/public-checkpoint.php:41

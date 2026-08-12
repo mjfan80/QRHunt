@@ -22,9 +22,6 @@ final class ParticipationService {
 	/** @var ParticipationRepository */
 	private $participation_repository;
 
-	/** @var PathService */
-	private $path_service;
-
 	/**
 	 * Creates a Participation service.
 	 *
@@ -33,7 +30,6 @@ final class ParticipationService {
 	 */
 	public function __construct( ParticipationRepository $participation_repository, PathService $path_service ) {
 		$this->participation_repository = $participation_repository;
-		$this->path_service             = $path_service;
 	}
 
 	/**
@@ -100,10 +96,19 @@ final class ParticipationService {
 	}
 
 	/**
-	 * Gets or creates the Participation for a Checkpoint scan.
+	 * Counts currently active Participations.
 	 *
-	 * A Participation is created only when the scanned Checkpoint is the
-	 * start Checkpoint of the Path and no valid Participation already exists.
+	 * @return int
+	 */
+	public function count_active_participations(): int {
+		return $this->participation_repository->count_by_status( ParticipationStatus::IN_PROGRESS );
+	}
+
+	/**
+	 * Gets the existing Participation for a Checkpoint scan.
+	 *
+	 * The first scan is validated before a Participation is persisted. Its
+	 * creation is therefore orchestrated by ScanService after validation.
 	 *
 	 * @param int        $user_id    User identifier.
 	 * @param Checkpoint $checkpoint Scanned Checkpoint.
@@ -112,23 +117,11 @@ final class ParticipationService {
 	public function get_participation_for_scan( int $user_id, Checkpoint $checkpoint ): ?Participation {
 		$path_id = $checkpoint->get_path_id();
 
-		if ( null === $path_id || null === $checkpoint->get_post_id() ) {
+		if ( null === $path_id ) {
 			return null;
 		}
 
-		$participation = $this->get_participation_by_user_and_path( $user_id, (int) $path_id );
-
-		if ( null !== $participation ) {
-			return $participation;
-		}
-
-		$path = $this->path_service->get_path( (int) $path_id );
-
-		if ( null === $path || (int) $checkpoint->get_post_id() !== (int) $path->get_start_checkpoint_id() ) {
-			return null;
-		}
-
-		return $this->create_participation( $user_id, (int) $path_id );
+		return $this->get_participation_by_user_and_path( $user_id, (int) $path_id );
 	}
 
 	/**

@@ -378,17 +378,18 @@ L'algoritmo di validazione verifica, nell'ordine:
 1. autenticazione del partecipante;
 2. esistenza del Checkpoint;
 3. appartenenza del Checkpoint al Percorso;
-4. eventuale creazione della Partecipazione;
-5. stato della Partecipazione;
-6. eventuale scansione duplicata;
-7. verifica del Prerequisito;
-8. verifica della regola "Non valido dopo";
-9. validazione del Checkpoint;
-10. aggiornamento dello stato della Partecipazione.
+4. disponibilità del Percorso;
+5. verifica di una Participation esistente oppure validazione iniziale del Checkpoint iniziale prima della sua creazione;
+6. stato della Partecipazione;
+7. eventuale scansione duplicata;
+8. verifica del Prerequisito;
+9. verifica della regola "Non valido dopo";
+10. validazione del Checkpoint;
+11. aggiornamento dello stato della Partecipazione.
 
 Al primo controllo non superato la validazione termina.
 
-Il Tentativo viene comunque registrato.
+Un Event viene registrato solo se esiste una Participation persistita. Se la prima validazione del Checkpoint iniziale fallisce, non vengono registrati né una Participation né un Event.
 
 ---
 
@@ -398,13 +399,11 @@ Il plugin deve impedire la configurazione di regole incoerenti.
 
 Devono essere rilevati almeno:
 
-- prerequisiti inesistenti;
-- riferimenti a Checkpoint appartenenti ad altri Percorsi;
-- dipendenze circolari;
-- assenza del Checkpoint iniziale;
-- assenza del Checkpoint finale;
-- presenza di più Checkpoint iniziali;
-- presenza di più Checkpoint finali.
+- Checkpoint iniziale assente, inesistente o non appartenente al Percorso;
+- Checkpoint finale assente, inesistente o non appartenente al Percorso;
+- Checkpoint iniziale e finale coincidenti;
+- riferimenti di dipendenza inesistenti o appartenenti a un altro Percorso;
+- dipendenze circolari che rendono impossibile soddisfare l'ordine.
 
 In presenza di errori il Percorso non può essere pubblicato.
 
@@ -484,7 +483,7 @@ Ogni Tentativo deve registrare almeno:
 
 La registrazione del timestamp consente il calcolo della durata del Percorso, dei tempi tra i Checkpoint e di eventuali classifiche cronometriche.
 
-La registrazione dell'indirizzo IP e del User Agent deve essere configurabile e può essere disabilitata dall'amministratore.
+La registrazione dell'indirizzo IP e del User Agent deve essere configurabile con due impostazioni indipendenti, disattivate per impostazione predefinita. Quando una delle due impostazioni è disattivata, il valore corrispondente non viene raccolto e resta `NULL`; l'attivazione non raccoglie dati retroattivamente.
 
 ---
 

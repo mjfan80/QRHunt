@@ -93,6 +93,23 @@ final class PathService {
 		return $this->path_repository->count_all();
 	}
 
+	/**
+	 * Counts Paths currently available for scans.
+	 *
+	 * @return int
+	 */
+	public function count_active_paths(): int {
+		$count = 0;
+
+		foreach ( $this->get_paths() as $path ) {
+			if ( $this->is_path_available_for_scan( $path ) ) {
+				++$count;
+			}
+		}
+
+		return $count;
+	}
+
 	public function save_path( Path $path ): void {
 		$this->path_repository->save( $path );
 	}

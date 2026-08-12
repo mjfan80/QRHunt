@@ -93,6 +93,35 @@ final class EventRepository {
 	}
 
 	/**
+	 * Counts all Events.
+	 *
+	 * @return int
+	 */
+	public function count_all(): int {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_events suffix.
+		$count = $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name}" );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return (int) $count;
+	}
+
+	/**
+	 * Counts Events by result.
+	 *
+	 * @param string $result Event result.
+	 * @return int
+	 */
+	public function count_by_result( string $result ): int {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_events suffix.
+		$sql = $this->wpdb->prepare( "SELECT COUNT(*) FROM {$this->table_name} WHERE result = %s", $result );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
+		$count = $this->wpdb->get_var( $sql );
+
+		return (int) $count;
+	}
+
+	/**
 	 * Gets Events matching optional admin filters.
 	 *
 	 * @param int    $path_id       Path identifier, or 0 for all Paths.

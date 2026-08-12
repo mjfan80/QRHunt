@@ -26,13 +26,17 @@ Gli Event costituiscono il log tecnico del sistema.
 
 ## Quando viene generato un Event
 
-Un Event viene generato ogni volta che una scansione raggiunge il dominio applicativo.
+Un Event viene generato quando una scansione raggiunge la validazione applicativa con una Participation persistita a cui associarlo.
 
 Non vengono invece registrati Event per richieste che non possono essere elaborate, ad esempio:
 
 - token inesistente;
 - utente non autenticato;
-- richiesta non valida.
+- Path non disponibile;
+- Participation annullata, terminata o completata;
+- validazione iniziale del Checkpoint iniziale fallita prima della creazione della Participation.
+
+La prima scansione valida il Checkpoint iniziale prima di persistere la Participation. Se viene accettata, vengono registrati coerentemente la Participation, il Checkpoint validato e l'Event `accepted`.
 
 ---
 
@@ -86,17 +90,13 @@ La Participation non viene modificata.
 
 ### path_closed
 
-Il Path non è disponibile.
-
-La Participation non viene modificata.
+Il valore rimane disponibile nel modello e nello schema per evoluzioni future, ma non viene prodotto dal Player Flow 1.0: un Path non disponibile interrompe il flusso prima della validazione.
 
 ---
 
 ### participation_cancelled
 
-La Participation risulta annullata.
-
-La scansione viene rifiutata.
+Il valore rimane disponibile nel modello e nello schema per evoluzioni future, ma non viene prodotto dal Player Flow 1.0: una Participation annullata interrompe il flusso prima della validazione.
 
 ---
 

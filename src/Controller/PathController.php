@@ -10,6 +10,7 @@ namespace QRHunt\Controller;
 use QRHunt\PathPostType;
 use QRHunt\Model\Path;
 use QRHunt\Service\CheckpointService;
+use QRHunt\Service\PathConfigurationValidator;
 use QRHunt\Service\PathService;
 
 defined( 'ABSPATH' ) || exit;
@@ -22,15 +23,23 @@ final class PathController {
 	/** @var CheckpointService */
 	private $checkpoint_service;
 
+	/** @var PathConfigurationValidator */
+	private $configuration_validator;
+
+	/** @var bool */
+	private $is_correcting_post_status = false;
+
 	/**
 	 * Creates a Path controller.
 	 *
-	 * @param PathService       $path_service       Path service.
-	 * @param CheckpointService $checkpoint_service Checkpoint service.
+	 * @param PathService                $path_service             Path service.
+	 * @param CheckpointService          $checkpoint_service       Checkpoint service.
+	 * @param PathConfigurationValidator $configuration_validator  Path configuration validator.
 	 */
-	public function __construct( PathService $path_service, CheckpointService $checkpoint_service ) {
-		$this->path_service       = $path_service;
-		$this->checkpoint_service = $checkpoint_service;
+	public function __construct( PathService $path_service, CheckpointService $checkpoint_service, PathConfigurationValidator $configuration_validator ) {
+		$this->path_service             = $path_service;
+		$this->checkpoint_service       = $checkpoint_service;
+		$this->configuration_validator  = $configuration_validator;
 	}
 
 	/**
@@ -65,6 +74,8 @@ final class PathController {
 		$finish_checkpoint_id = null === $path || null === $path->get_finish_checkpoint_id()
 			? 0
 			: (int) $path->get_finish_checkpoint_id();
+		$opening_date = null === $path ? '' : (string) $path->get_opening_date();
+		$closing_date = null === $path ? '' : (string) $path->get_closing_date();
 		$checkpoints = 0 === $path_id
 			? array()
 			: $this->checkpoint_service->get_checkpoints_by_path( $path_id );
@@ -82,6 +93,14 @@ final class PathController {
 					</option>
 				<?php endforeach; ?>
 			</select>
+		</p>
+		<p>
+			<label for="qrhunt-opening-date"><?php esc_html_e( 'Opening date', 'qrhunt' ); ?></label>
+			<input id="qrhunt-opening-date" name="qrhunt_opening_date" type="datetime-local" value="<?php echo esc_attr( $this->format_datetime_input( $opening_date ) ); ?>" />
+		</p>
+		<p>
+			<label for="qrhunt-closing-date"><?php esc_html_e( 'Closing date', 'qrhunt' ); ?></label>
+			<input id="qrhunt-closing-date" name="qrhunt_closing_date" type="datetime-local" value="<?php echo esc_attr( $this->format_datetime_input( $closing_date ) ); ?>" />
 		</p>
 		<p>
 			<label for="qrhunt-finish-checkpoint-id"><?php esc_html_e( 'Finish Checkpoint', 'qrhunt' ); ?></label>
@@ -125,6 +144,8 @@ final class PathController {
 		if ( null !== $stored_path ) {
 			$path->set_start_checkpoint_id( $stored_path->get_start_checkpoint_id() );
 			$path->set_finish_checkpoint_id( $stored_path->get_finish_checkpoint_id() );
+			$path->set_opening_date( $stored_path->get_opening_date() );
+			$path->set_closing_date( $stored_path->get_closing_date() );
 		}
 
 		$has_valid_checkpoints_nonce = isset( $_POST['qrhunt_path_checkpoints_nonce'] )
@@ -148,9 +169,27 @@ final class PathController {
 			$path->set_finish_checkpoint_id(
 				isset( $checkpoint_ids[ $finish_checkpoint_id ] ) ? $finish_checkpoint_id : null
 			);
+			$path->set_opening_date( $this->get_datetime_input( 'qrhunt_opening_date' ) );
+			$path->set_closing_date( $this->get_datetime_input( 'qrhunt_closing_date' ) );
 		}
 
 		$this->path_service->save_path( $path );
+
+		if ( 'publish' === $post->post_status && ! $this->is_correcting_post_status ) {
+			$errors = $this->configuration_validator->validate( $path );
+
+			if ( ! empty( $errors ) ) {
+				$this->is_correcting_post_status = true;
+				set_transient( 'qrhunt_path_configuration_errors_' . $post_id, $errors, MINUTE_IN_SECONDS );
+				wp_update_post(
+					array(
+						'ID'          => $post_id,
+						'post_status' => 'draft',
+					)
+				);
+				$this->is_correcting_post_status = false;
+			}
+		}
 	}
 
 	/**
@@ -167,5 +206,53 @@ final class PathController {
 		}
 
 		return $checkpoint_ids;
+	}
+
+	private function format_datetime_input( string $value ): string {
+		$timestamp = strtotime( $value );
+
+		return false === $timestamp ? '' : wp_date( 'Y-m-d\\TH:i', $timestamp );
+	}
+
+	private function get_datetime_input( string $key ): ?string {
+		if ( ! isset( $_POST[ $key ] ) ) {
+			return null;
+		}
+
+		$value = sanitize_text_field( wp_unslash( $_POST[ $key ] ) );
+
+		if ( '' === $value ) {
+			return null;
+		}
+
+		$date = \DateTimeImmutable::createFromFormat( 'Y-m-d\\TH:i', $value, wp_timezone() );
+
+		return $date instanceof \DateTimeImmutable && $date->format( 'Y-m-d\\TH:i' ) === $value ? $date->format( 'Y-m-d H:i:s' ) : null;
+	}
+
+	/**
+	 * Renders configuration errors after a prevented publication.
+	 *
+	 * @return void
+	 */
+	public function render_configuration_errors(): void {
+		$post_id = get_the_ID();
+		$errors  = false === $post_id ? false : get_transient( 'qrhunt_path_configuration_errors_' . $post_id );
+
+		if ( ! is_array( $errors ) ) {
+			return;
+		}
+
+		delete_transient( 'qrhunt_path_configuration_errors_' . $post_id );
+		?>
+		<div class="notice notice-error">
+			<p><strong><?php esc_html_e( 'The Path was saved as a draft because its configuration is not publishable.', 'qrhunt' ); ?></strong></p>
+			<ul>
+				<?php foreach ( $errors as $error ) : ?>
+					<li><?php echo esc_html( $error ); ?></li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		<?php
 	}
 }

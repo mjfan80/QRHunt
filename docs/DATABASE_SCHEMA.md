@@ -446,9 +446,9 @@ L'integrità referenziale è garantita dal plugin.
 
 Contiene lo storico completo degli Eventi generati dal plugin.
 
-Ogni richiesta valida elaborata dal plugin genera un Evento.
+Ogni scansione che raggiunge la validazione applicativa con una Participation persistita genera un Evento.
 
-Le richieste prive di autenticazione oppure riferite a token inesistenti non vengono registrate.
+Le richieste prive di autenticazione, riferite a token inesistenti, a Path non disponibili o a Participation annullate, terminate o completate non vengono registrate. Nemmeno una validazione iniziale fallita genera un Evento, perché non esiste ancora una Participation a cui associarlo.
 ---
 
 ## Struttura
@@ -522,18 +522,20 @@ L'elenco potrà essere esteso nelle versioni future.
 - Gli Eventi non vengono mai modificati.
 - Gli Eventi non vengono mai eliminati.
 
-Gli Eventi vengono registrati esclusivamente dopo la risoluzione del token pubblico in un Checkpoint esistente e dopo la verifica dell'autenticazione dell'utente.
+Gli Eventi vengono registrati esclusivamente dopo la risoluzione del token pubblico in un Checkpoint esistente, la verifica dell'autenticazione dell'utente e la disponibilità di una Participation persistita.
 
 ---
 
 ## Privacy
 
-La registrazione di indirizzo IP e User Agent è configurabile.
+La registrazione di indirizzo IP e User Agent è configurabile tramite due opzioni indipendenti, entrambe disattivate per impostazione predefinita.
 
 Se disabilitata:
 
 - `ip_address` viene lasciato a NULL;
 - `user_agent` viene lasciato a NULL.
+
+L'attivazione di un'opzione influenza esclusivamente gli Eventi successivi e non raccoglie dati retroattivamente.
 
 ---
 
