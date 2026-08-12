@@ -1,6 +1,6 @@
 # AI Handover
 
-**Ultimo aggiornamento:** 2026-08-12 — Release candidate 1.0.0
+**Ultimo aggiornamento:** 2026-08-12 — Release 1.0.0 verificata
 
 ---
 
@@ -183,9 +183,10 @@ Funziona:
 - Duplicazione Checkpoint
 - Statistiche specifiche per Checkpoint
 
-## Verifiche residue
+## Verifiche finali
 
-- Verifica manuale delle ultime scansioni Dashboard prima della release definitiva.
+- Verifica manuale delle ultime scansioni Dashboard completata.
+- Release 1.0.0: verifiche finali superate.
 
 ---
 
