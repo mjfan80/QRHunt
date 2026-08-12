@@ -17,6 +17,9 @@
 - [x] Gestione Dipendenze
 - [x] Gestione QR Code
 - [x] Dashboard
+- [x] Consultazione Eventi
+- [x] Statistiche aggregate per Path
+- [x] Verifica configurazione Path
 
 # Public Flow
 

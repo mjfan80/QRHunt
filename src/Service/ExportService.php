@@ -185,22 +185,24 @@ final class ExportService {
 
 		foreach ( $paths as $path ) {
 			$current_path_id = (int) $path->get_id();
-			$participations  = $this->participation_service->get_participations_by_filters( $current_path_id, 0, '' );
-			$events          = $this->event_service->get_events_by_filters( $current_path_id, 0, 0, '', '', '' );
-			$event_counts    = $this->count_events_by_result( $events );
+			$statistics      = $this->get_path_statistics( $current_path_id );
+
+			if ( null === $statistics ) {
+				continue;
+			}
 
 			$rows[] = array(
 				(string) $current_path_id,
 				(string) $path->get_name(),
-				(string) count( $participations ),
-				(string) $this->count_participations_by_status( $participations, ParticipationStatus::IN_PROGRESS ),
-				(string) $this->count_participations_by_status( $participations, ParticipationStatus::FINISHED ),
-				(string) $this->count_participations_by_status( $participations, ParticipationStatus::COMPLETED ),
-				(string) $this->count_participations_by_status( $participations, ParticipationStatus::CANCELLED ),
-				(string) count( $events ),
-				(string) ( $event_counts[ EventResult::ACCEPTED ] ?? 0 ),
-				(string) $this->count_invalid_events( $event_counts ),
-				(string) ( $event_counts[ EventResult::DUPLICATE ] ?? 0 ),
+				(string) $statistics['participations_total'],
+				(string) $statistics['participations_in_progress'],
+				(string) $statistics['participations_finished'],
+				(string) $statistics['participations_completed'],
+				(string) $statistics['participations_cancelled'],
+				(string) $statistics['events_total'],
+				(string) $statistics['events_accepted'],
+				(string) $statistics['events_invalid'],
+				(string) $statistics['events_duplicate'],
 			);
 		}
 
@@ -219,6 +221,34 @@ final class ExportService {
 				'events_duplicate',
 			),
 			'rows'    => $rows,
+		);
+	}
+
+	/**
+	 * Gets aggregate statistics for one Path.
+	 *
+	 * @param int $path_id Path identifier.
+	 * @return array{participations_total:int,participations_in_progress:int,participations_finished:int,participations_completed:int,participations_cancelled:int,events_total:int,events_accepted:int,events_invalid:int,events_duplicate:int}|null
+	 */
+	public function get_path_statistics( int $path_id ): ?array {
+		if ( null === $this->path_service->get_path( $path_id ) ) {
+			return null;
+		}
+
+		$participations = $this->participation_service->get_participations_by_filters( $path_id, 0, '' );
+		$events         = $this->event_service->get_events_by_filters( $path_id, 0, 0, '', '', '' );
+		$event_counts   = $this->count_events_by_result( $events );
+
+		return array(
+			'participations_total'       => count( $participations ),
+			'participations_in_progress' => $this->count_participations_by_status( $participations, ParticipationStatus::IN_PROGRESS ),
+			'participations_finished'    => $this->count_participations_by_status( $participations, ParticipationStatus::FINISHED ),
+			'participations_completed'   => $this->count_participations_by_status( $participations, ParticipationStatus::COMPLETED ),
+			'participations_cancelled'   => $this->count_participations_by_status( $participations, ParticipationStatus::CANCELLED ),
+			'events_total'               => count( $events ),
+			'events_accepted'            => $event_counts[ EventResult::ACCEPTED ] ?? 0,
+			'events_invalid'             => $this->count_invalid_events( $event_counts ),
+			'events_duplicate'           => $event_counts[ EventResult::DUPLICATE ] ?? 0,
 		);
 	}
 

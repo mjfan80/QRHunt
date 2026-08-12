@@ -1,6 +1,6 @@
 # AI Handover
 
-**Ultimo aggiornamento:** 2026-07-15
+**Ultimo aggiornamento:** 2026-08-12
 
 ---
 
@@ -37,13 +37,15 @@ Prima di qualsiasi modifica va sempre verificata la coerenza tra documentazione 
 - Gestione Dipendenze
 - Gestione QR Code
 - Dashboard
+- Consultazione globale Event
+- Statistiche aggregate per Path
+- Archiviazione Path
 
 ## Public Flow
 
 - Routing pubblico
 - Token Resolution
 - Player Flow
-- REST Scan API
 
 ---
 
@@ -120,6 +122,8 @@ Non vengono registrati Event quando:
 - il giocatore non è autenticato;
 - non esiste una Participation e il checkpoint non è quello iniziale.
 
+Una prima scansione del Checkpoint iniziale viene validata prima di creare la Participation. Se fallisce non genera né Participation né Event; se riesce, persiste coerentemente Participation, progressione ed Event.
+
 ---
 
 ## Group
@@ -161,25 +165,24 @@ Funziona:
 - Riepilogo percorsi/checkpoint/gruppi/partecipazioni
 - Ultime scansioni (da testare in realtà)
 - Quick actions
+- Consultazione globale Event con filtri
+- Statistiche aggregate raggiungibili dal singolo Path
+- Verifica configurazione Path con errori bloccanti e warning
+- Archiviazione e ripristino Path (ripristino in bozza)
 
 ---
 
 # TODO
 
-## Public
+## Post-1.0
 
-- Public UI definitiva
-
-## Features
-
-- Partecipazioni
-- Esportazione
+- Duplicazione Path
+- Duplicazione Checkpoint
+- Statistiche specifiche per Checkpoint
 
 ## Quality
 
-- Test
-- Internazionalizzazione
-- Documentation Review
+- Documentation Review (ancora aperta)
 
 ---
 

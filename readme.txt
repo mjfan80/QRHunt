@@ -5,7 +5,7 @@ Requires at least: 6.7
 Tested up to: 7.0
 Requires PHP: 8.2
 Stable tag: 0.1.0
-License: GPLv2 or later
+License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Create interactive QR code experiences including treasure hunts, guided tours, museums, educational paths and seasonal events.

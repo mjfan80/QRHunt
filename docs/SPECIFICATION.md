@@ -8,7 +8,7 @@
 
 **Status:** Draft
 
-**License:** LGPL-3.0-or-later
+**License:** GPL-2.0-or-later
 
 ---
 
@@ -108,11 +108,11 @@ Per ogni coppia Partecipante/Percorso può esistere una sola Partecipazione.
 
 ---
 
-## Tentativo
+## Tentativo / Event
 
-Ogni richiesta all'URL pubblico di un Checkpoint genera un Tentativo.
+Un Tentativo è una scansione che ha superato le verifiche preliminari del Player Flow (token risolto, utente autenticato, Path disponibile e Participation persistita o creata dopo la validazione iniziale). Viene registrato come Event.
 
-Il Tentativo viene sempre registrato, indipendentemente dal suo esito.
+Le richieste che terminano prima di tali verifiche non generano Event. In particolare, una prima validazione fallita del Checkpoint iniziale non crea né Participation né Event.
 
 Ogni Tentativo registra almeno:
 
@@ -371,7 +371,7 @@ Le due regole possono coesistere.
 
 ## 5.7 Validazione
 
-Ogni apertura dell'URL pubblico di un Checkpoint genera sempre un Tentativo.
+L'apertura dell'URL pubblico avvia il Player Flow autenticato. Un Tentativo/Event viene registrato solo quando la scansione raggiunge la validazione con una Participation persistita; le verifiche preliminari e una prima validazione iniziale fallita non generano record storico.
 
 L'algoritmo di validazione verifica, nell'ordine:
 
@@ -462,9 +462,7 @@ La visualizzazione deve essere responsive e ottimizzata prioritariamente per sma
 
 ## 6.1 Definizione
 
-Ogni richiesta ricevuta dall'URL pubblico di un Checkpoint genera un Tentativo.
-
-Il Tentativo viene sempre registrato, indipendentemente dal suo esito.
+Un Tentativo è un Event di scansione registrato dopo le verifiche preliminari e con una Participation persistita. Per una Participation esistente vengono registrati gli esiti accepted, duplicate, after_failed e before_failed; una prima validazione del Checkpoint iniziale fallita non crea né Participation né Event.
 
 ---
 
@@ -496,10 +494,7 @@ La versione 1.0 prevede almeno:
 - duplicato;
 - prerequisito non soddisfatto;
 - non valido dopo;
-- partecipazione annullata;
-- partecipazione conclusa;
-- partecipante non autenticato;
-- checkpoint inesistente.
+- Path chiuso o non disponibile, token inesistente, utente non autenticato e Participation annullata o conclusa terminano prima della registrazione dell'Event.
 
 L'elenco dovrà poter essere esteso nelle versioni future.
 
@@ -634,20 +629,26 @@ Il plugin non impone alcuno schema di gioco.
 
 ---
 
-## 7.7 Verifica di coerenza
+## 7.7 Verifica configurazione
 
 Prima della pubblicazione il plugin deve verificare automaticamente la coerenza dell'intero Percorso.
 
-Devono essere rilevati almeno:
+La sezione amministrativa **Verifica configurazione** mostra controlli superati, errori bloccanti, warning non bloccanti e il verdetto di pubblicabilità. Gli stessi controlli sono l'unica fonte usata per impedire la pubblicazione.
+
+Devono essere rilevati come errori bloccanti almeno:
 
 - prerequisiti inesistenti;
 - dipendenze circolari;
 - riferimenti a Checkpoint appartenenti ad altri Percorsi;
 - assenza del Checkpoint iniziale;
 - assenza del Checkpoint finale;
-- presenza di più Checkpoint iniziali;
-- presenza di più Checkpoint finali;
-- Checkpoint irraggiungibili.
+- riferimenti a Gruppi non validi o appartenenti a un altro Percorso;
+- dipendenze con tipo o destinazione non validi;
+- dipendenze circolari.
+
+Le dipendenze BEFORE e AFTER sono vincoli di validazione, non archi di navigazione: l'assenza di una relazione non rende un Checkpoint irraggiungibile e non viene verificata una raggiungibilità dal Checkpoint iniziale.
+
+Un Checkpoint ordinario, diverso da iniziale e finale, che non possiede proprie dipendenze genera un warning non bloccante. Può essere validato indipendentemente dalla progressione precedente; il fatto che sia destinazione di una dipendenza altrui non elimina il warning.
 
 In presenza di errori il Percorso non può essere pubblicato.
 
@@ -788,9 +789,7 @@ La versione 1.0 dovrà prevedere almeno:
 
 ### Generali
 
-- lingua;
-- formato data;
-- formato ora.
+Lingua, formato data e formato ora usano le impostazioni native di WordPress e non sono configurazioni proprietarie di QRHunt.
 
 ### QR Code
 

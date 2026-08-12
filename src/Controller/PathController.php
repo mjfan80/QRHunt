@@ -58,6 +58,15 @@ final class PathController {
 			PathPostType::POST_TYPE,
 			'side'
 		);
+
+		add_meta_box(
+			'qrhunt-path-configuration-check',
+			__( 'Configuration check', 'qrhunt' ),
+			array( $this, 'render_configuration_check_metabox' ),
+			PathPostType::POST_TYPE,
+			'normal',
+			'default'
+		);
 	}
 
 	/**
@@ -122,6 +131,38 @@ final class PathController {
 				<?php esc_html_e( 'Save this Path and assign Checkpoints to it before selecting start and finish Checkpoints.', 'qrhunt' ); ?>
 			</p>
 		<?php endif; ?>
+		<?php
+	}
+
+	/**
+	 * Renders the publishability diagnostics for a saved Path.
+	 *
+	 * @param \WP_Post $post WordPress post object.
+	 * @return void
+	 */
+	public function render_configuration_check_metabox( \WP_Post $post ): void {
+		$path = $this->path_service->get_path_by_post_id( $post->ID );
+
+		if ( null === $path || null === $path->get_id() ) {
+			?>
+			<p><?php esc_html_e( 'Save this Path before running its configuration check.', 'qrhunt' ); ?></p>
+			<?php
+			return;
+		}
+
+		$diagnostics = $this->configuration_validator->get_diagnostics( $path );
+		?>
+		<p>
+			<?php if ( $diagnostics['publishable'] ) : ?>
+				<strong><?php esc_html_e( 'This Path configuration can be published.', 'qrhunt' ); ?></strong>
+			<?php else : ?>
+				<strong><?php esc_html_e( 'This Path configuration cannot be published.', 'qrhunt' ); ?></strong>
+			<?php endif; ?>
+		</p>
+
+		<?php $this->render_diagnostic_list( __( 'Checks passed', 'qrhunt' ), $diagnostics['checks'], 'notice-success' ); ?>
+		<?php $this->render_diagnostic_list( __( 'Blocking errors', 'qrhunt' ), $diagnostics['errors'], 'notice-error' ); ?>
+		<?php $this->render_diagnostic_list( __( 'Warnings', 'qrhunt' ), $diagnostics['warnings'], 'notice-warning' ); ?>
 		<?php
 	}
 
@@ -229,7 +270,61 @@ final class PathController {
 			);
 		}
 
+		$actions['qrhunt_statistics'] = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( admin_url( 'admin.php?page=qrhunt-path-statistics&path_id=' . $post->ID ) ),
+			esc_html__( 'Statistics', 'qrhunt' )
+		);
+
 		return $actions;
+	}
+
+	/**
+	 * Adds the configuration diagnostic column to the Path list.
+	 *
+	 * @param array<string,string> $columns List columns.
+	 * @return array<string,string>
+	 */
+	public function add_list_columns( array $columns ): array {
+		$columns['qrhunt_configuration'] = __( 'Configuration', 'qrhunt' );
+
+		return $columns;
+	}
+
+	/**
+	 * Renders the configuration diagnostic summary in a Path list column.
+	 *
+	 * @param string $column_name Column identifier.
+	 * @param int    $post_id     Path post identifier.
+	 * @return void
+	 */
+	public function render_list_column( string $column_name, int $post_id ): void {
+		if ( 'qrhunt_configuration' !== $column_name || 'publish' !== get_post_status( $post_id ) ) {
+			return;
+		}
+
+		$path = $this->path_service->get_path_by_post_id( $post_id );
+
+		if ( null === $path ) {
+			return;
+		}
+
+		$diagnostics  = $this->configuration_validator->get_diagnostics( $path );
+		$error_count  = count( $diagnostics['errors'] );
+		$warning_count = count( $diagnostics['warnings'] );
+		$summary      = $this->get_configuration_summary( $error_count, $warning_count );
+		$edit_link    = get_edit_post_link( $post_id );
+
+		if ( $edit_link ) {
+			printf(
+				'<a href="%1$s">%2$s</a>',
+				esc_url( $edit_link ),
+				esc_html( $summary )
+			);
+			return;
+		}
+
+		echo esc_html( $summary );
 	}
 
 	/**
@@ -339,6 +434,72 @@ final class PathController {
 		}
 
 		return $checkpoint_ids;
+	}
+
+	/**
+	 * Gets the compact configuration diagnostic summary for the Path list.
+	 *
+	 * @param int $error_count   Number of blocking errors.
+	 * @param int $warning_count Number of warnings.
+	 * @return string
+	 */
+	private function get_configuration_summary( int $error_count, int $warning_count ): string {
+		if ( 0 === $error_count && 0 === $warning_count ) {
+			return __( '✓ OK', 'qrhunt' );
+		}
+
+		if ( 0 === $error_count ) {
+			return sprintf(
+				/* translators: %s: number of configuration warnings. */
+				_n( '⚠ %s warning', '⚠ %s warnings', $warning_count, 'qrhunt' ),
+				number_format_i18n( $warning_count )
+			);
+		}
+
+		$summary = sprintf(
+			/* translators: %s: number of blocking configuration errors. */
+			_n( '✕ %s error', '✕ %s errors', $error_count, 'qrhunt' ),
+			number_format_i18n( $error_count )
+		);
+
+		if ( 0 === $warning_count ) {
+			return $summary;
+		}
+
+		return sprintf(
+			/* translators: 1: error summary, 2: warning summary. */
+			__( '%1$s · %2$s', 'qrhunt' ),
+			$summary,
+			sprintf(
+				/* translators: %s: number of configuration warnings. */
+				_n( '⚠ %s warning', '⚠ %s warnings', $warning_count, 'qrhunt' ),
+				number_format_i18n( $warning_count )
+			)
+		);
+	}
+
+	/**
+	 * Renders one configuration diagnostic group.
+	 *
+	 * @param string             $title Group title.
+	 * @param array<int,string>  $items Diagnostic messages.
+	 * @param string             $class WordPress notice class.
+	 * @return void
+	 */
+	private function render_diagnostic_list( string $title, array $items, string $class ): void {
+		if ( empty( $items ) ) {
+			return;
+		}
+		?>
+		<div class="notice inline <?php echo esc_attr( $class ); ?>">
+			<p><strong><?php echo esc_html( $title ); ?></strong></p>
+			<ul>
+				<?php foreach ( $items as $item ) : ?>
+					<li><?php echo esc_html( $item ); ?></li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		<?php
 	}
 
 	private function format_datetime_input( string $value ): string {

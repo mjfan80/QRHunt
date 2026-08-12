@@ -17,7 +17,13 @@ QRHunt
 
 ├── Checkpoint
 
+├── Gruppi
+
 ├── Partecipazioni
+
+├── QR Code
+
+├── Esportazioni
 
 ├── Eventi
 
@@ -54,8 +60,13 @@ Operazioni disponibili:
 - Nuovo
 - Modifica
 - Archivia
+- Statistiche
 
 I Percorsi archiviati sono disponibili tramite l'apposito filtro di stato WordPress. L'azione **Ripristina** riporta il Percorso in bozza: una nuova pubblicazione è esplicita e sottoposta nuovamente alla verifica della configurazione.
+
+L'azione **Statistiche** apre il riepilogo aggregato del singolo Percorso, senza statistiche per Checkpoint.
+
+La lista include inoltre la colonna **Configurazione** per i soli Percorsi pubblicati: mostra in forma compatta `✓ OK`, il numero di warning oppure il numero di errori bloccanti e, quando presenti, anche i warning. La sintesi apre la modifica del Percorso, dove rimane disponibile il dettaglio completo. Bozze, Percorsi archiviati e gli altri stati non ricevono segnalazioni nella panoramica.
 
 ---
 
@@ -70,6 +81,12 @@ Campi previsti
 - Data chiusura
 - Checkpoint iniziale
 - Checkpoint finale
+
+## Verifica configurazione
+
+La schermata di modifica del Percorso mostra una sezione read-only con controlli superati, errori bloccanti, warning e verdetto di pubblicabilità. Gli errori bloccano la pubblicazione; i warning no.
+
+Un warning viene mostrato per ogni Checkpoint ordinario che non possiede proprie Dipendenze. Checkpoint iniziale e finale sono esclusi; essere destinazione di una Dipendenza altrui non elimina il warning.
 
 ---
 
@@ -94,50 +111,16 @@ Campi previsti
 
 ---
 
-# 5. Dipendenze
-
 # 5. Regole del Checkpoint
 
 Le Dipendenze vengono configurate tramite il metabox QRHunt presente nella schermata di modifica del Checkpoint.
-
-Per semplificare la configurazione, il metabox è suddiviso in due modalità.
-
----
-
-## Modalità standard
-
-Per la maggior parte dei casi è sufficiente configurare un solo prerequisito ed un solo vincolo.
-
-Sono disponibili i seguenti campi.
-
-### Deve essere già stato completato
-
-Elenco dei Checkpoint appartenenti al medesimo Percorso.
-
-È possibile selezionare un solo Checkpoint.
-
----
-
-### Non deve essere già stato completato
-
-Elenco dei Checkpoint appartenenti al medesimo Percorso.
-
-È possibile selezionare un solo Checkpoint.
-
----
-
-## Configurazione avanzata
-
-La modalità avanzata consente di definire regole più complesse.
-
-Per ciascuna sezione è possibile aggiungere una o più Dipendenze.
 
 Ogni Dipendenza può riferirsi a:
 
 - un Checkpoint;
 - un Gruppo.
 
-Nella versione 1.0 tutte le Dipendenze vengono valutate con logica AND.
+Nella versione 1.0 tutte le Dipendenze vengono valutate con logica AND. Possono essere aggiunte più regole AFTER o BEFORE tramite il metabox.
 
 ---
 
@@ -181,8 +164,15 @@ Sono disponibili filtri per:
 
 - percorso;
 - utente;
+- Checkpoint;
 - intervallo temporale;
 - esito.
+
+---
+
+## Statistiche Path
+
+L'azione **Statistiche** del singolo Percorso mostra Partecipazioni totali, in corso, terminate, completate, annullate, scansioni totali, accepted, duplicate e non valide.
 
 ---
 

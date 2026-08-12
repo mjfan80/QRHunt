@@ -27,7 +27,7 @@ Il risultato contiene almeno le seguenti informazioni:
 
 Il Validation Engine non genera direttamente messaggi destinati all'utente.
 
-Le informazioni restituite in `failed_dependencies` dovranno essere trasformate dal livello di presentazione (Web App, App mobile, API, ecc.) in messaggi comprensibili.
+Le informazioni restituite in `failed_dependencies` vengono trasformate dal livello di presentazione del Player Flow in messaggi comprensibili.
 
 Ad esempio:
 
@@ -121,11 +121,11 @@ Il Validation Engine segue i seguenti principi:
 - è completamente stateless;
 - non salva dati nel database;
 - non modifica lo stato della Participation;
-- non registra visite;
+- non registra Event;
 - valuta esclusivamente le regole del dominio;
 - restituisce sempre un `ValidationResult`.
 
-La registrazione della visita, l'aggiornamento della Participation e ogni modifica dello stato dell'applicazione sono responsabilità del `VisitService`.
+La registrazione dell'Event, l'aggiornamento della Participation e ogni modifica dello stato dell'applicazione sono responsabilità di `ScanService`.
 
 ## DependencyViolation
 

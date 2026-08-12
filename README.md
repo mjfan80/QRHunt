@@ -74,4 +74,4 @@ QRHunt è sviluppato seguendo alcuni principi fondamentali:
 
 ## Licenza
 
-Da definire.
+GPL-2.0-or-later.

@@ -4,7 +4,7 @@
 
 Questo documento descrive il flusso completo seguito da QRHunt quando un utente effettua la scansione di un QR Code.
 
-L'obiettivo è definire il comportamento del sistema indipendentemente dalla tecnologia utilizzata (REST API, Web App, App mobile, ecc.).
+Il flusso runtime della versione 1.0 è il Player Flow autenticato di WordPress, attivato dall'URL pubblico del QR Code.
 
 Il documento descrive esclusivamente il flusso logico del dominio e non i dettagli implementativi.
 
@@ -187,4 +187,4 @@ Il flusso di scansione segue i seguenti principi.
 - il servizio di scansione registra gli Event;
 - il livello di presentazione costruisce i messaggi mostrati all'utente.
 
-Questa separazione garantisce che la logica di dominio rimanga indipendente dall'interfaccia utente e dal protocollo di comunicazione utilizzato.
+Questa separazione mantiene distinta la logica di dominio dalla presentazione del Player Flow WordPress.

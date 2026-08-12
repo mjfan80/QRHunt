@@ -10,11 +10,13 @@ namespace QRHunt;
 use QRHunt\Controller\CheckpointController;
 use QRHunt\Controller\DashboardController;
 use QRHunt\Controller\DependencyController;
+use QRHunt\Controller\EventController;
 use QRHunt\Controller\ExportController;
 use QRHunt\Controller\GroupController;
 use QRHunt\Controller\MyPathsController;
 use QRHunt\Controller\ParticipationController;
 use QRHunt\Controller\PathController;
+use QRHunt\Controller\PathStatisticsController;
 use QRHunt\Controller\PlayerFlowController;
 use QRHunt\Controller\QrCodeController;
 use QRHunt\Controller\SettingsController;
@@ -78,6 +80,12 @@ final class Plugin {
 
 	/** @var ExportController|null */
 	private $export_controller;
+
+	/** @var EventController|null */
+	private $event_controller;
+
+	/** @var PathStatisticsController|null */
+	private $path_statistics_controller;
 
 	/** @var ScanService|null */
 	private $scan_service;
@@ -156,6 +164,8 @@ final class Plugin {
 		add_action( 'admin_menu', array( $this, 'register_participations_page' ) );
 		add_action( 'admin_menu', array( $this, 'register_qr_codes_page' ) );
 		add_action( 'admin_menu', array( $this, 'register_exports_page' ) );
+		add_action( 'admin_menu', array( $this, 'register_events_page' ) );
+		add_action( 'admin_menu', array( $this, 'register_path_statistics_page' ) );
 		add_action( 'admin_menu', array( $this, 'register_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_post_qrhunt_save_group', array( $this, 'save_group' ) );
@@ -169,6 +179,8 @@ final class Plugin {
 		add_action( 'add_meta_boxes_' . PathPostType::POST_TYPE, array( $this, 'register_path_metabox' ) );
 		add_action( 'save_post_' . PathPostType::POST_TYPE, array( $this, 'synchronize_path' ), 10, 2 );
 		add_filter( 'post_row_actions', array( $this, 'add_path_row_actions' ), 10, 2 );
+		add_filter( 'manage_' . PathPostType::POST_TYPE . '_posts_columns', array( $this, 'add_path_list_columns' ) );
+		add_action( 'manage_' . PathPostType::POST_TYPE . '_posts_custom_column', array( $this, 'render_path_list_column' ), 10, 2 );
 		add_action( 'admin_notices', array( $this, 'render_path_configuration_errors' ) );
 		add_action( 'add_meta_boxes_' . CheckpointPostType::POST_TYPE, array( $this, 'register_checkpoint_metabox' ) );
 		add_action( 'save_post_' . CheckpointPostType::POST_TYPE, array( $this, 'save_checkpoint_path' ), 10, 2 );
@@ -273,6 +285,24 @@ final class Plugin {
 	}
 
 	/**
+	 * Registers the Events administration page.
+	 *
+	 * @return void
+	 */
+	public function register_events_page(): void {
+		$this->get_event_controller()->register_page();
+	}
+
+	/**
+	 * Registers the single-Path statistics page.
+	 *
+	 * @return void
+	 */
+	public function register_path_statistics_page(): void {
+		$this->get_path_statistics_controller()->register_page();
+	}
+
+	/**
 	 * Registers the settings administration page.
 	 *
 	 * @return void
@@ -353,6 +383,27 @@ final class Plugin {
 	 */
 	public function add_path_row_actions( array $actions, \WP_Post $post ): array {
 		return $this->get_path_controller()->add_row_actions( $actions, $post );
+	}
+
+	/**
+	 * Adds QRHunt columns to the Path list.
+	 *
+	 * @param array<string,string> $columns List columns.
+	 * @return array<string,string>
+	 */
+	public function add_path_list_columns( array $columns ): array {
+		return $this->get_path_controller()->add_list_columns( $columns );
+	}
+
+	/**
+	 * Renders a QRHunt column in the Path list.
+	 *
+	 * @param string $column_name Column identifier.
+	 * @param int    $post_id     Post identifier.
+	 * @return void
+	 */
+	public function render_path_list_column( string $column_name, int $post_id ): void {
+		$this->get_path_controller()->render_list_column( $column_name, $post_id );
 	}
 
 	/**
@@ -602,6 +653,37 @@ final class Plugin {
 		}
 
 		return $this->export_controller;
+	}
+
+	/**
+	 * Creates the Event controller.
+	 *
+	 * @return EventController
+	 */
+	private function get_event_controller(): EventController {
+		if ( null === $this->event_controller ) {
+			$this->event_controller = new EventController(
+				$this->get_event_service(),
+				$this->get_path_service(),
+				$this->get_participation_service(),
+				$this->get_checkpoint_service()
+			);
+		}
+
+		return $this->event_controller;
+	}
+
+	/**
+	 * Creates the single-Path statistics controller.
+	 *
+	 * @return PathStatisticsController
+	 */
+	private function get_path_statistics_controller(): PathStatisticsController {
+		if ( null === $this->path_statistics_controller ) {
+			$this->path_statistics_controller = new PathStatisticsController( $this->get_export_service(), $this->get_path_service() );
+		}
+
+		return $this->path_statistics_controller;
 	}
 
 	/**

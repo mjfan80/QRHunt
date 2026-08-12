@@ -6,7 +6,7 @@ Questo documento descrive il flusso funzionale vissuto dal giocatore durante una
 
 L'obiettivo è definire l'esperienza utente indipendentemente dai dettagli implementativi del sistema.
 
-Le modalità con cui il flusso viene realizzato (WordPress, REST API, template, JavaScript o altre tecnologie) sono considerate dettagli implementativi e non fanno parte di questo documento.
+Nella versione 1.0 il flusso runtime è il Player Flow autenticato di WordPress, reso dal router pubblico del plugin; non è prevista una REST Scan API pubblica.
 
 ---
 

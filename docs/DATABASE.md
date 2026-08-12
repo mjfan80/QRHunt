@@ -76,7 +76,7 @@ WordPress gestisce automaticamente:
 - media;
 - revisioni;
 - permalink;
-- REST API.
+- API REST native di WordPress per la gestione editoriale del CPT.
 
 QRHunt aggiunge esclusivamente la logica di gioco.
 
@@ -96,6 +96,8 @@ wp_qrhunt_checkpoint_groups
 wp_qrhunt_dependencies
 
 wp_qrhunt_participations
+
+wp_qrhunt_participation_checkpoints
 
 wp_qrhunt_events
 ```
@@ -258,14 +260,9 @@ Viene sempre calcolata dagli Eventi.
 
 # 12. Eventi
 
-Ogni richiesta valida elaborata dal plugin genera un Evento.
+Un Evento viene registrato per una scansione che ha superato le verifiche preliminari del Player Flow: token risolto, utente autenticato, Path disponibile e Participation persistita. Per la prima scansione, la Participation viene persistita solo dopo l'accettazione del Checkpoint iniziale.
 
-Una richiesta è considerata valida quando:
-
-il token pubblico identifica un Checkpoint esistente;
-l'utente è autenticato.
-
-Le richieste che non soddisfano tali requisiti (ad esempio utente non autenticato o token inesistente) non generano alcun Evento.
+Le richieste che non soddisfano tali requisiti, inclusa una prima validazione iniziale fallita, non generano alcun Evento.
 
 Nella versione 1.0 l'unico tipo previsto è la scansione di un QR Code.
 
@@ -284,6 +281,10 @@ La registrazione di indirizzo IP e User Agent è configurabile e può essere dis
 Un Evento viene registrato esclusivamente quando la richiesta ha superato tutte le verifiche preliminari (autenticazione, risoluzione del token e disponibilità del Percorso) ed entra nel flusso di gioco.
 
 Le richieste che terminano durante le verifiche preliminari non generano Eventi.
+
+## Progressione della Partecipazione
+
+La tabella `wp_qrhunt_participation_checkpoints` registra i Checkpoint accettati per ciascuna Participation. Rappresenta lo stato corrente della progressione; gli Event rimangono lo storico immutabile delle scansioni.
 
 ---
 

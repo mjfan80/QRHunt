@@ -40,6 +40,7 @@ final class ExportServiceTest extends IntegrationTestCase {
 		$events     = $export->get_event_export( (int) $path->get_id(), $user_id, (int) $checkpoint->get_post_id(), 'accepted', '', '' );
 		$participations = $export->get_participation_export( (int) $path->get_id(), $user_id, 'in_progress' );
 		$statistics = $export->get_path_statistics_export( (int) $path->get_id() );
+		$path_statistics = $export->get_path_statistics( (int) $path->get_id() );
 
 		self::assertSame( array( 'participation_id', 'user_id', 'user_display_name', 'user_email', 'path_id', 'path_name', 'status', 'started_at', 'finished_at', 'cancelled_at', 'created_at', 'updated_at', 'validated_checkpoints' ), $participations['headers'] );
 		self::assertCount( 1, $participations['rows'] );
@@ -49,5 +50,8 @@ final class ExportServiceTest extends IntegrationTestCase {
 		self::assertSame( '', $events['rows'][0][12] );
 		self::assertSame( '1', $statistics['rows'][0][7] );
 		self::assertSame( '1', $statistics['rows'][0][8] );
+		self::assertNotNull( $path_statistics );
+		self::assertSame( 1, $path_statistics['events_total'] );
+		self::assertSame( 1, $path_statistics['events_accepted'] );
 	}
 }
