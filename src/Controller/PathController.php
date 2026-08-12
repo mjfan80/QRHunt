@@ -29,6 +29,9 @@ final class PathController {
 	/** @var bool */
 	private $is_correcting_post_status = false;
 
+	/** @var bool */
+	private $is_transitioning_post_status = false;
+
 	/**
 	 * Creates a Path controller.
 	 *
@@ -130,7 +133,7 @@ final class PathController {
 	 * @return void
 	 */
 	public function save( int $post_id, \WP_Post $post ): void {
-		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
+		if ( $this->is_transitioning_post_status || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
 
@@ -190,6 +193,130 @@ final class PathController {
 				$this->is_correcting_post_status = false;
 			}
 		}
+	}
+
+	/**
+	 * Adds archive actions to Path rows in the WordPress administration list.
+	 *
+	 * @param array<string,string> $actions Row actions.
+	 * @param \WP_Post             $post    Current post.
+	 * @return array<string,string>
+	 */
+	public function add_row_actions( array $actions, \WP_Post $post ): array {
+		if ( PathPostType::POST_TYPE !== $post->post_type || ! current_user_can( 'edit_post', $post->ID ) ) {
+			return $actions;
+		}
+
+		if ( 'publish' === $post->post_status ) {
+			$actions['qrhunt_archive'] = sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=qrhunt_archive_path&post_id=' . $post->ID ), 'qrhunt_archive_path_' . $post->ID ) ),
+				esc_html__( 'Archive', 'qrhunt' )
+			);
+		}
+
+		if ( PathPostType::ARCHIVED_STATUS === $post->post_status ) {
+			$actions['qrhunt_restore'] = sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=qrhunt_restore_path&post_id=' . $post->ID ), 'qrhunt_restore_path_' . $post->ID ) ),
+				esc_html__( 'Restore to Draft', 'qrhunt' )
+			);
+		}
+
+		return $actions;
+	}
+
+	/**
+	 * Archives a published Path.
+	 *
+	 * @return void
+	 */
+	public function archive(): void {
+		$this->handle_status_transition( PathPostType::ARCHIVED_STATUS, 'qrhunt_archive_path' );
+	}
+
+	/**
+	 * Restores an archived Path as a draft.
+	 *
+	 * @return void
+	 */
+	public function restore(): void {
+		$this->handle_status_transition( 'draft', 'qrhunt_restore_path' );
+	}
+
+	/**
+	 * Transitions a Path to the requested status from an admin action.
+	 *
+	 * @param string $status Target status.
+	 * @param string $action Action nonce prefix.
+	 * @return void
+	 */
+	private function handle_status_transition( string $status, string $action ): void {
+		$post_id = isset( $_GET['post_id'] ) ? absint( wp_unslash( $_GET['post_id'] ) ) : 0;
+
+		if ( 0 === $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
+			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
+		}
+
+		check_admin_referer( $action . '_' . $post_id );
+
+		if ( ! $this->transition_post_status( $post_id, $status ) ) {
+			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
+		}
+
+		wp_safe_redirect( admin_url( 'edit.php?post_type=' . PathPostType::POST_TYPE . '&post_status=' . $status ) );
+		exit;
+	}
+
+	/**
+	 * Changes a Path status without altering its associated QRHunt data.
+	 *
+	 * @param int    $post_id Path post identifier.
+	 * @param string $status  Target post status.
+	 * @return bool
+	 */
+	public function transition_post_status( int $post_id, string $status ): bool {
+		$post = get_post( $post_id );
+
+		if ( ! $post instanceof \WP_Post || PathPostType::POST_TYPE !== $post->post_type ) {
+			return false;
+		}
+
+		if ( PathPostType::ARCHIVED_STATUS === $status && 'publish' !== $post->post_status ) {
+			return false;
+		}
+
+		if ( 'draft' === $status && PathPostType::ARCHIVED_STATUS !== $post->post_status ) {
+			return false;
+		}
+
+		$this->is_transitioning_post_status = true;
+
+		try {
+			$updated_post_id = wp_update_post(
+				array(
+					'ID'          => $post_id,
+					'post_status' => $status,
+				),
+				true
+			);
+		} finally {
+			$this->is_transitioning_post_status = false;
+		}
+
+		if ( is_wp_error( $updated_post_id ) || 0 === $updated_post_id ) {
+			return false;
+		}
+
+		$updated_post = get_post( $post_id );
+
+		if ( ! $updated_post instanceof \WP_Post ) {
+			return false;
+		}
+
+		$this->save( $post_id, $updated_post );
+
+		return true;
 	}
 
 	/**

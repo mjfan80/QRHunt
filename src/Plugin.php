@@ -164,8 +164,11 @@ final class Plugin {
 		add_action( 'admin_post_qrhunt_download_qr_code', array( $this, 'download_qr_code' ) );
 		add_action( 'admin_post_qrhunt_print_path_qr_codes', array( $this, 'print_path_qr_codes' ) );
 		add_action( 'admin_post_qrhunt_export_csv', array( $this, 'export_csv' ) );
+		add_action( 'admin_post_qrhunt_archive_path', array( $this, 'archive_path' ) );
+		add_action( 'admin_post_qrhunt_restore_path', array( $this, 'restore_path' ) );
 		add_action( 'add_meta_boxes_' . PathPostType::POST_TYPE, array( $this, 'register_path_metabox' ) );
 		add_action( 'save_post_' . PathPostType::POST_TYPE, array( $this, 'synchronize_path' ), 10, 2 );
+		add_filter( 'post_row_actions', array( $this, 'add_path_row_actions' ), 10, 2 );
 		add_action( 'admin_notices', array( $this, 'render_path_configuration_errors' ) );
 		add_action( 'add_meta_boxes_' . CheckpointPostType::POST_TYPE, array( $this, 'register_checkpoint_metabox' ) );
 		add_action( 'save_post_' . CheckpointPostType::POST_TYPE, array( $this, 'save_checkpoint_path' ), 10, 2 );
@@ -321,6 +324,35 @@ final class Plugin {
 	 */
 	public function export_csv(): void {
 		$this->get_export_controller()->download();
+	}
+
+	/**
+	 * Archives a Path.
+	 *
+	 * @return void
+	 */
+	public function archive_path(): void {
+		$this->get_path_controller()->archive();
+	}
+
+	/**
+	 * Restores a Path as a draft.
+	 *
+	 * @return void
+	 */
+	public function restore_path(): void {
+		$this->get_path_controller()->restore();
+	}
+
+	/**
+	 * Adds QRHunt Path actions to the WordPress post list.
+	 *
+	 * @param array<string,string> $actions Row actions.
+	 * @param \WP_Post             $post    Current post.
+	 * @return array<string,string>
+	 */
+	public function add_path_row_actions( array $actions, \WP_Post $post ): array {
+		return $this->get_path_controller()->add_row_actions( $actions, $post );
 	}
 
 	/**

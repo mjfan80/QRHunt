@@ -23,12 +23,6 @@ Il risultato contiene almeno le seguenti informazioni:
 - `failed_dependencies`
   - elenco delle dipendenze che non risultano soddisfatte.
 
-- `blocked_message`
-  - eventuale messaggio definito dall'organizzatore del Path e associato al Checkpoint.
-  Questo messaggio è facoltativo e viene restituito solo se presente.
-  Il Validation Engine restituisce il blocked_message senza interpretarlo.
-
-
   ## Messaggi
 
 Il Validation Engine non genera direttamente messaggi destinati all'utente.
@@ -42,10 +36,6 @@ Ad esempio:
 oppure
 
 - "Per poter validare questo checkpoint devi prima completare il gruppo «Bosco»."
-
-Qualora il Checkpoint definisca anche un `blocked_message`, tale messaggio potrà essere mostrato insieme al messaggio tecnico generato dal sistema.
-
-
 ## Tipi di dipendenza
 
 Ogni Checkpoint può definire una o più dipendenze.
@@ -159,5 +149,3 @@ Ad esempio:
 oppure
 
 - "Per poter validare questo checkpoint devi prima completare il gruppo «Bosco»."
-
-Qualora il Checkpoint definisca anche un `blocked_message`, tale messaggio potrà essere mostrato insieme al messaggio tecnico generato automaticamente dal sistema.

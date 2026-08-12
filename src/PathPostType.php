@@ -16,12 +16,32 @@ final class PathPostType {
 
 	public const POST_TYPE = 'qrhunt_path';
 
+	public const ARCHIVED_STATUS = 'qrhunt_archived';
+
 	/**
 	 * Registers the Path custom post type.
 	 *
 	 * @return void
 	 */
 	public function register(): void {
+		register_post_status(
+			self::ARCHIVED_STATUS,
+			array(
+				'label'                     => _x( 'Archived', 'Path post status', 'qrhunt' ),
+				'public'                    => false,
+				'internal'                  => false,
+				'protected'                 => true,
+				'exclude_from_search'       => true,
+				'show_in_admin_all_list'    => false,
+				'show_in_admin_status_list' => true,
+				'label_count'               => _n_noop(
+					'Archived <span class="count">(%s)</span>',
+					'Archived <span class="count">(%s)</span>',
+					'qrhunt'
+				),
+			)
+		);
+
 		register_post_type(
 			self::POST_TYPE,
 			array(

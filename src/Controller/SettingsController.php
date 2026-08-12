@@ -19,6 +19,9 @@ final class SettingsController {
 	/** @var string */
 	public const PAGE_SLUG = 'qrhunt-settings';
 
+	/** @var string */
+	public const CSV_SEPARATOR_OPTION_NAME = 'qrhunt_csv_separator';
+
 	/**
 	 * Registers the settings page.
 	 *
@@ -43,6 +46,16 @@ final class SettingsController {
 	public function register_settings(): void {
 		register_setting(
 			'qrhunt_settings',
+			self::CSV_SEPARATOR_OPTION_NAME,
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => array( $this, 'sanitize_csv_separator' ),
+				'default'           => ',',
+			)
+		);
+
+		register_setting(
+			'qrhunt_settings',
 			PrivacyService::OPTION_NAME,
 			array(
 				'type'              => 'array',
@@ -53,6 +66,18 @@ final class SettingsController {
 				),
 			)
 		);
+	}
+
+	/**
+	 * Sanitizes the CSV separator setting.
+	 *
+	 * @param mixed $separator Submitted separator.
+	 * @return string
+	 */
+	public function sanitize_csv_separator( $separator ): string {
+		$separator = is_string( $separator ) ? $separator : ',';
+
+		return in_array( $separator, array( ',', ';', "\t" ), true ) ? $separator : ',';
 	}
 
 	/**
@@ -97,6 +122,20 @@ final class SettingsController {
 								<input name="<?php echo esc_attr( PrivacyService::OPTION_NAME ); ?>[record_user_agent]" type="checkbox" value="1" <?php checked( ! empty( $settings['record_user_agent'] ) ); ?> />
 								<?php esc_html_e( 'Record User Agent for new Events', 'qrhunt' ); ?>
 							</label>
+						</td>
+					</tr>
+				</table>
+				<h2><?php esc_html_e( 'Exports', 'qrhunt' ); ?></h2>
+				<table class="form-table" role="presentation">
+					<tr>
+						<th scope="row"><label for="qrhunt-csv-separator"><?php esc_html_e( 'CSV separator', 'qrhunt' ); ?></label></th>
+						<td>
+							<select id="qrhunt-csv-separator" name="<?php echo esc_attr( self::CSV_SEPARATOR_OPTION_NAME ); ?>">
+								<option value="," <?php selected( ',', get_option( self::CSV_SEPARATOR_OPTION_NAME, ',' ) ); ?>><?php esc_html_e( 'Comma (,)', 'qrhunt' ); ?></option>
+								<option value=";" <?php selected( ';', get_option( self::CSV_SEPARATOR_OPTION_NAME, ',' ) ); ?>><?php esc_html_e( 'Semicolon (;)', 'qrhunt' ); ?></option>
+								<option value="&#9;" <?php selected( "\t", get_option( self::CSV_SEPARATOR_OPTION_NAME, ',' ) ); ?>><?php esc_html_e( 'Tab', 'qrhunt' ); ?></option>
+							</select>
+							<p class="description"><?php esc_html_e( 'CSV exports are always encoded in UTF-8.', 'qrhunt' ); ?></p>
 						</td>
 					</tr>
 				</table>

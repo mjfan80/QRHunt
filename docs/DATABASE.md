@@ -169,8 +169,6 @@ Esempio
 https://example.com/qrhunt/T6GJ5Q9ZP4M8N2
 ```
 
-Durante la duplicazione di un Percorso vengono generati nuovi token per tutti i Checkpoint.
-
 Il token viene utilizzato esclusivamente come identificativo pubblico del Checkpoint.
 
 ---

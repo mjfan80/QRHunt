@@ -335,7 +335,7 @@ final class ExportController {
 	 * @return string
 	 */
 	private function get_csv_separator(): string {
-		$separator = (string) get_option( 'qrhunt_csv_separator', ',' );
+		$separator = (string) get_option( SettingsController::CSV_SEPARATOR_OPTION_NAME, ',' );
 
 		return in_array( $separator, array( ',', ';', "\t" ), true ) ? $separator : ',';
 	}

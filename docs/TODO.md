@@ -42,3 +42,9 @@
 # Release
 
 - [ ] Release 1.0
+
+# Post-1.0
+
+- [ ] Duplicazione Path
+- [ ] Duplicazione Checkpoint
+- [ ] Statistiche specifiche per Checkpoint

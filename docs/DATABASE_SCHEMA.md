@@ -126,7 +126,6 @@ UNIQUE (token)
 - Il token deve essere univoco.
 - Il token viene generato automaticamente.
 - Il token non può essere modificato manualmente.
-- Il token viene rigenerato durante la duplicazione di un Percorso.
 
 ---
 

@@ -415,11 +415,10 @@ L'amministratore deve poter:
 
 - creare;
 - modificare;
-- duplicare;
 - eliminare;
 - scaricare il QR Code;
-- rigenerare il QR Code;
-- consultare le statistiche del Checkpoint.
+
+Il QR Code viene generato dal token pubblico esistente. Nella versione 1.0 non sono previste funzioni di rigenerazione del token o del QR Code.
 
 I Checkpoint vengono gestiti all'interno del menu amministrativo del plugin QRHunt e non come voce autonoma del menu di WordPress.
 
@@ -600,7 +599,9 @@ Il Percorso viene conservato a fini storici.
 
 Non accetta nuove Partecipazioni.
 
-Può essere modificato e duplicato dagli amministratori.
+Partecipazioni, Event e stato di avanzamento associati rimangono integralmente disponibili per la consultazione amministrativa e per l'esportazione.
+
+L'archiviazione non modifica Checkpoint, Partecipazioni, stato di avanzamento o Event. Il ripristino riporta il Percorso nello stato **Bozza**; la successiva pubblicazione è esplicita e sottoposta nuovamente alla verifica della configurazione.
 
 ---
 
@@ -680,41 +681,9 @@ Il formato minimo supportato è CSV.
 
 ---
 
-## 7.10 Duplicazione
+## 7.10 Eliminazione
 
-L'amministratore deve poter duplicare qualsiasi Percorso, indipendentemente dal suo stato.
-
-Devono essere duplicati:
-
-- impostazioni;
-- Checkpoint;
-- contenuti;
-- regole di progressione.
-
-Non devono essere duplicati:
-
-- Partecipazioni;
-- Tentativi;
-- statistiche;
-- dati storici.
-
-Il nuovo Percorso viene creato nello stato **Bozza**.
-
-Durante la duplicazione tutti i Checkpoint ricevono:
-
-- un nuovo identificativo interno;
-- un nuovo token pubblico;
-- un nuovo QR Code.
-
-Nessun URL del Percorso originale deve rimanere valido nel nuovo Percorso.
-
----
-
-## 7.11 Eliminazione
-
-L'eliminazione di un Percorso deve richiedere una conferma esplicita.
-
-Il comportamento definitivo verrà definito durante la progettazione del database.
+La versione 1.0 non introduce una funzione di eliminazione distruttiva specifica di QRHunt per i Percorsi. L'archiviazione è il meccanismo preferenziale per conservare il Percorso e il relativo storico.
 
 ---
 
@@ -762,9 +731,7 @@ Per ogni Percorso devono essere disponibili almeno le operazioni di:
 
 - creazione;
 - modifica;
-- duplicazione;
 - archiviazione;
-- eliminazione;
 - esportazione;
 - consultazione delle statistiche.
 
@@ -775,11 +742,8 @@ Per ogni Percorso devono essere disponibili almeno le operazioni di:
 Per ogni Checkpoint devono essere disponibili almeno:
 
 - modifica;
-- duplicazione;
 - eliminazione;
 - download del QR Code;
-- rigenerazione del QR Code;
-- statistiche.
 
 ---
 
@@ -830,10 +794,7 @@ La versione 1.0 dovrà prevedere almeno:
 
 ### QR Code
 
-- formato;
-- dimensione;
-- livello di correzione;
-- logo centrale.
+Il QR Code è disponibile nei formati PNG e SVG. Dimensione, livello di correzione e logo centrale non sono configurabili nella versione 1.0.
 
 ### Privacy
 
@@ -843,7 +804,7 @@ La versione 1.0 dovrà prevedere almeno:
 ### Esportazione
 
 - separatore CSV;
-- codifica dei caratteri.
+- codifica UTF-8 fissa e non configurabile.
 
 ---
 

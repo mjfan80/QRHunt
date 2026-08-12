@@ -49,6 +49,17 @@ final class PathConfigurationValidatorTest extends IntegrationTestCase {
 		$services['path_service']->save_path( $path );
 		$services['dependency_repository']->save_for_checkpoint( (int) $start->get_post_id(), array( $this->create_after_dependency( (int) $finish->get_post_id() ) ) );
 		$services['dependency_repository']->save_for_checkpoint( (int) $finish->get_post_id(), array( $this->create_after_dependency( (int) $start->get_post_id() ) ) );
+		$start_dependencies  = $services['dependency_repository']->find_by_checkpoint( (int) $start->get_post_id() );
+		$finish_dependencies = $services['dependency_repository']->find_by_checkpoint( (int) $finish->get_post_id() );
+
+		self::assertCount( 1, $start_dependencies );
+		self::assertSame( DependencyType::AFTER, $start_dependencies[0]->get_type() );
+		self::assertSame( DependencyTargetType::CHECKPOINT, $start_dependencies[0]->get_target_type() );
+		self::assertSame( $finish->get_post_id(), $start_dependencies[0]->get_target_id() );
+		self::assertCount( 1, $finish_dependencies );
+		self::assertSame( DependencyType::AFTER, $finish_dependencies[0]->get_type() );
+		self::assertSame( DependencyTargetType::CHECKPOINT, $finish_dependencies[0]->get_target_type() );
+		self::assertSame( $start->get_post_id(), $finish_dependencies[0]->get_target_id() );
 
 		self::assertContains( 'The Path dependencies contain a cycle.', $services['path_configuration_validator']->validate( $path ) );
 	}

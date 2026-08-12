@@ -131,8 +131,6 @@ Se il Validation Engine restituisce un risultato negativo per una Participation 
 
 Il livello di presentazione costruisce il messaggio da mostrare all'utente utilizzando il `ValidationResult`.
 
-Qualora il Checkpoint definisca anche un `blocked_message`, esso potrà essere mostrato insieme al messaggio generato automaticamente.
-
 ---
 
 # 6. Validazione riuscita

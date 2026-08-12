@@ -82,7 +82,9 @@ final class PathConfigurationValidator {
 
 		foreach ( array_keys( $checkpoint_ids ) as $checkpoint_id ) {
 			$precedence_graph[ $checkpoint_id ] = array();
+		}
 
+		foreach ( array_keys( $checkpoint_ids ) as $checkpoint_id ) {
 			foreach ( $this->dependency_service->get_dependencies_by_checkpoint( $checkpoint_id ) as $dependency ) {
 				$target_ids = $this->get_target_checkpoint_ids( $dependency->get_target_type(), $dependency->get_target_id(), $path_id, $checkpoint_ids, $errors );
 

@@ -53,9 +53,9 @@ Operazioni disponibili:
 
 - Nuovo
 - Modifica
-- Duplica
 - Archivia
-- Elimina
+
+I Percorsi archiviati sono disponibili tramite l'apposito filtro di stato WordPress. L'azione **Ripristina** riporta il Percorso in bozza: una nuova pubblicazione è esplicita e sottoposta nuovamente alla verifica della configurazione.
 
 ---
 
@@ -203,8 +203,16 @@ Le due opzioni sono indipendenti e disattivate per impostazione predefinita. Si 
 
 - formato PNG;
 - formato SVG;
-- logo;
-- livello di correzione.
+- download del QR Code esistente.
+
+Dimensione, livello di correzione e logo non sono configurabili nella versione 1.0.
+
+---
+
+## Esportazione
+
+- separatore CSV configurabile (virgola, punto e virgola o tabulazione);
+- codifica sempre UTF-8.
 
 ---
 
