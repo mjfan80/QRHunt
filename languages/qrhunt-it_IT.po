@@ -63,7 +63,7 @@ msgid "Checkpoint"
 msgstr "Punto di controllo"
 
 #: src/CheckpointPostType.php:55
-#: src/PathPostType.php:56
+#: src/PathPostType.php:76
 msgid "Add New"
 msgstr "Aggiungi nuovo"
 
@@ -198,7 +198,7 @@ msgid "Quick actions"
 msgstr "Azioni rapide"
 
 #: src/Controller/DashboardController.php:78
-#: src/PathPostType.php:58
+#: src/PathPostType.php:78
 msgid "New Path"
 msgstr "Nuovo percorso"
 
@@ -288,8 +288,8 @@ msgid "AFTER"
 msgstr "DOPO"
 
 #: src/Controller/DependencyController.php:227
-#: src/Controller/PathController.php:88
-#: src/Controller/PathController.php:108
+#: src/Controller/PathController.php:91
+#: src/Controller/PathController.php:111
 msgid "Select a Checkpoint"
 msgstr "Seleziona un punto di controllo"
 
@@ -305,6 +305,7 @@ msgstr "Elimina"
 #: src/Controller/ExportController.php:64
 #: src/Controller/ExportController.php:65
 #: src/Controller/ExportController.php:88
+#: src/Controller/SettingsController.php:128
 msgid "Exports"
 msgstr "Esportazioni"
 
@@ -365,6 +366,8 @@ msgstr "Esporta statistiche percorso CSV"
 #: src/Controller/GroupController.php:136
 #: src/Controller/GroupController.php:163
 #: src/Controller/ParticipationController.php:207
+#: src/Controller/PathController.php:258
+#: src/Controller/PathController.php:264
 #: src/Controller/QrCodeController.php:149
 #: src/Controller/QrCodeController.php:156
 #: src/Controller/QrCodeController.php:162
@@ -375,7 +378,7 @@ msgstr "Richiesta non valida."
 
 #: src/Controller/ExportController.php:216
 #: src/Controller/ParticipationController.php:118
-#: src/PathPostType.php:61
+#: src/PathPostType.php:81
 msgid "All Paths"
 msgstr "Tutti i percorsi"
 
@@ -540,19 +543,19 @@ msgstr "Tipo"
 msgid "QR Code scan"
 msgstr "Scansione codice QR"
 
-#: src/Controller/PathController.php:53
+#: src/Controller/PathController.php:56
 msgid "Path Checkpoints"
 msgstr "Punti di controllo del percorso"
 
-#: src/Controller/PathController.php:86
+#: src/Controller/PathController.php:89
 msgid "Start Checkpoint"
 msgstr "Punto di controllo iniziale"
 
-#: src/Controller/PathController.php:106
+#: src/Controller/PathController.php:109
 msgid "Finish Checkpoint"
 msgstr "Punto di controllo finale"
 
-#: src/Controller/PathController.php:119
+#: src/Controller/PathController.php:122
 msgid "Save this Path and assign Checkpoints to it before selecting start and finish Checkpoints."
 msgstr "Salva questo percorso e assegna i punti di controllo prima di selezionare quelli iniziale e finale."
 
@@ -669,59 +672,59 @@ msgstr "Punto di controllo non trovato."
 msgid "Path not found."
 msgstr "Percorso non trovato."
 
-#: src/PathPostType.php:52
+#: src/PathPostType.php:72
 msgctxt "Post type general name"
 msgid "Paths"
 msgstr "Percorsi"
 
-#: src/PathPostType.php:53
+#: src/PathPostType.php:73
 msgctxt "Post type singular name"
 msgid "Path"
 msgstr "Percorso"
 
-#: src/PathPostType.php:54
+#: src/PathPostType.php:74
 msgctxt "Admin Menu text"
 msgid "Paths"
 msgstr "Percorsi"
 
-#: src/PathPostType.php:55
+#: src/PathPostType.php:75
 msgctxt "Add New on Toolbar"
 msgid "Path"
 msgstr "Percorso"
 
-#: src/PathPostType.php:57
+#: src/PathPostType.php:77
 msgid "Add New Path"
 msgstr "Aggiungi nuovo percorso"
 
-#: src/PathPostType.php:59
+#: src/PathPostType.php:79
 msgid "Edit Path"
 msgstr "Modifica percorso"
 
-#: src/PathPostType.php:60
+#: src/PathPostType.php:80
 msgid "View Path"
 msgstr "Visualizza percorso"
 
-#: src/PathPostType.php:62
+#: src/PathPostType.php:82
 msgid "Search Paths"
 msgstr "Cerca percorsi"
 
-#: src/PathPostType.php:63
+#: src/PathPostType.php:83
 msgid "No paths found."
 msgstr "Nessun percorso trovato."
 
-#: src/PathPostType.php:64
+#: src/PathPostType.php:84
 msgid "No paths found in Trash."
 msgstr "Nessun percorso trovato nel cestino."
 
-#: src/PathPostType.php:65
+#: src/PathPostType.php:85
 msgid "Filter paths list"
 msgstr "Filtra elenco percorsi"
 
-#: src/PathPostType.php:66
+#: src/PathPostType.php:86
 msgid "Paths list navigation"
 msgstr "Navigazione elenco percorsi"
 
-#: src/PathPostType.php:67
+#: src/PathPostType.php:87
 msgid "Paths list"
 msgstr "Elenco percorsi"
 
@@ -761,95 +764,135 @@ msgstr "Avanzamento:"
 msgid "Open path"
 msgstr "Apri percorso"
 
-#: src/Controller/PathController.php:98
+#: src/Controller/PathController.php:101
 msgid "Opening date"
-msgstr ""
+msgstr "Data di apertura"
 
-#: src/Controller/PathController.php:102
+#: src/Controller/PathController.php:105
 msgid "Closing date"
-msgstr ""
+msgstr "Data di chiusura"
 
-#: src/Controller/PathController.php:249
+#: src/Controller/PathController.php:376
 msgid "The Path was saved as a draft because its configuration is not publishable."
-msgstr ""
+msgstr "Il Percorso è stato salvato come bozza perché la sua configurazione non è pubblicabile."
 
-#: src/Controller/SettingsController.php:30
-#: src/Controller/SettingsController.php:31
+#: src/Controller/SettingsController.php:33
+#: src/Controller/SettingsController.php:34
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
-#: src/Controller/SettingsController.php:83
+#: src/Controller/SettingsController.php:108
 msgid "QRHunt Settings"
-msgstr ""
+msgstr "Impostazioni QRHunt"
 
-#: src/Controller/SettingsController.php:86
+#: src/Controller/SettingsController.php:111
 msgid "Privacy"
-msgstr ""
+msgstr "Privacy"
 
-#: src/Controller/SettingsController.php:89
+#: src/Controller/SettingsController.php:114
 msgid "Event data"
-msgstr ""
+msgstr "Dati degli Eventi"
 
-#: src/Controller/SettingsController.php:93
+#: src/Controller/SettingsController.php:118
 msgid "Record IP address for new Events"
-msgstr ""
+msgstr "Registra l'indirizzo IP per i nuovi Eventi"
 
-#: src/Controller/SettingsController.php:98
+#: src/Controller/SettingsController.php:123
 msgid "Record User Agent for new Events"
-msgstr ""
+msgstr "Registra lo User Agent per i nuovi Eventi"
 
 #: src/Service/DashboardService.php:70
 msgid "Active Paths"
-msgstr ""
+msgstr "Percorsi attivi"
 
 #: src/Service/DashboardService.php:86
 msgid "Active Participations"
-msgstr ""
+msgstr "Partecipazioni attive"
 
 #: src/Service/DashboardService.php:90
 msgid "Total scans"
-msgstr ""
+msgstr "Scansioni totali"
 
 #: src/Service/DashboardService.php:94
 msgid "Invalid scans"
-msgstr ""
+msgstr "Scansioni non valide"
 
 #: src/Service/DashboardService.php:98
 msgid "Duplicate scans"
-msgstr ""
+msgstr "Scansioni duplicate"
 
 #: src/Service/PathConfigurationValidator.php:53
 msgid "The Path must be saved before it can be published."
-msgstr ""
+msgstr "Il Percorso deve essere salvato prima di poter essere pubblicato."
 
 #: src/Service/PathConfigurationValidator.php:70
 msgid "A Path must have a start Checkpoint belonging to the Path."
-msgstr ""
+msgstr "Un Percorso deve avere un Checkpoint iniziale appartenente al Percorso."
 
 #: src/Service/PathConfigurationValidator.php:74
 msgid "A Path must have a finish Checkpoint belonging to the Path."
-msgstr ""
+msgstr "Un Percorso deve avere un Checkpoint finale appartenente al Percorso."
 
 #: src/Service/PathConfigurationValidator.php:78
 msgid "The start and finish Checkpoints must be different."
-msgstr ""
+msgstr "Il Checkpoint iniziale e quello finale devono essere diversi."
 
-#: src/Service/PathConfigurationValidator.php:100
+#: src/Service/PathConfigurationValidator.php:102
 msgid "The Path dependencies contain a cycle."
-msgstr ""
+msgstr "Le dipendenze del Percorso contengono un ciclo."
 
-#: src/Service/PathConfigurationValidator.php:118
+#: src/Service/PathConfigurationValidator.php:120
 msgid "A dependency has an invalid target."
-msgstr ""
+msgstr "Una dipendenza ha una destinazione non valida."
 
-#: src/Service/PathConfigurationValidator.php:124
+#: src/Service/PathConfigurationValidator.php:126
 msgid "A dependency references a Checkpoint that does not belong to this Path."
-msgstr ""
+msgstr "Una dipendenza fa riferimento a un Checkpoint che non appartiene a questo Percorso."
 
-#: src/Service/PathConfigurationValidator.php:132
+#: src/Service/PathConfigurationValidator.php:134
 msgid "A dependency has an invalid target type."
-msgstr ""
+msgstr "Una dipendenza ha un tipo di destinazione non valido."
 
-#: src/Service/PathConfigurationValidator.php:139
+#: src/Service/PathConfigurationValidator.php:141
 msgid "A dependency references a Group that does not belong to this Path."
-msgstr ""
+msgstr "Una dipendenza fa riferimento a un Gruppo che non appartiene a questo Percorso."
+
+#: src/Controller/PathController.php:214
+msgid "Archive"
+msgstr "Archivia"
+
+#: src/Controller/PathController.php:222
+msgid "Restore to Draft"
+msgstr "Ripristina come bozza"
+
+#: src/Controller/SettingsController.php:131
+msgid "CSV separator"
+msgstr "Separatore CSV"
+
+#: src/Controller/SettingsController.php:134
+msgid "Comma (,)"
+msgstr "Virgola (,)"
+
+#: src/Controller/SettingsController.php:135
+msgid "Semicolon (;)"
+msgstr "Punto e virgola (;)"
+
+#: src/Controller/SettingsController.php:136
+msgid "Tab"
+msgstr "Tabulazione"
+
+#: src/Controller/SettingsController.php:138
+msgid "CSV exports are always encoded in UTF-8."
+msgstr "Le esportazioni CSV sono sempre codificate in UTF-8."
+
+#: src/PathPostType.php:30
+msgctxt "Path post status"
+msgid "Archived"
+msgstr "Archiviato"
+
+#: src/PathPostType.php:37
+#, php-format
+msgid "Archived <span class=\"count\">(%s)</span>"
+msgid_plural "Archived <span class=\"count\">(%s)</span>"
+msgstr[0] "Archiviato <span class=\"count\">(%s)</span>"
+msgstr[1] "Archiviati <span class=\"count\">(%s)</span>"

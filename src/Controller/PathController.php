@@ -172,8 +172,14 @@ final class PathController {
 			$path->set_finish_checkpoint_id(
 				isset( $checkpoint_ids[ $finish_checkpoint_id ] ) ? $finish_checkpoint_id : null
 			);
-			$path->set_opening_date( $this->get_datetime_input( 'qrhunt_opening_date' ) );
-			$path->set_closing_date( $this->get_datetime_input( 'qrhunt_closing_date' ) );
+			$opening_date = isset( $_POST['qrhunt_opening_date'] )
+				? sanitize_text_field( wp_unslash( $_POST['qrhunt_opening_date'] ) )
+				: '';
+			$closing_date = isset( $_POST['qrhunt_closing_date'] )
+				? sanitize_text_field( wp_unslash( $_POST['qrhunt_closing_date'] ) )
+				: '';
+			$path->set_opening_date( $this->get_datetime_input( $opening_date ) );
+			$path->set_closing_date( $this->get_datetime_input( $closing_date ) );
 		}
 
 		$this->path_service->save_path( $path );
@@ -341,13 +347,7 @@ final class PathController {
 		return false === $timestamp ? '' : wp_date( 'Y-m-d\\TH:i', $timestamp );
 	}
 
-	private function get_datetime_input( string $key ): ?string {
-		if ( ! isset( $_POST[ $key ] ) ) {
-			return null;
-		}
-
-		$value = sanitize_text_field( wp_unslash( $_POST[ $key ] ) );
-
+	private function get_datetime_input( string $value ): ?string {
 		if ( '' === $value ) {
 			return null;
 		}

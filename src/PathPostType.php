@@ -34,7 +34,9 @@ final class PathPostType {
 				'exclude_from_search'       => true,
 				'show_in_admin_all_list'    => false,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop(
+				'label_count'               =>
+					/* translators: %s: number of archived Paths. */
+					_n_noop(
 					'Archived <span class="count">(%s)</span>',
 					'Archived <span class="count">(%s)</span>',
 					'qrhunt'
