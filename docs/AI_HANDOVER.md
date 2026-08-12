@@ -1,6 +1,6 @@
 # AI Handover
 
-**Ultimo aggiornamento:** 2026-08-12
+**Ultimo aggiornamento:** 2026-08-12 — Release candidate 1.0.0
 
 ---
 
@@ -37,9 +37,11 @@ Prima di qualsiasi modifica va sempre verificata la coerenza tra documentazione 
 - Gestione Dipendenze
 - Gestione QR Code
 - Dashboard
-- Consultazione globale Event
+- Pagina Eventi e consultazione globale Event
 - Statistiche aggregate per Path
 - Archiviazione Path
+- Verifica configurazione Path
+- Colonna Configurazione nella lista Percorsi
 
 ## Public Flow
 
@@ -165,9 +167,10 @@ Funziona:
 - Riepilogo percorsi/checkpoint/gruppi/partecipazioni
 - Ultime scansioni (da testare in realtà)
 - Quick actions
-- Consultazione globale Event con filtri
+- Pagina Eventi con filtri
 - Statistiche aggregate raggiungibili dal singolo Path
 - Verifica configurazione Path con errori bloccanti e warning
+- Colonna Configurazione per i Path pubblicati
 - Archiviazione e ripristino Path (ripristino in bozza)
 
 ---
@@ -180,9 +183,9 @@ Funziona:
 - Duplicazione Checkpoint
 - Statistiche specifiche per Checkpoint
 
-## Quality
+## Verifiche residue
 
-- Documentation Review (ancora aperta)
+- Verifica manuale delle ultime scansioni Dashboard prima della release definitiva.
 
 ---
 

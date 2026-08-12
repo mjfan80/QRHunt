@@ -2,7 +2,7 @@
 /**
  * Plugin Name: QRHunt
  * Description: Creates interactive experiences based on QR Code checkpoints.
- * Version: 0.1.0
+ * Version: 1.0.0
  * Requires at least: 6.7
  * Requires PHP: 8.2
  * Author: mjfan80

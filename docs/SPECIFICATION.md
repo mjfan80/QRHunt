@@ -644,7 +644,6 @@ Devono essere rilevati come errori bloccanti almeno:
 - assenza del Checkpoint finale;
 - riferimenti a Gruppi non validi o appartenenti a un altro Percorso;
 - dipendenze con tipo o destinazione non validi;
-- dipendenze circolari.
 
 Le dipendenze BEFORE e AFTER sono vincoli di validazione, non archi di navigazione: l'assenza di una relazione non rende un Checkpoint irraggiungibile e non viene verificata una raggiungibilità dal Checkpoint iniziale.
 

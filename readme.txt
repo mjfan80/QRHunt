@@ -4,7 +4,7 @@ Tags: qr code, treasure hunt, game, education, events
 Requires at least: 6.7
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 0.1.0
+Stable tag: 1.0.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,15 +53,23 @@ Content such as text, images, audio, video and pages is managed using native Wor
 
 = Is the plugin production ready? =
 
-Not yet. QRHunt is currently under active development.
+Yes. QRHunt 1.0.0 is the first stable release.
 
 == Changelog ==
+
+= 1.0.0 =
+
+* First stable release of QRHunt.
 
 = 0.1.0 =
 
 * Initial development release.
 
 == Upgrade Notice ==
+
+= 1.0.0 =
+
+First stable release of QRHunt.
 
 = 0.1.0 =
 

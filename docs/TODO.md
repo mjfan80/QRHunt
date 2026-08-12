@@ -39,12 +39,12 @@
 - [x] Test
 - [x] Internazionalizzazione
 - [x] Plugin Check
-- [ ] Documentation Review
+- [x] Documentation Review
 - [X] Replace temporary inline styles with the dedicated Public UI stylesheet.
 
 # Release
 
-- [ ] Release 1.0
+- [x] Release 1.0
 
 # Post-1.0
 
