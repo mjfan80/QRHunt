@@ -284,10 +284,92 @@ try {
 	}
 
 	$currentCheck = 'Archive'
-	Compress-Archive -LiteralPath $packageDirectory -DestinationPath $archivePath -Force
+	Add-Type -AssemblyName System.IO.Compression
+
+	$archiveStream = [System.IO.File]::Open(
+		$archivePath,
+		[System.IO.FileMode]::Create,
+		[System.IO.FileAccess]::Write,
+		[System.IO.FileShare]::None
+	)
+
+	try {
+		$archive = New-Object System.IO.Compression.ZipArchive(
+			$archiveStream,
+			[System.IO.Compression.ZipArchiveMode]::Create,
+			$false
+		)
+
+		try {
+			# ZIP entry names always use forward slashes, regardless of the build platform.
+			$archive.CreateEntry('qrhunt/') | Out-Null
+
+			foreach ($packageFile in Get-ChildItem -LiteralPath $packageDirectory -Recurse -File -Force) {
+				$relativePath = $packageFile.FullName.Substring($stagingDirectory.Length).TrimStart('\', '/')
+				$entryName = $relativePath.Replace('\', '/')
+				$entry = $archive.CreateEntry($entryName, [System.IO.Compression.CompressionLevel]::Optimal)
+				$entryStream = $entry.Open()
+
+				try {
+					$sourceStream = [System.IO.File]::OpenRead($packageFile.FullName)
+					try {
+						$sourceStream.CopyTo($entryStream)
+					}
+					finally {
+						$sourceStream.Dispose()
+					}
+				}
+				finally {
+					$entryStream.Dispose()
+				}
+			}
+		}
+		finally {
+			$archive.Dispose()
+		}
+	}
+	finally {
+		$archiveStream.Dispose()
+	}
+
 	if (-not (Test-Path -LiteralPath $archivePath -PathType Leaf) -or 0 -eq (Get-Item -LiteralPath $archivePath).Length) {
 		throw 'The release archive was not created.'
 	}
+
+	$archiveStream = [System.IO.File]::OpenRead($archivePath)
+	try {
+		$archive = New-Object System.IO.Compression.ZipArchive(
+			$archiveStream,
+			[System.IO.Compression.ZipArchiveMode]::Read,
+			$false
+		)
+
+		try {
+			$entryNames = @( $archive.Entries | ForEach-Object { $_.FullName } )
+
+			if ($entryNames | Where-Object { $_.Contains('\') }) {
+				throw 'The release archive contains ZIP entries with backslash separators.'
+			}
+
+			foreach ($requiredEntry in @('qrhunt/qrhunt.php', 'qrhunt/readme.txt')) {
+				if ($requiredEntry -notin $entryNames) {
+					throw "The release archive is missing required entry: $requiredEntry."
+				}
+			}
+
+			$hasUnexpectedRootEntry = @( $entryNames | Where-Object { -not $_.StartsWith('qrhunt/') } ).Count -gt 0
+			if ('qrhunt/' -notin $entryNames -or $hasUnexpectedRootEntry) {
+				throw 'The release archive does not have qrhunt/ as its only root directory.'
+			}
+		}
+		finally {
+			$archive.Dispose()
+		}
+	}
+	finally {
+		$archiveStream.Dispose()
+	}
+
 	$checks[$currentCheck] = 'PASS'
 }
 catch {
