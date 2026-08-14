@@ -2,15 +2,15 @@
 /**
  * Player Flow availability tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Controller\PlayerFlowController;
-use QRHunt\Model\Dependency;
-use QRHunt\Model\DependencyTargetType;
-use QRHunt\Model\DependencyType;
+use QuestUno\Controller\PlayerFlowController;
+use QuestUno\Model\Dependency;
+use QuestUno\Model\DependencyTargetType;
+use QuestUno\Model\DependencyType;
 
 /**
  * Verifies that unavailable Paths stop before scan orchestration.
@@ -51,7 +51,7 @@ final class PlayerFlowControllerTest extends IntegrationTestCase {
 			$services['progress_builder']
 		);
 		$controller->handle_request();
-		$context = get_query_var( 'qrhunt_public_ui_context' );
+		$context = get_query_var( 'questuno_public_ui_context' );
 
 		self::assertSame( 'Checkpoint could not be validated.', $context['message'] );
 		self::assertNull( $services['participation_service']->get_participation_by_user_and_path( $user_id, (int) $path->get_id() ) );
@@ -96,8 +96,8 @@ final class PlayerFlowControllerTest extends IntegrationTestCase {
 		wp_set_current_user( $user_id );
 
 		global $wpdb, $wp_query;
-		$participation_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_participations" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test asserts that the Player Flow does not persist a Participation.
-		$event_count         = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_events" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test asserts that the Player Flow does not persist an Event.
+		$participation_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}questuno_participations" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test asserts that the Player Flow does not persist a Participation.
+		$event_count         = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}questuno_events" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test asserts that the Player Flow does not persist an Event.
 		$wp_query->query_vars[ PlayerFlowController::QUERY_VAR ] = $checkpoint->get_token();
 
 		$controller = new PlayerFlowController(
@@ -108,10 +108,10 @@ final class PlayerFlowControllerTest extends IntegrationTestCase {
 			$services['progress_builder']
 		);
 		$controller->handle_request();
-		$context = get_query_var( 'qrhunt_public_ui_context' );
+		$context = get_query_var( 'questuno_public_ui_context' );
 
 		self::assertSame( 'This Path is not available.', $context['message'] );
-		self::assertSame( $participation_count, (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_participations" ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test compares the persisted Participation count after the Player Flow.
-		self::assertSame( $event_count, (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}qrhunt_events" ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test compares the persisted Event count after the Player Flow.
+		self::assertSame( $participation_count, (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}questuno_participations" ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test compares the persisted Participation count after the Player Flow.
+		self::assertSame( $event_count, (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}questuno_events" ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- The integration test compares the persisted Event count after the Player Flow.
 	}
 }

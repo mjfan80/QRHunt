@@ -117,7 +117,7 @@ Il Validation Engine esegue sempre le verifiche nel seguente ordine:
 
 Il Validation Engine segue i seguenti principi:
 
-- Il Validation Engine determina se una validazione sia consentita consultando lo stato corrente della Participation, rappresentato dalla tabella `wp_qrhunt_participation_checkpoints`.
+- Il Validation Engine determina se una validazione sia consentita consultando lo stato corrente della Participation, rappresentato dalla tabella `wp_questuno_participation_checkpoints`.
 - è completamente stateless;
 - non salva dati nel database;
 - non modifica lo stato della Participation;

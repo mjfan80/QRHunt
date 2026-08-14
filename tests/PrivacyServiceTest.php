@@ -2,12 +2,12 @@
 /**
  * Privacy settings tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Service\PrivacyService;
+use QuestUno\Service\PrivacyService;
 
 /**
  * Verifies independent opt-in collection of Event data.
@@ -38,7 +38,7 @@ final class PrivacyServiceTest extends IntegrationTestCase {
 		$participation               = $this->create_participation( self::factory()->user->create(), (int) $path->get_id() );
 		$privacy_service             = new PrivacyService();
 		$_SERVER['REMOTE_ADDR']      = '203.0.113.42';
-		$_SERVER['HTTP_USER_AGENT']  = 'QRHunt Test Agent';
+		$_SERVER['HTTP_USER_AGENT']  = 'QuestUno Test Agent';
 		$path->set_start_checkpoint_id( (int) $start->get_post_id() );
 		$path->set_finish_checkpoint_id( (int) $finish->get_post_id() );
 		$services['path_service']->save_path( $path );
@@ -60,10 +60,10 @@ final class PrivacyServiceTest extends IntegrationTestCase {
 
 		update_option( PrivacyService::OPTION_NAME, array( 'record_ip_address' => false, 'record_user_agent' => true ) );
 		self::assertNull( $privacy_service->get_ip_address() );
-		self::assertSame( 'QRHunt Test Agent', $privacy_service->get_user_agent() );
+		self::assertSame( 'QuestUno Test Agent', $privacy_service->get_user_agent() );
 		$services['scan_service']->scan_checkpoint( $participation, $start );
 		$events = $services['event_service']->get_events_by_participation( (int) $participation->get_id() );
 		self::assertNull( $events[0]->get_ip_address() );
-		self::assertSame( 'QRHunt Test Agent', $events[0]->get_user_agent() );
+		self::assertSame( 'QuestUno Test Agent', $events[0]->get_user_agent() );
 	}
 }

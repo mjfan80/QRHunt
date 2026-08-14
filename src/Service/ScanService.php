@@ -2,20 +2,20 @@
 /**
  * Scan service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Checkpoint;
-use QRHunt\Model\DependencyType;
-use QRHunt\Model\Event;
-use QRHunt\Model\EventResult;
-use QRHunt\Model\EventType;
-use QRHunt\Model\Participation;
-use QRHunt\Model\ParticipationProgress;
-use QRHunt\Model\ParticipationStatus;
-use QRHunt\Model\ValidationResult;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Model\DependencyType;
+use QuestUno\Model\Event;
+use QuestUno\Model\EventResult;
+use QuestUno\Model\EventType;
+use QuestUno\Model\Participation;
+use QuestUno\Model\ParticipationProgress;
+use QuestUno\Model\ParticipationStatus;
+use QuestUno\Model\ValidationResult;
 
 defined( 'ABSPATH' ) || exit;
 

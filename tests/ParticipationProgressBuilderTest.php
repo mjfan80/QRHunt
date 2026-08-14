@@ -2,13 +2,13 @@
 /**
  * Participation progress tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Model\Group;
-use QRHunt\Model\GroupCompletionMode;
+use QuestUno\Model\Group;
+use QuestUno\Model\GroupCompletionMode;
 
 /**
  * Verifies Group progress derived from persisted state.
@@ -70,7 +70,7 @@ final class ParticipationProgressBuilderTest extends IntegrationTestCase {
 	/**
 	 * Assigns a Checkpoint to a Group.
 	 *
-	 * @param \QRHunt\Model\Checkpoint $checkpoint Checkpoint to update.
+	 * @param \QuestUno\Model\Checkpoint $checkpoint Checkpoint to update.
 	 * @param int                         $group_id   Group identifier.
 	 * @return void
 	 */

@@ -2,10 +2,10 @@
 /**
  * Database installation handler.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Database;
+namespace QuestUno\Database;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,13 +25,13 @@ final class DatabaseInstaller {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		$charset_collate = $wpdb->get_charset_collate();
-		$paths_table     = $wpdb->prefix . 'qrhunt_paths';
-		$checkpoints_table = $wpdb->prefix . 'qrhunt_checkpoints';
-		$groups_table      = $wpdb->prefix . 'qrhunt_checkpoint_groups';
-		$dependencies_table = $wpdb->prefix . 'qrhunt_dependencies';
-		$participations_table = $wpdb->prefix . 'qrhunt_participations';
-		$participation_checkpoints_table = $wpdb->prefix . 'qrhunt_participation_checkpoints';
-		$events_table        = $wpdb->prefix . 'qrhunt_events';
+		$paths_table     = $wpdb->prefix . 'questuno_paths';
+		$checkpoints_table = $wpdb->prefix . 'questuno_checkpoints';
+		$groups_table      = $wpdb->prefix . 'questuno_checkpoint_groups';
+		$dependencies_table = $wpdb->prefix . 'questuno_dependencies';
+		$participations_table = $wpdb->prefix . 'questuno_participations';
+		$participation_checkpoints_table = $wpdb->prefix . 'questuno_participation_checkpoints';
+		$events_table        = $wpdb->prefix . 'questuno_events';
 
 		$paths_sql = "CREATE TABLE $paths_table (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,

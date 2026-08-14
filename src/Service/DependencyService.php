@@ -2,13 +2,13 @@
 /**
  * Dependency service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Dependency;
-use QRHunt\Repository\DependencyRepository;
+use QuestUno\Model\Dependency;
+use QuestUno\Repository\DependencyRepository;
 
 defined( 'ABSPATH' ) || exit;
 

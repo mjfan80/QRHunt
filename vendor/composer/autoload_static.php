@@ -15,7 +15,7 @@ class ComposerStaticInit5167c08ab67ff7c18be4cb070859748f
     public static $prefixLengthsPsr4 = array (
         'Q' => 
         array (
-            'QRHunt\\' => 7,
+            'QuestUno\\' => 7,
         ),
         'P' => 
         array (
@@ -38,7 +38,7 @@ class ComposerStaticInit5167c08ab67ff7c18be4cb070859748f
     );
 
     public static $prefixDirsPsr4 = array (
-        'QRHunt\\' => 
+        'QuestUno\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

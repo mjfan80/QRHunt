@@ -2,10 +2,10 @@
 /**
  * Participation checkpoint repository.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Repository;
+namespace QuestUno\Repository;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -27,7 +27,7 @@ final class ParticipationCheckpointRepository {
 	 */
 	public function __construct( \wpdb $wpdb ) {
 		$this->wpdb       = $wpdb;
-		$this->table_name = $wpdb->prefix . 'qrhunt_participation_checkpoints';
+		$this->table_name = $wpdb->prefix . 'questuno_participation_checkpoints';
 	}
 
 	/**
@@ -37,7 +37,7 @@ final class ParticipationCheckpointRepository {
 	 * @return array<int, int>
 	 */
 	public function find_validated_checkpoint_ids_by_participation( int $participation_id ): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_participation_checkpoints suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_participation_checkpoints suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT checkpoint_id FROM {$this->table_name} WHERE participation_id = %d ORDER BY checkpoint_id ASC",
 			$participation_id

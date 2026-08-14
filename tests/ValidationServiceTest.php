@@ -2,18 +2,18 @@
 /**
  * Validation Engine tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Model\Checkpoint;
-use QRHunt\Model\DependencyTargetType;
-use QRHunt\Model\DependencyType;
-use QRHunt\Model\Participation;
-use QRHunt\Model\ParticipationProgress;
-use QRHunt\Model\ResolvedDependency;
-use QRHunt\Service\ValidationService;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Model\DependencyTargetType;
+use QuestUno\Model\DependencyType;
+use QuestUno\Model\Participation;
+use QuestUno\Model\ParticipationProgress;
+use QuestUno\Model\ResolvedDependency;
+use QuestUno\Service\ValidationService;
 
 /**
  * Verifies Validation Engine rules without persistence.

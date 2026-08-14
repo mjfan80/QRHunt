@@ -1,5 +1,5 @@
 <?php
-namespace QRHunt\Model;
+namespace QuestUno\Model;
 
 defined( 'ABSPATH' ) || exit;
 

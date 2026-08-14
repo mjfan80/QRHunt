@@ -1,6 +1,6 @@
-# QRHunt Software Requirements Specification (SRS)
+# QuestUno Software Requirements Specification (SRS)
 
-**Project:** QRHunt
+**Project:** QuestUno
 
 **Document Version:** 0.2 (Draft)
 
@@ -16,7 +16,7 @@
 
 ## 1.1 Scopo del progetto
 
-QRHunt è un plugin per WordPress che consente di creare esperienze interattive basate su Checkpoint identificati tramite QR Code.
+QuestUno è un plugin per WordPress che consente di creare esperienze interattive basate su Checkpoint identificati tramite QR Code.
 
 Il plugin è progettato per essere completamente generico e può essere utilizzato, a titolo di esempio, per:
 
@@ -30,7 +30,7 @@ Il plugin è progettato per essere completamente generico e può essere utilizza
 - visite guidate;
 - qualsiasi attività nella quale un partecipante debba trovare uno o più Checkpoint.
 
-QRHunt non è legato ad uno specifico tema, evento o settore applicativo.
+QuestUno non è legato ad uno specifico tema, evento o settore applicativo.
 
 ---
 
@@ -51,7 +51,7 @@ Il plugin deve permettere di:
 
 ## 1.3 Filosofia del progetto
 
-QRHunt gestisce esclusivamente la logica del gioco.
+QuestUno gestisce esclusivamente la logica del gioco.
 
 WordPress continua a gestire:
 
@@ -96,7 +96,7 @@ Ogni Checkpoint appartiene ad un solo Percorso.
 
 Utente autenticato di WordPress.
 
-QRHunt utilizza il sistema di autenticazione di WordPress e non implementa un proprio sistema di login.
+QuestUno utilizza il sistema di autenticazione di WordPress e non implementa un proprio sistema di login.
 
 ---
 
@@ -307,7 +307,7 @@ Il token deve essere sufficientemente casuale da impedire l'individuazione dei C
 
 ## 5.3 Contenuto
 
-Il nome tecnico del Custom Post Type è `qrhunt_checkpoint`.
+Il nome tecnico del Custom Post Type è `questuno_checkpoint`.
 
 Ogni Checkpoint è implementato come Custom Post Type di WordPress.
 
@@ -420,7 +420,7 @@ L'amministratore deve poter:
 
 Il QR Code viene generato dal token pubblico esistente. Nella versione 1.0 non sono previste funzioni di rigenerazione del token o del QR Code.
 
-I Checkpoint vengono gestiti all'interno del menu amministrativo del plugin QRHunt e non come voce autonoma del menu di WordPress.
+I Checkpoint vengono gestiti all'interno del menu amministrativo del plugin QuestUno e non come voce autonoma del menu di WordPress.
 
 ---
 
@@ -683,7 +683,7 @@ Il formato minimo supportato è CSV.
 
 ## 7.10 Eliminazione
 
-La versione 1.0 non introduce una funzione di eliminazione distruttiva specifica di QRHunt per i Percorsi. L'archiviazione è il meccanismo preferenziale per conservare il Percorso e il relativo storico.
+La versione 1.0 non introduce una funzione di eliminazione distruttiva specifica di QuestUno per i Percorsi. L'archiviazione è il meccanismo preferenziale per conservare il Percorso e il relativo storico.
 
 ---
 
@@ -699,7 +699,7 @@ Tutte le funzionalità devono essere raggiungibili dall'interfaccia di WordPress
 
 ## 8.2 Menu
 
-Il plugin aggiunge un menu principale "QRHunt" contenente almeno:
+Il plugin aggiunge un menu principale "QuestUno" contenente almeno:
 
 - Dashboard;
 - Percorsi;
@@ -788,7 +788,7 @@ La versione 1.0 dovrà prevedere almeno:
 
 ### Generali
 
-Lingua, formato data e formato ora usano le impostazioni native di WordPress e non sono configurazioni proprietarie di QRHunt.
+Lingua, formato data e formato ora usano le impostazioni native di WordPress e non sono configurazioni proprietarie di QuestUno.
 
 ### QR Code
 
@@ -822,7 +822,7 @@ Le funzionalità amministrative sono disponibili esclusivamente agli utenti auto
 
 Il partecipante deve essere autenticato tramite WordPress prima di poter iniziare un Percorso.
 
-QRHunt non implementa un proprio sistema di autenticazione.
+QuestUno non implementa un proprio sistema di autenticazione.
 
 Può integrarsi con eventuali plugin di Social Login compatibili.
 

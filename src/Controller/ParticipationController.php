@@ -2,20 +2,20 @@
 /**
  * Participation controller.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\Model\Participation;
-use QRHunt\Model\ParticipationStatus;
-use QRHunt\Model\EventResult;
-use QRHunt\Model\EventType;
-use QRHunt\Service\CheckpointService;
-use QRHunt\Service\EventService;
-use QRHunt\Service\ParticipationProgressBuilder;
-use QRHunt\Service\ParticipationService;
-use QRHunt\Service\PathService;
+use QuestUno\Model\Participation;
+use QuestUno\Model\ParticipationStatus;
+use QuestUno\Model\EventResult;
+use QuestUno\Model\EventType;
+use QuestUno\Service\CheckpointService;
+use QuestUno\Service\EventService;
+use QuestUno\Service\ParticipationProgressBuilder;
+use QuestUno\Service\ParticipationService;
+use QuestUno\Service\PathService;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -69,11 +69,11 @@ final class ParticipationController {
 	 */
 	public function register_page(): void {
 		add_submenu_page(
-			'qrhunt',
-			__( 'Participations', 'qrhunt' ),
-			__( 'Participations', 'qrhunt' ),
+			'questuno',
+			__( 'Participations', 'questuno' ),
+			__( 'Participations', 'questuno' ),
 			'edit_posts',
-			'qrhunt-participations',
+			'questuno-participations',
 			array( $this, 'render_page' )
 		);
 	}
@@ -109,13 +109,13 @@ final class ParticipationController {
 		$detail         = 0 === $detail_id ? null : $this->participation_service->get_participation( $detail_id );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Participations', 'qrhunt' ); ?></h1>
+			<h1><?php esc_html_e( 'Participations', 'questuno' ); ?></h1>
 
 			<form method="get">
-				<input type="hidden" name="page" value="qrhunt-participations" />
-				<label for="qrhunt-filter-path"><?php esc_html_e( 'Path', 'qrhunt' ); ?></label>
-				<select id="qrhunt-filter-path" name="path_id">
-					<option value="0"><?php esc_html_e( 'All Paths', 'qrhunt' ); ?></option>
+				<input type="hidden" name="page" value="questuno-participations" />
+				<label for="questuno-filter-path"><?php esc_html_e( 'Path', 'questuno' ); ?></label>
+				<select id="questuno-filter-path" name="path_id">
+					<option value="0"><?php esc_html_e( 'All Paths', 'questuno' ); ?></option>
 					<?php foreach ( $paths as $path ) : ?>
 						<option value="<?php echo esc_attr( (string) $path->get_id() ); ?>" <?php selected( $filter_path_id, $path->get_id() ); ?>>
 							<?php echo esc_html( $path->get_name() ); ?>
@@ -123,9 +123,9 @@ final class ParticipationController {
 					<?php endforeach; ?>
 				</select>
 
-				<label for="qrhunt-filter-user"><?php esc_html_e( 'User', 'qrhunt' ); ?></label>
-				<select id="qrhunt-filter-user" name="user_id">
-					<option value="0"><?php esc_html_e( 'All Users', 'qrhunt' ); ?></option>
+				<label for="questuno-filter-user"><?php esc_html_e( 'User', 'questuno' ); ?></label>
+				<select id="questuno-filter-user" name="user_id">
+					<option value="0"><?php esc_html_e( 'All Users', 'questuno' ); ?></option>
 					<?php foreach ( $users as $user ) : ?>
 						<option value="<?php echo esc_attr( (string) $user->ID ); ?>" <?php selected( $filter_user_id, $user->ID ); ?>>
 							<?php echo esc_html( $user_labels[ $user->ID ] ?? (string) $user->ID ); ?>
@@ -133,9 +133,9 @@ final class ParticipationController {
 					<?php endforeach; ?>
 				</select>
 
-				<label for="qrhunt-filter-status"><?php esc_html_e( 'Status', 'qrhunt' ); ?></label>
-				<select id="qrhunt-filter-status" name="status">
-					<option value=""><?php esc_html_e( 'All Statuses', 'qrhunt' ); ?></option>
+				<label for="questuno-filter-status"><?php esc_html_e( 'Status', 'questuno' ); ?></label>
+				<select id="questuno-filter-status" name="status">
+					<option value=""><?php esc_html_e( 'All Statuses', 'questuno' ); ?></option>
 					<?php foreach ( $this->get_status_labels() as $status => $label ) : ?>
 						<option value="<?php echo esc_attr( $status ); ?>" <?php selected( $filter_status, $status ); ?>>
 							<?php echo esc_html( $label ); ?>
@@ -143,20 +143,20 @@ final class ParticipationController {
 					<?php endforeach; ?>
 				</select>
 
-				<?php submit_button( __( 'Filter', 'qrhunt' ), 'secondary', '', false ); ?>
+				<?php submit_button( __( 'Filter', 'questuno' ), 'secondary', '', false ); ?>
 			</form>
 
 			<table class="widefat striped">
 				<thead>
 					<tr>
-						<th scope="col"><?php esc_html_e( 'User', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Path', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Status', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Started at', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Finished at', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Cancelled at', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Validated Checkpoints', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Actions', 'qrhunt' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'User', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Path', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Status', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Started at', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Finished at', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Cancelled at', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Validated Checkpoints', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Actions', 'questuno' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -171,15 +171,15 @@ final class ParticipationController {
 							<td><?php echo esc_html( $this->format_datetime( $participation->get_cancelled_at() ) ); ?></td>
 							<td><?php echo esc_html( (string) count( $progress->get_validated_checkpoint_ids() ) ); ?></td>
 							<td>
-								<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=qrhunt-participations&participation_id=' . $participation->get_id() ) ); ?>">
-									<?php esc_html_e( 'View', 'qrhunt' ); ?>
+								<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=questuno-participations&participation_id=' . $participation->get_id() ) ); ?>">
+									<?php esc_html_e( 'View', 'questuno' ); ?>
 								</a>
 								<?php if ( ParticipationStatus::CANCELLED !== $participation->get_status() ) : ?>
-									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="qrhunt-inline-form">
-										<?php wp_nonce_field( 'qrhunt_cancel_participation_' . $participation->get_id(), 'qrhunt_participation_nonce' ); ?>
-										<input type="hidden" name="action" value="qrhunt_cancel_participation" />
+									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="questuno-inline-form">
+										<?php wp_nonce_field( 'questuno_cancel_participation_' . $participation->get_id(), 'questuno_participation_nonce' ); ?>
+										<input type="hidden" name="action" value="questuno_cancel_participation" />
 										<input type="hidden" name="participation_id" value="<?php echo esc_attr( (string) $participation->get_id() ); ?>" />
-										<button type="submit" class="button-link-delete"><?php esc_html_e( 'Cancel', 'qrhunt' ); ?></button>
+										<button type="submit" class="button-link-delete"><?php esc_html_e( 'Cancel', 'questuno' ); ?></button>
 									</form>
 								<?php endif; ?>
 							</td>
@@ -203,13 +203,13 @@ final class ParticipationController {
 	public function cancel(): void {
 		$id = absint( wp_unslash( $_POST['participation_id'] ?? 0 ) );
 
-		if ( ! current_user_can( 'edit_posts' ) || ! isset( $_POST['qrhunt_participation_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['qrhunt_participation_nonce'] ) ), 'qrhunt_cancel_participation_' . $id ) ) {
-			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
+		if ( ! current_user_can( 'edit_posts' ) || ! isset( $_POST['questuno_participation_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['questuno_participation_nonce'] ) ), 'questuno_cancel_participation_' . $id ) ) {
+			wp_die( esc_html__( 'Invalid request.', 'questuno' ) );
 		}
 
 		$this->participation_service->cancel_participation( $id );
 
-		wp_safe_redirect( admin_url( 'admin.php?page=qrhunt-participations&participation_id=' . $id ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=questuno-participations&participation_id=' . $id ) );
 		exit;
 	}
 
@@ -224,27 +224,27 @@ final class ParticipationController {
 	private function render_detail( Participation $participation, array $user_labels, array $path_names ): void {
 		$events = null === $participation->get_id() ? array() : $this->event_service->get_events_by_participation( (int) $participation->get_id() );
 		?>
-		<h2><?php esc_html_e( 'Participation detail', 'qrhunt' ); ?></h2>
+		<h2><?php esc_html_e( 'Participation detail', 'questuno' ); ?></h2>
 		<table class="widefat striped">
 			<tbody>
-				<tr><th scope="row"><?php esc_html_e( 'User', 'qrhunt' ); ?></th><td><?php echo esc_html( $user_labels[ $participation->get_user_id() ] ?? (string) $participation->get_user_id() ); ?></td></tr>
-				<tr><th scope="row"><?php esc_html_e( 'Path', 'qrhunt' ); ?></th><td><?php echo esc_html( $path_names[ $participation->get_path_id() ] ?? '' ); ?></td></tr>
-				<tr><th scope="row"><?php esc_html_e( 'Status', 'qrhunt' ); ?></th><td><?php echo esc_html( $this->get_status_labels()[ (string) $participation->get_status() ] ?? (string) $participation->get_status() ); ?></td></tr>
-				<tr><th scope="row"><?php esc_html_e( 'Created at', 'qrhunt' ); ?></th><td><?php echo esc_html( $this->format_datetime( $participation->get_created_at() ) ); ?></td></tr>
-				<tr><th scope="row"><?php esc_html_e( 'Started at', 'qrhunt' ); ?></th><td><?php echo esc_html( $this->format_datetime( $participation->get_started_at() ) ); ?></td></tr>
-				<tr><th scope="row"><?php esc_html_e( 'Finished at', 'qrhunt' ); ?></th><td><?php echo esc_html( $this->format_datetime( $participation->get_finished_at() ) ); ?></td></tr>
-				<tr><th scope="row"><?php esc_html_e( 'Cancelled at', 'qrhunt' ); ?></th><td><?php echo esc_html( $this->format_datetime( $participation->get_cancelled_at() ) ); ?></td></tr>
+				<tr><th scope="row"><?php esc_html_e( 'User', 'questuno' ); ?></th><td><?php echo esc_html( $user_labels[ $participation->get_user_id() ] ?? (string) $participation->get_user_id() ); ?></td></tr>
+				<tr><th scope="row"><?php esc_html_e( 'Path', 'questuno' ); ?></th><td><?php echo esc_html( $path_names[ $participation->get_path_id() ] ?? '' ); ?></td></tr>
+				<tr><th scope="row"><?php esc_html_e( 'Status', 'questuno' ); ?></th><td><?php echo esc_html( $this->get_status_labels()[ (string) $participation->get_status() ] ?? (string) $participation->get_status() ); ?></td></tr>
+				<tr><th scope="row"><?php esc_html_e( 'Created at', 'questuno' ); ?></th><td><?php echo esc_html( $this->format_datetime( $participation->get_created_at() ) ); ?></td></tr>
+				<tr><th scope="row"><?php esc_html_e( 'Started at', 'questuno' ); ?></th><td><?php echo esc_html( $this->format_datetime( $participation->get_started_at() ) ); ?></td></tr>
+				<tr><th scope="row"><?php esc_html_e( 'Finished at', 'questuno' ); ?></th><td><?php echo esc_html( $this->format_datetime( $participation->get_finished_at() ) ); ?></td></tr>
+				<tr><th scope="row"><?php esc_html_e( 'Cancelled at', 'questuno' ); ?></th><td><?php echo esc_html( $this->format_datetime( $participation->get_cancelled_at() ) ); ?></td></tr>
 			</tbody>
 		</table>
 
-		<h3><?php esc_html_e( 'History', 'qrhunt' ); ?></h3>
+		<h3><?php esc_html_e( 'History', 'questuno' ); ?></h3>
 		<table class="widefat striped">
 			<thead>
 				<tr>
-					<th scope="col"><?php esc_html_e( 'Date', 'qrhunt' ); ?></th>
-					<th scope="col"><?php esc_html_e( 'Checkpoint', 'qrhunt' ); ?></th>
-					<th scope="col"><?php esc_html_e( 'Type', 'qrhunt' ); ?></th>
-					<th scope="col"><?php esc_html_e( 'Result', 'qrhunt' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Date', 'questuno' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Checkpoint', 'questuno' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Type', 'questuno' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Result', 'questuno' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -264,7 +264,7 @@ final class ParticipationController {
 	/**
 	 * Builds Path names indexed by identifier.
 	 *
-	 * @param array<int, \QRHunt\Model\Path> $paths Paths.
+	 * @param array<int, \QuestUno\Model\Path> $paths Paths.
 	 * @return array<int, string>
 	 */
 	private function get_path_names( array $paths ): array {
@@ -304,10 +304,10 @@ final class ParticipationController {
 	 */
 	private function get_status_labels(): array {
 		return array(
-			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'qrhunt' ),
-			ParticipationStatus::FINISHED    => __( 'Finished', 'qrhunt' ),
-			ParticipationStatus::COMPLETED   => __( 'Completed', 'qrhunt' ),
-			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'qrhunt' ),
+			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'questuno' ),
+			ParticipationStatus::FINISHED    => __( 'Finished', 'questuno' ),
+			ParticipationStatus::COMPLETED   => __( 'Completed', 'questuno' ),
+			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'questuno' ),
 		);
 	}
 
@@ -318,7 +318,7 @@ final class ParticipationController {
 	 */
 	private function get_event_type_labels(): array {
 		return array(
-			EventType::QR_SCAN => __( 'QR Code scan', 'qrhunt' ),
+			EventType::QR_SCAN => __( 'QR Code scan', 'questuno' ),
 		);
 	}
 
@@ -329,12 +329,12 @@ final class ParticipationController {
 	 */
 	private function get_event_result_labels(): array {
 		return array(
-			EventResult::ACCEPTED                => __( 'Accepted', 'qrhunt' ),
-			EventResult::DUPLICATE               => __( 'Duplicate', 'qrhunt' ),
-			EventResult::BEFORE_FAILED           => __( 'Before Failed', 'qrhunt' ),
-			EventResult::AFTER_FAILED            => __( 'After Failed', 'qrhunt' ),
-			EventResult::PATH_CLOSED             => __( 'Path Closed', 'qrhunt' ),
-			EventResult::PARTICIPATION_CANCELLED => __( 'Participation Cancelled', 'qrhunt' ),
+			EventResult::ACCEPTED                => __( 'Accepted', 'questuno' ),
+			EventResult::DUPLICATE               => __( 'Duplicate', 'questuno' ),
+			EventResult::BEFORE_FAILED           => __( 'Before Failed', 'questuno' ),
+			EventResult::AFTER_FAILED            => __( 'After Failed', 'questuno' ),
+			EventResult::PATH_CLOSED             => __( 'Path Closed', 'questuno' ),
+			EventResult::PARTICIPATION_CANCELLED => __( 'Participation Cancelled', 'questuno' ),
 		);
 	}
 

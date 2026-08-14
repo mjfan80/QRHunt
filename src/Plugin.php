@@ -2,46 +2,46 @@
 /**
  * Plugin bootstrap.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt;
+namespace QuestUno;
 
-use QRHunt\Controller\CheckpointController;
-use QRHunt\Controller\DashboardController;
-use QRHunt\Controller\DependencyController;
-use QRHunt\Controller\EventController;
-use QRHunt\Controller\ExportController;
-use QRHunt\Controller\GroupController;
-use QRHunt\Controller\MyPathsController;
-use QRHunt\Controller\ParticipationController;
-use QRHunt\Controller\PathController;
-use QRHunt\Controller\PathStatisticsController;
-use QRHunt\Controller\PlayerFlowController;
-use QRHunt\Controller\QrCodeController;
-use QRHunt\Controller\SettingsController;
-use QRHunt\Repository\CheckpointRepository;
-use QRHunt\Repository\DependencyRepository;
-use QRHunt\Repository\EventRepository;
-use QRHunt\Repository\GroupRepository;
-use QRHunt\Repository\ParticipationCheckpointRepository;
-use QRHunt\Repository\ParticipationRepository;
-use QRHunt\Repository\PathRepository;
-use QRHunt\Service\CheckpointService;
-use QRHunt\Service\DashboardService;
-use QRHunt\Service\DependencyService;
-use QRHunt\Service\EventService;
-use QRHunt\Service\ExportService;
-use QRHunt\Service\GroupService;
-use QRHunt\Service\ParticipationCheckpointService;
-use QRHunt\Service\ParticipationProgressBuilder;
-use QRHunt\Service\PathConfigurationValidator;
-use QRHunt\Service\PrivacyService;
-use QRHunt\Service\ParticipationService;
-use QRHunt\Service\PathService;
-use QRHunt\Service\QrCodeService;
-use QRHunt\Service\ScanService;
-use QRHunt\Service\ValidationService;
+use QuestUno\Controller\CheckpointController;
+use QuestUno\Controller\DashboardController;
+use QuestUno\Controller\DependencyController;
+use QuestUno\Controller\EventController;
+use QuestUno\Controller\ExportController;
+use QuestUno\Controller\GroupController;
+use QuestUno\Controller\MyPathsController;
+use QuestUno\Controller\ParticipationController;
+use QuestUno\Controller\PathController;
+use QuestUno\Controller\PathStatisticsController;
+use QuestUno\Controller\PlayerFlowController;
+use QuestUno\Controller\QrCodeController;
+use QuestUno\Controller\SettingsController;
+use QuestUno\Repository\CheckpointRepository;
+use QuestUno\Repository\DependencyRepository;
+use QuestUno\Repository\EventRepository;
+use QuestUno\Repository\GroupRepository;
+use QuestUno\Repository\ParticipationCheckpointRepository;
+use QuestUno\Repository\ParticipationRepository;
+use QuestUno\Repository\PathRepository;
+use QuestUno\Service\CheckpointService;
+use QuestUno\Service\DashboardService;
+use QuestUno\Service\DependencyService;
+use QuestUno\Service\EventService;
+use QuestUno\Service\ExportService;
+use QuestUno\Service\GroupService;
+use QuestUno\Service\ParticipationCheckpointService;
+use QuestUno\Service\ParticipationProgressBuilder;
+use QuestUno\Service\PathConfigurationValidator;
+use QuestUno\Service\PrivacyService;
+use QuestUno\Service\ParticipationService;
+use QuestUno\Service\PathService;
+use QuestUno\Service\QrCodeService;
+use QuestUno\Service\ScanService;
+use QuestUno\Service\ValidationService;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -168,14 +168,14 @@ final class Plugin {
 		add_action( 'admin_menu', array( $this, 'register_path_statistics_page' ) );
 		add_action( 'admin_menu', array( $this, 'register_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
-		add_action( 'admin_post_qrhunt_save_group', array( $this, 'save_group' ) );
-		add_action( 'admin_post_qrhunt_delete_group', array( $this, 'delete_group' ) );
-		add_action( 'admin_post_qrhunt_cancel_participation', array( $this, 'cancel_participation' ) );
-		add_action( 'admin_post_qrhunt_download_qr_code', array( $this, 'download_qr_code' ) );
-		add_action( 'admin_post_qrhunt_print_path_qr_codes', array( $this, 'print_path_qr_codes' ) );
-		add_action( 'admin_post_qrhunt_export_csv', array( $this, 'export_csv' ) );
-		add_action( 'admin_post_qrhunt_archive_path', array( $this, 'archive_path' ) );
-		add_action( 'admin_post_qrhunt_restore_path', array( $this, 'restore_path' ) );
+		add_action( 'admin_post_questuno_save_group', array( $this, 'save_group' ) );
+		add_action( 'admin_post_questuno_delete_group', array( $this, 'delete_group' ) );
+		add_action( 'admin_post_questuno_cancel_participation', array( $this, 'cancel_participation' ) );
+		add_action( 'admin_post_questuno_download_qr_code', array( $this, 'download_qr_code' ) );
+		add_action( 'admin_post_questuno_print_path_qr_codes', array( $this, 'print_path_qr_codes' ) );
+		add_action( 'admin_post_questuno_export_csv', array( $this, 'export_csv' ) );
+		add_action( 'admin_post_questuno_archive_path', array( $this, 'archive_path' ) );
+		add_action( 'admin_post_questuno_restore_path', array( $this, 'restore_path' ) );
 		add_action( 'add_meta_boxes_' . PathPostType::POST_TYPE, array( $this, 'register_path_metabox' ) );
 		add_action( 'save_post_' . PathPostType::POST_TYPE, array( $this, 'synchronize_path' ), 10, 2 );
 		add_filter( 'post_row_actions', array( $this, 'add_path_row_actions' ), 10, 2 );
@@ -183,6 +183,7 @@ final class Plugin {
 		add_action( 'manage_' . PathPostType::POST_TYPE . '_posts_custom_column', array( $this, 'render_path_list_column' ), 10, 2 );
 		add_action( 'admin_notices', array( $this, 'render_path_configuration_errors' ) );
 		add_action( 'add_meta_boxes_' . CheckpointPostType::POST_TYPE, array( $this, 'register_checkpoint_metabox' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_checkpoint_assets' ) );
 		add_action( 'save_post_' . CheckpointPostType::POST_TYPE, array( $this, 'save_checkpoint_path' ), 10, 2 );
 		add_action( 'template_redirect', array( $this, 'handle_player_flow' ), 0 );
 		add_action( 'template_redirect', array( $this, 'handle_my_paths' ), 0 );
@@ -237,6 +238,16 @@ final class Plugin {
 	 */
 	public function register_groups_page(): void {
 		$this->get_group_controller()->register_page();
+	}
+
+	/**
+	 * Enqueues checkpoint editor assets.
+	 *
+	 * @param string $hook_suffix Current admin page hook suffix.
+	 * @return void
+	 */
+	public function enqueue_checkpoint_assets( string $hook_suffix ): void {
+		$this->get_checkpoint_controller()->enqueue_assets( $hook_suffix );
 	}
 
 	/**
@@ -375,7 +386,7 @@ final class Plugin {
 	}
 
 	/**
-	 * Adds QRHunt Path actions to the WordPress post list.
+	 * Adds QuestUno Path actions to the WordPress post list.
 	 *
 	 * @param array<string,string> $actions Row actions.
 	 * @param \WP_Post             $post    Current post.
@@ -386,7 +397,7 @@ final class Plugin {
 	}
 
 	/**
-	 * Adds QRHunt columns to the Path list.
+	 * Adds QuestUno columns to the Path list.
 	 *
 	 * @param array<string,string> $columns List columns.
 	 * @return array<string,string>
@@ -396,7 +407,7 @@ final class Plugin {
 	}
 
 	/**
-	 * Renders a QRHunt column in the Path list.
+	 * Renders a QuestUno column in the Path list.
 	 *
 	 * @param string $column_name Column identifier.
 	 * @param int    $post_id     Post identifier.

@@ -1,10 +1,10 @@
 <#
 .SYNOPSIS
-Builds and optionally verifies the distributable QRHunt plugin archive.
+Builds and optionally verifies the distributable QuestUno plugin archive.
 
 .DESCRIPTION
-Creates build\staging\qrhunt from runtime files only, installs Composer
-production dependencies, and creates build\qrhunt.zip. When -WordPressPath
+Creates build\staging\questuno from runtime files only, installs Composer
+production dependencies, and creates build\questuno.zip. When -WordPressPath
 is provided, it runs Plugin Check against a temporary sibling plugin copy.
 
 .EXAMPLE
@@ -27,9 +27,9 @@ $ErrorActionPreference = 'Stop'
 $projectRoot       = Split-Path -Parent $PSScriptRoot
 $buildDirectory    = Join-Path $projectRoot 'build'
 $stagingDirectory  = Join-Path $buildDirectory 'staging'
-$packageDirectory  = Join-Path $stagingDirectory 'qrhunt'
-$archivePath       = Join-Path $buildDirectory 'qrhunt.zip'
-$checkPluginSlug   = 'qrhunt-release-check'
+$packageDirectory  = Join-Path $stagingDirectory 'questuno'
+$archivePath       = Join-Path $buildDirectory 'questuno.zip'
+$checkPluginSlug   = 'questuno-release-check'
 $checkPluginPath   = $null
 $checkPluginCreated = $false
 $failureMessage    = $null
@@ -56,7 +56,7 @@ try {
 	$checks[$currentCheck] = 'PASS'
 
 	$runtimeFiles = @(
-		'qrhunt.php',
+		'questuno.php',
 		'readme.txt',
 		'LICENSE'
 	)
@@ -88,7 +88,7 @@ try {
 
 	$currentCheck = 'PHP syntax'
 	$phpFiles = @(
-		Join-Path $projectRoot 'qrhunt.php'
+		Join-Path $projectRoot 'questuno.php'
 	) + @(
 		Get-ChildItem -Path (Join-Path $projectRoot 'src'), (Join-Path $projectRoot 'templates') -Recurse -File -Filter '*.php' |
 			Select-Object -ExpandProperty FullName
@@ -104,9 +104,9 @@ try {
 
 	$currentCheck = 'Release structure'
 	$catalogFiles = @(
-		'languages\qrhunt.pot',
-		'languages\qrhunt-it_IT.po',
-		'languages\qrhunt-it_IT.mo'
+		'languages\questuno.pot',
+		'languages\questuno-it_IT.po',
+		'languages\questuno-it_IT.mo'
 	)
 
 	foreach ($catalogFile in $catalogFiles) {
@@ -145,6 +145,11 @@ try {
 
 	foreach ($runtimeDirectory in $runtimeDirectories) {
 		Copy-Item -LiteralPath (Join-Path $projectRoot $runtimeDirectory) -Destination $packageDirectory -Recurse
+	}
+
+	# Italian translations are retained in the repository, but WordPress.org distributes language packs separately.
+	foreach ($italianCatalog in @('languages\questuno-it_IT.po', 'languages\questuno-it_IT.mo')) {
+		Remove-Item -LiteralPath (Join-Path $packageDirectory $italianCatalog) -Force
 	}
 
 	# Composer needs the lock file to resolve the production dependencies deterministically.
@@ -236,7 +241,7 @@ try {
 
 		$pluginCheckErrorFile = [System.IO.Path]::GetTempFileName()
 		try {
-			$pluginCheckOutput = & wp --path=$wpRoot plugin check $checkPluginSlug --slug=qrhunt --format=strict-json 2>$pluginCheckErrorFile
+			$pluginCheckOutput = & wp --path=$wpRoot plugin check $checkPluginSlug --slug=questuno --format=strict-json 2>$pluginCheckErrorFile
 			$pluginCheckExitCode = $LASTEXITCODE
 			$pluginCheckErrorOutput = Get-Content -LiteralPath $pluginCheckErrorFile -Raw
 
@@ -302,7 +307,7 @@ try {
 
 		try {
 			# ZIP entry names always use forward slashes, regardless of the build platform.
-			$archive.CreateEntry('qrhunt/') | Out-Null
+			$archive.CreateEntry('questuno/') | Out-Null
 
 			foreach ($packageFile in Get-ChildItem -LiteralPath $packageDirectory -Recurse -File -Force) {
 				$relativePath = $packageFile.FullName.Substring($stagingDirectory.Length).TrimStart('\', '/')
@@ -351,15 +356,21 @@ try {
 				throw 'The release archive contains ZIP entries with backslash separators.'
 			}
 
-			foreach ($requiredEntry in @('qrhunt/qrhunt.php', 'qrhunt/readme.txt')) {
+			foreach ($requiredEntry in @('questuno/questuno.php', 'questuno/readme.txt')) {
 				if ($requiredEntry -notin $entryNames) {
 					throw "The release archive is missing required entry: $requiredEntry."
 				}
 			}
 
-			$hasUnexpectedRootEntry = @( $entryNames | Where-Object { -not $_.StartsWith('qrhunt/') } ).Count -gt 0
-			if ('qrhunt/' -notin $entryNames -or $hasUnexpectedRootEntry) {
-				throw 'The release archive does not have qrhunt/ as its only root directory.'
+			foreach ($excludedEntry in @('questuno/languages/questuno-it_IT.po', 'questuno/languages/questuno-it_IT.mo')) {
+				if ($excludedEntry -in $entryNames) {
+					throw "The release archive must not contain $excludedEntry."
+				}
+			}
+
+			$hasUnexpectedRootEntry = @( $entryNames | Where-Object { -not $_.StartsWith('questuno/') } ).Count -gt 0
+			if ('questuno/' -notin $entryNames -or $hasUnexpectedRootEntry) {
+				throw 'The release archive does not have questuno/ as its only root directory.'
 			}
 		}
 		finally {

@@ -2,19 +2,19 @@
 /**
  * Validation service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Checkpoint;
-use QRHunt\Model\DependencyTargetType;
-use QRHunt\Model\DependencyType;
-use QRHunt\Model\DependencyViolation;
-use QRHunt\Model\Participation;
-use QRHunt\Model\ParticipationProgress;
-use QRHunt\Model\ResolvedDependency;
-use QRHunt\Model\ValidationResult;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Model\DependencyTargetType;
+use QuestUno\Model\DependencyType;
+use QuestUno\Model\DependencyViolation;
+use QuestUno\Model\Participation;
+use QuestUno\Model\ParticipationProgress;
+use QuestUno\Model\ResolvedDependency;
+use QuestUno\Model\ValidationResult;
 
 defined( 'ABSPATH' ) || exit;
 

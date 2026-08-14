@@ -2,14 +2,14 @@
 /**
  * Checkpoint repository.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Repository;
+namespace QuestUno\Repository;
 
-use QRHunt\Model\Checkpoint;
-use QRHunt\Model\DependencyTargetType;
-use QRHunt\Model\ResolvedDependency;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Model\DependencyTargetType;
+use QuestUno\Model\ResolvedDependency;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -39,7 +39,7 @@ final class CheckpointRepository {
 	 */
 	public function __construct( \wpdb $wpdb, DependencyRepository $dependency_repository, GroupRepository $group_repository ) {
 		$this->wpdb                  = $wpdb;
-		$this->table_name            = $wpdb->prefix . 'qrhunt_checkpoints';
+		$this->table_name            = $wpdb->prefix . 'questuno_checkpoints';
 		$this->dependency_repository = $dependency_repository;
 		$this->group_repository      = $group_repository;
 	}
@@ -50,7 +50,7 @@ final class CheckpointRepository {
 	 * @return array<int, Checkpoint>
 	 */
 	public function find_all(): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_checkpoints suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_checkpoints suffix.
 		$rows = $this->wpdb->get_results(
 			"SELECT post_id, path_id, group_id, token, created_at, updated_at FROM {$this->table_name} ORDER BY post_id ASC",
 			ARRAY_A
@@ -67,7 +67,7 @@ final class CheckpointRepository {
 	}
 
 	public function find_by_post_id( int $post_id ): ?Checkpoint {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_checkpoints suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_checkpoints suffix.
 		$sql = $this->wpdb->prepare( "SELECT post_id, path_id, group_id, token, created_at, updated_at FROM {$this->table_name} WHERE post_id = %d", $post_id );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
@@ -87,7 +87,7 @@ final class CheckpointRepository {
 	 * @return Checkpoint|null
 	 */
 	public function find_by_token( string $token ): ?Checkpoint {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_checkpoints suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_checkpoints suffix.
 		$sql = $this->wpdb->prepare( "SELECT post_id, path_id, group_id, token, created_at, updated_at FROM {$this->table_name} WHERE token = %s", $token );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
@@ -107,7 +107,7 @@ final class CheckpointRepository {
 	 * @return array<int, Checkpoint>
 	 */
 	public function find_by_path( int $path_id ): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_checkpoints suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_checkpoints suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT post_id, path_id, group_id, token, created_at, updated_at FROM {$this->table_name} WHERE path_id = %d ORDER BY post_id ASC",
 			$path_id
@@ -131,7 +131,7 @@ final class CheckpointRepository {
 	 * @return int
 	 */
 	public function count_all(): int {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_checkpoints suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_checkpoints suffix.
 		$count = $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name}" );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
@@ -221,7 +221,7 @@ final class CheckpointRepository {
 	}
 
 	private function token_exists( string $token ): bool {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_checkpoints suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_checkpoints suffix.
 		$sql = $this->wpdb->prepare( "SELECT 1 FROM {$this->table_name} WHERE token = %s", $token );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().

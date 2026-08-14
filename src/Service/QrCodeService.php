@@ -2,10 +2,10 @@
 /**
  * QR code service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
@@ -13,7 +13,7 @@ use Endroid\QrCode\QrCode;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Writer\SvgWriter;
-use QRHunt\Model\Checkpoint;
+use QuestUno\Model\Checkpoint;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,7 +29,7 @@ final class QrCodeService {
 	 * @return string
 	 */
 	public function build_public_url( string $token ): string {
-		return home_url( '/qrhunt/checkpoint/' . rawurlencode( $token ) );
+		return home_url( '/questuno/checkpoint/' . rawurlencode( $token ) );
 	}
 
 	/**

@@ -1,4 +1,4 @@
-=== QRHunt ===
+=== QuestUno ===
 Contributors: mjfan80
 Tags: qr code, treasure hunt, game, education, events
 Requires at least: 6.7
@@ -12,7 +12,7 @@ Create interactive QR code experiences including treasure hunts, guided tours, m
 
 == Description ==
 
-QRHunt is an open source WordPress plugin for creating interactive experiences based on QR codes.
+QuestUno is an open source WordPress plugin for creating interactive experiences based on QR codes.
 
 Although originally inspired by treasure hunts, the plugin is designed to support many different scenarios, including:
 
@@ -26,7 +26,7 @@ Although originally inspired by treasure hunts, the plugin is designed to suppor
 * Seasonal events
 * Any checkpoint-based interactive experience
 
-QRHunt manages the game logic only.
+QuestUno manages the game logic only.
 
 Content such as text, images, audio, video and pages is managed using native WordPress features.
 
@@ -47,19 +47,19 @@ Content such as text, images, audio, video and pages is managed using native Wor
 
 1. Upload the plugin.
 2. Activate it from the Plugins page.
-3. Configure QRHunt from the WordPress administration panel.
+3. Configure QuestUno from the WordPress administration panel.
 
 == Frequently Asked Questions ==
 
 = Is the plugin production ready? =
 
-Yes. QRHunt 1.0.0 is the first stable release.
+Yes. QuestUno 1.0.0 is the first stable release.
 
 == Changelog ==
 
 = 1.0.0 =
 
-* First stable release of QRHunt.
+* First stable release of QuestUno.
 
 = 0.1.0 =
 
@@ -69,7 +69,7 @@ Yes. QRHunt 1.0.0 is the first stable release.
 
 = 1.0.0 =
 
-First stable release of QRHunt.
+First stable release of QuestUno.
 
 = 0.1.0 =
 

@@ -2,17 +2,17 @@
 /**
  * Path archiving tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Controller\PathController;
-use QRHunt\PathPostType;
-use QRHunt\Service\ExportService;
+use QuestUno\Controller\PathController;
+use QuestUno\PathPostType;
+use QuestUno\Service\ExportService;
 
 /**
- * Verifies that Path archiving preserves QRHunt history.
+ * Verifies that Path archiving preserves QuestUno history.
  */
 final class PathArchivingTest extends IntegrationTestCase {
 	/**
@@ -83,7 +83,7 @@ final class PathArchivingTest extends IntegrationTestCase {
 	/**
 	 * Gets the persisted Event values relevant to historical integrity.
 	 *
-	 * @param array<int,\QRHunt\Model\Event> $events Events to project.
+	 * @param array<int,\QuestUno\Model\Event> $events Events to project.
 	 * @return array<int,array<string,int|string|null>>
 	 */
 	private function get_event_values( array $events ): array {

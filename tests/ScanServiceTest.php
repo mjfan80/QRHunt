@@ -2,16 +2,16 @@
 /**
  * Scan orchestration tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Model\Dependency;
-use QRHunt\Model\DependencyTargetType;
-use QRHunt\Model\DependencyType;
-use QRHunt\Model\EventResult;
-use QRHunt\Model\ParticipationStatus;
+use QuestUno\Model\Dependency;
+use QuestUno\Model\DependencyTargetType;
+use QuestUno\Model\DependencyType;
+use QuestUno\Model\EventResult;
+use QuestUno\Model\ParticipationStatus;
 
 /**
  * Verifies persisted scan outcomes, Events and Participation status changes.
@@ -38,7 +38,7 @@ final class ScanServiceTest extends IntegrationTestCase {
 		$participation = $services['participation_service']->get_participation_by_user_and_path( $user_id, (int) $path->get_id() );
 
 		self::assertTrue( $result->is_valid() );
-		self::assertInstanceOf( \QRHunt\Model\Participation::class, $participation );
+		self::assertInstanceOf( \QuestUno\Model\Participation::class, $participation );
 		self::assertSame( ParticipationStatus::IN_PROGRESS, $participation->get_status() );
 		self::assertSame( array( (int) $start->get_post_id() ), $services['progress_builder']->build( $participation )->get_validated_checkpoint_ids() );
 		self::assertSame( EventResult::ACCEPTED, $services['event_service']->get_events_by_participation( (int) $participation->get_id() )[0]->get_result() );

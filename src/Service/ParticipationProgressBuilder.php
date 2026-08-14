@@ -2,19 +2,19 @@
 /**
  * Participation progress builder.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Checkpoint;
-use QRHunt\Model\Group;
-use QRHunt\Model\GroupCompletionMode;
-use QRHunt\Model\Participation;
-use QRHunt\Model\ParticipationProgress;
-use QRHunt\Repository\CheckpointRepository;
-use QRHunt\Repository\GroupRepository;
-use QRHunt\Repository\ParticipationCheckpointRepository;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Model\Group;
+use QuestUno\Model\GroupCompletionMode;
+use QuestUno\Model\Participation;
+use QuestUno\Model\ParticipationProgress;
+use QuestUno\Repository\CheckpointRepository;
+use QuestUno\Repository\GroupRepository;
+use QuestUno\Repository\ParticipationCheckpointRepository;
 
 defined( 'ABSPATH' ) || exit;
 

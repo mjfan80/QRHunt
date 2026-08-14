@@ -2,20 +2,20 @@
 /**
  * Dashboard controller.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\CheckpointPostType;
-use QRHunt\Model\EventResult;
-use QRHunt\PathPostType;
-use QRHunt\Service\DashboardService;
+use QuestUno\CheckpointPostType;
+use QuestUno\Model\EventResult;
+use QuestUno\PathPostType;
+use QuestUno\Service\DashboardService;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Handles the QRHunt dashboard page.
+ * Handles the QuestUno dashboard page.
  */
 final class DashboardController {
 
@@ -41,21 +41,21 @@ final class DashboardController {
 		$recent_events = $this->dashboard_service->get_recent_events( 10 );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'QRHunt Dashboard', 'qrhunt' ); ?></h1>
+			<h1><?php esc_html_e( 'QuestUno Dashboard', 'questuno' ); ?></h1>
 
 			<div class="notice notice-info inline">
-				<p><?php esc_html_e( 'Overview of the plugin and the latest recorded scans.', 'qrhunt' ); ?></p>
+				<p><?php esc_html_e( 'Overview of the plugin and the latest recorded scans.', 'questuno' ); ?></p>
 			</div>
 
 			<div class="metabox-holder">
 				<div class="postbox">
-					<h2 class="hndle"><span><?php esc_html_e( 'Summary', 'qrhunt' ); ?></span></h2>
+					<h2 class="hndle"><span><?php esc_html_e( 'Summary', 'questuno' ); ?></span></h2>
 					<div class="inside">
 						<table class="widefat striped">
 							<thead>
 								<tr>
-									<th scope="col"><?php esc_html_e( 'Item', 'qrhunt' ); ?></th>
-									<th scope="col"><?php esc_html_e( 'Count', 'qrhunt' ); ?></th>
+									<th scope="col"><?php esc_html_e( 'Item', 'questuno' ); ?></th>
+									<th scope="col"><?php esc_html_e( 'Count', 'questuno' ); ?></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -71,38 +71,38 @@ final class DashboardController {
 				</div>
 
 				<div class="postbox">
-					<h2 class="hndle"><span><?php esc_html_e( 'Quick actions', 'qrhunt' ); ?></span></h2>
+					<h2 class="hndle"><span><?php esc_html_e( 'Quick actions', 'questuno' ); ?></span></h2>
 					<div class="inside">
 						<p>
 							<a class="button button-primary" href="<?php echo esc_url( admin_url( 'post-new.php?post_type=' . PathPostType::POST_TYPE ) ); ?>">
-								<?php esc_html_e( 'New Path', 'qrhunt' ); ?>
+								<?php esc_html_e( 'New Path', 'questuno' ); ?>
 							</a>
 							<a class="button" href="<?php echo esc_url( admin_url( 'post-new.php?post_type=' . CheckpointPostType::POST_TYPE ) ); ?>">
-								<?php esc_html_e( 'New Checkpoint', 'qrhunt' ); ?>
+								<?php esc_html_e( 'New Checkpoint', 'questuno' ); ?>
 							</a>
 							<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=' . GroupController::PAGE_SLUG ) ); ?>">
-								<?php esc_html_e( 'New Group', 'qrhunt' ); ?>
+								<?php esc_html_e( 'New Group', 'questuno' ); ?>
 							</a>
 						</p>
 					</div>
 				</div>
 
 				<div class="postbox">
-					<h2 class="hndle"><span><?php esc_html_e( 'Latest scans', 'qrhunt' ); ?></span></h2>
+					<h2 class="hndle"><span><?php esc_html_e( 'Latest scans', 'questuno' ); ?></span></h2>
 					<div class="inside">
 						<table class="widefat striped">
 							<thead>
 								<tr>
-									<th scope="col"><?php esc_html_e( 'Date', 'qrhunt' ); ?></th>
-									<th scope="col"><?php esc_html_e( 'Path', 'qrhunt' ); ?></th>
-									<th scope="col"><?php esc_html_e( 'Checkpoint', 'qrhunt' ); ?></th>
-									<th scope="col"><?php esc_html_e( 'Result', 'qrhunt' ); ?></th>
+									<th scope="col"><?php esc_html_e( 'Date', 'questuno' ); ?></th>
+									<th scope="col"><?php esc_html_e( 'Path', 'questuno' ); ?></th>
+									<th scope="col"><?php esc_html_e( 'Checkpoint', 'questuno' ); ?></th>
+									<th scope="col"><?php esc_html_e( 'Result', 'questuno' ); ?></th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php if ( empty( $recent_events ) ) : ?>
 									<tr>
-										<td colspan="4"><?php esc_html_e( 'No scans recorded yet.', 'qrhunt' ); ?></td>
+										<td colspan="4"><?php esc_html_e( 'No scans recorded yet.', 'questuno' ); ?></td>
 									</tr>
 								<?php else : ?>
 									<?php foreach ( $recent_events as $event ) : ?>
@@ -131,12 +131,12 @@ final class DashboardController {
 	 */
 	private function get_event_result_label( string $result ): string {
 		$labels = array(
-			EventResult::ACCEPTED                => __( 'Accepted', 'qrhunt' ),
-			EventResult::DUPLICATE               => __( 'Duplicate', 'qrhunt' ),
-			EventResult::BEFORE_FAILED           => __( 'Before Failed', 'qrhunt' ),
-			EventResult::AFTER_FAILED            => __( 'After Failed', 'qrhunt' ),
-			EventResult::PATH_CLOSED             => __( 'Path Closed', 'qrhunt' ),
-			EventResult::PARTICIPATION_CANCELLED => __( 'Participation Cancelled', 'qrhunt' ),
+			EventResult::ACCEPTED                => __( 'Accepted', 'questuno' ),
+			EventResult::DUPLICATE               => __( 'Duplicate', 'questuno' ),
+			EventResult::BEFORE_FAILED           => __( 'Before Failed', 'questuno' ),
+			EventResult::AFTER_FAILED            => __( 'After Failed', 'questuno' ),
+			EventResult::PATH_CLOSED             => __( 'Path Closed', 'questuno' ),
+			EventResult::PARTICIPATION_CANCELLED => __( 'Participation Cancelled', 'questuno' ),
 		);
 
 		return $labels[ $result ] ?? $result;

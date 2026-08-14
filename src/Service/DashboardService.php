@@ -2,13 +2,13 @@
 /**
  * Dashboard service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Event;
-use QRHunt\Model\EventResult;
+use QuestUno\Model\Event;
+use QuestUno\Model\EventResult;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -63,39 +63,39 @@ final class DashboardService {
 	public function get_summary(): array {
 		return array(
 			array(
-				'label' => __( 'Paths', 'qrhunt' ),
+				'label' => __( 'Paths', 'questuno' ),
 				'value' => $this->path_service->count_paths(),
 			),
 			array(
-				'label' => __( 'Active Paths', 'qrhunt' ),
+				'label' => __( 'Active Paths', 'questuno' ),
 				'value' => $this->path_service->count_active_paths(),
 			),
 			array(
-				'label' => __( 'Checkpoints', 'qrhunt' ),
+				'label' => __( 'Checkpoints', 'questuno' ),
 				'value' => $this->checkpoint_service->count_checkpoints(),
 			),
 			array(
-				'label' => __( 'Groups', 'qrhunt' ),
+				'label' => __( 'Groups', 'questuno' ),
 				'value' => $this->group_service->count_groups(),
 			),
 			array(
-				'label' => __( 'Participations', 'qrhunt' ),
+				'label' => __( 'Participations', 'questuno' ),
 				'value' => $this->participation_service->count_participations(),
 			),
 			array(
-				'label' => __( 'Active Participations', 'qrhunt' ),
+				'label' => __( 'Active Participations', 'questuno' ),
 				'value' => $this->participation_service->count_active_participations(),
 			),
 			array(
-				'label' => __( 'Total scans', 'qrhunt' ),
+				'label' => __( 'Total scans', 'questuno' ),
 				'value' => $this->event_service->count_events(),
 			),
 			array(
-				'label' => __( 'Invalid scans', 'qrhunt' ),
+				'label' => __( 'Invalid scans', 'questuno' ),
 				'value' => $this->event_service->count_events_by_result( EventResult::BEFORE_FAILED ) + $this->event_service->count_events_by_result( EventResult::AFTER_FAILED ),
 			),
 			array(
-				'label' => __( 'Duplicate scans', 'qrhunt' ),
+				'label' => __( 'Duplicate scans', 'questuno' ),
 				'value' => $this->event_service->count_events_by_result( EventResult::DUPLICATE ),
 			),
 		);

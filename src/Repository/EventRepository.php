@@ -2,12 +2,12 @@
 /**
  * Event repository.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Repository;
+namespace QuestUno\Repository;
 
-use QRHunt\Model\Event;
+use QuestUno\Model\Event;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,7 +29,7 @@ final class EventRepository {
 	 */
 	public function __construct( \wpdb $wpdb ) {
 		$this->wpdb       = $wpdb;
-		$this->table_name = $wpdb->prefix . 'qrhunt_events';
+		$this->table_name = $wpdb->prefix . 'questuno_events';
 	}
 
 	/**
@@ -60,7 +60,7 @@ final class EventRepository {
 	 * @return array<int, Event>
 	 */
 	public function find_recent( int $limit ): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_events suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_events suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, participation_id, checkpoint_id, event_type, result, ip_address, user_agent, created_at FROM {$this->table_name} ORDER BY created_at DESC, id DESC LIMIT %d",
 			$limit
@@ -79,7 +79,7 @@ final class EventRepository {
 	 * @return array<int, Event>
 	 */
 	public function find_by_participation( int $participation_id ): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_events suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_events suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, participation_id, checkpoint_id, event_type, result, ip_address, user_agent, created_at FROM {$this->table_name} WHERE participation_id = %d ORDER BY created_at DESC, id DESC",
 			$participation_id
@@ -98,7 +98,7 @@ final class EventRepository {
 	 * @return int
 	 */
 	public function count_all(): int {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_events suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_events suffix.
 		$count = $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name}" );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
@@ -112,7 +112,7 @@ final class EventRepository {
 	 * @return int
 	 */
 	public function count_by_result( string $result ): int {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_events suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_events suffix.
 		$sql = $this->wpdb->prepare( "SELECT COUNT(*) FROM {$this->table_name} WHERE result = %s", $result );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().
@@ -168,8 +168,8 @@ final class EventRepository {
 
 		$where_sql = empty( $where ) ? '' : ' WHERE ' . implode( ' AND ', $where );
 
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names contain only the WordPress database prefix and fixed QRHunt suffixes; WHERE fragments are fixed strings selected above.
-		$sql = "SELECT e.id, e.participation_id, e.checkpoint_id, e.event_type, e.result, e.ip_address, e.user_agent, e.created_at FROM {$this->table_name} e INNER JOIN {$this->wpdb->prefix}qrhunt_participations p ON p.id = e.participation_id{$where_sql} ORDER BY e.created_at DESC, e.id DESC";
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names contain only the WordPress database prefix and fixed QuestUno suffixes; WHERE fragments are fixed strings selected above.
+		$sql = "SELECT e.id, e.participation_id, e.checkpoint_id, e.event_type, e.result, e.ip_address, e.user_agent, e.created_at FROM {$this->table_name} e INNER JOIN {$this->wpdb->prefix}questuno_participations p ON p.id = e.participation_id{$where_sql} ORDER BY e.created_at DESC, e.id DESC";
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		if ( ! empty( $values ) ) {

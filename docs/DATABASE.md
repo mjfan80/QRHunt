@@ -1,6 +1,6 @@
-# QRHunt – Database Design
+# QuestUno – Database Design
 
-**Project:** QRHunt
+**Project:** QuestUno
 
 **Document Version:** 0.2 (Draft)
 
@@ -10,7 +10,7 @@
 
 # 1. Obiettivi
 
-Il database di QRHunt deve essere:
+Il database di QuestUno deve essere:
 
 - semplice;
 - normalizzato;
@@ -37,7 +37,7 @@ Il database segue i seguenti principi.
 
 # 3. Entità
 
-QRHunt utilizza le seguenti entità.
+QuestUno utilizza le seguenti entità.
 
 - Utente (WordPress)
 - Percorso
@@ -55,7 +55,7 @@ QRHunt utilizza le seguenti entità.
 
 Gli utenti sono quelli nativi dell'installazione WordPress.
 
-QRHunt non implementa alcun sistema di autenticazione.
+QuestUno non implementa alcun sistema di autenticazione.
 
 Utilizza esclusivamente gli utenti presenti nelle tabelle:
 
@@ -78,7 +78,7 @@ WordPress gestisce automaticamente:
 - permalink;
 - API REST native di WordPress per la gestione editoriale del CPT.
 
-QRHunt aggiunge esclusivamente la logica di gioco.
+QuestUno aggiunge esclusivamente la logica di gioco.
 
 ---
 
@@ -87,19 +87,19 @@ QRHunt aggiunge esclusivamente la logica di gioco.
 La versione 1.0 prevede le seguenti tabelle.
 
 ```
-wp_qrhunt_paths
+wp_questuno_paths
 
-wp_qrhunt_checkpoints
+wp_questuno_checkpoints
 
-wp_qrhunt_checkpoint_groups
+wp_questuno_checkpoint_groups
 
-wp_qrhunt_dependencies
+wp_questuno_dependencies
 
-wp_qrhunt_participations
+wp_questuno_participations
 
-wp_qrhunt_participation_checkpoints
+wp_questuno_participation_checkpoints
 
-wp_qrhunt_events
+wp_questuno_events
 ```
 
 ---
@@ -168,7 +168,7 @@ L'URL pubblico utilizza esclusivamente il token.
 Esempio
 
 ```
-https://example.com/qrhunt/T6GJ5Q9ZP4M8N2
+https://example.com/questuno/T6GJ5Q9ZP4M8N2
 ```
 
 Il token viene utilizzato esclusivamente come identificativo pubblico del Checkpoint.
@@ -284,7 +284,7 @@ Le richieste che terminano durante le verifiche preliminari non generano Eventi.
 
 ## Progressione della Partecipazione
 
-La tabella `wp_qrhunt_participation_checkpoints` registra i Checkpoint accettati per ciascuna Participation. Rappresenta lo stato corrente della progressione; gli Event rimangono lo storico immutabile delle scansioni.
+La tabella `wp_questuno_participation_checkpoints` registra i Checkpoint accettati per ciascuna Participation. Rappresenta lo stato corrente della progressione; gli Event rimangono lo storico immutabile delle scansioni.
 
 ---
 

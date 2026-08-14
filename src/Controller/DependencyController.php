@@ -2,15 +2,15 @@
 /**
  * Dependency controller.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\Model\Dependency;
-use QRHunt\Service\CheckpointService;
-use QRHunt\Service\DependencyService;
-use QRHunt\Service\GroupService;
+use QuestUno\Model\Dependency;
+use QuestUno\Service\CheckpointService;
+use QuestUno\Service\DependencyService;
+use QuestUno\Service\GroupService;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -71,118 +71,20 @@ final class DependencyController {
 			$available_group_ids[ $group->get_id() ] = true;
 		}
 		?>
-		<div class="qrhunt-dependencies">
-			<p><strong><?php esc_html_e( 'Dependencies', 'qrhunt' ); ?></strong></p>
-			<div id="qrhunt-dependency-rows">
+		<div class="questuno-dependencies">
+			<p><strong><?php esc_html_e( 'Dependencies', 'questuno' ); ?></strong></p>
+			<div id="questuno-dependency-rows">
 				<?php foreach ( $dependencies as $index => $dependency ) : ?>
 					<?php $this->render_row( $index, $dependency, $checkpoints, $groups, $available_checkpoint_ids, $available_group_ids, $checkpoint_titles, $current_checkpoint_id ); ?>
 				<?php endforeach; ?>
 			</div>
 			<p>
-				<button type="button" class="button" id="qrhunt-add-dependency"><?php esc_html_e( 'Add Dependency', 'qrhunt' ); ?></button>
+				<button type="button" class="button" id="questuno-add-dependency"><?php esc_html_e( 'Add Dependency', 'questuno' ); ?></button>
 			</p>
 		</div>
-		<script type="text/html" id="tmpl-qrhunt-dependency-row">
+		<template id="tmpl-questuno-dependency-row">
 			<?php $this->render_row( '__index__', null, $checkpoints, $groups, $available_checkpoint_ids, $available_group_ids, $checkpoint_titles, $current_checkpoint_id ); ?>
-		</script>
-		<script>
-			(function() {
-				const pathField = document.getElementById( 'qrhunt-path-id' );
-				const dependencyRows = document.getElementById( 'qrhunt-dependency-rows' );
-				const addDependencyButton = document.getElementById( 'qrhunt-add-dependency' );
-				const dependencyTemplate = document.getElementById( 'tmpl-qrhunt-dependency-row' );
-
-				if ( ! pathField || ! dependencyRows || ! addDependencyButton || ! dependencyTemplate ) {
-					return;
-				}
-
-				const syncRow = function(row) {
-					const targetTypeField = row.querySelector( '.qrhunt-dependency-target-type' );
-					const checkpointSelect = row.querySelector( '.qrhunt-dependency-checkpoint' );
-					const groupSelect = row.querySelector( '.qrhunt-dependency-group' );
-					const selectedPathId = pathField.value;
-					let hasSelectedCheckpoint = false;
-					let hasSelectedGroup = false;
-
-					Array.from( checkpointSelect.options ).forEach( function( option, index ) {
-						if ( 0 === index ) {
-							return;
-						}
-
-						const matchesPath = option.dataset.pathId === selectedPathId;
-
-						option.hidden = ! matchesPath;
-						option.disabled = ! matchesPath;
-
-						if ( matchesPath && option.selected ) {
-							hasSelectedCheckpoint = true;
-						}
-					} );
-
-					if ( ! hasSelectedCheckpoint ) {
-						checkpointSelect.value = '0';
-					}
-
-					Array.from( groupSelect.options ).forEach( function( option, index ) {
-						if ( 0 === index ) {
-							return;
-						}
-
-						const matchesPath = option.dataset.pathId === selectedPathId;
-
-						option.hidden = ! matchesPath;
-						option.disabled = ! matchesPath;
-
-						if ( matchesPath && option.selected ) {
-							hasSelectedGroup = true;
-						}
-					} );
-
-					if ( ! hasSelectedGroup ) {
-						groupSelect.value = '0';
-					}
-
-					checkpointSelect.style.display = 'checkpoint' === targetTypeField.value ? '' : 'none';
-					groupSelect.style.display = 'group' === targetTypeField.value ? '' : 'none';
-				};
-
-				const bindRow = function(row) {
-					const targetTypeField = row.querySelector( '.qrhunt-dependency-target-type' );
-					const removeButton = row.querySelector( '.qrhunt-remove-dependency' );
-
-					targetTypeField.addEventListener( 'change', function() {
-						syncRow( row );
-					} );
-
-					removeButton.addEventListener( 'click', function() {
-						row.remove();
-					} );
-
-					syncRow( row );
-				};
-
-				const syncRows = function() {
-					Array.from( dependencyRows.querySelectorAll( '.qrhunt-dependency-row' ) ).forEach( function(row) {
-						syncRow( row );
-					} );
-				};
-
-				Array.from( dependencyRows.querySelectorAll( '.qrhunt-dependency-row' ) ).forEach( function(row) {
-					bindRow( row );
-				} );
-
-				addDependencyButton.addEventListener( 'click', function() {
-					const index = dependencyRows.querySelectorAll( '.qrhunt-dependency-row' ).length;
-					const html = dependencyTemplate.innerHTML.replaceAll( '__index__', index );
-
-					dependencyRows.insertAdjacentHTML( 'beforeend', html );
-					bindRow( dependencyRows.lastElementChild );
-				} );
-
-				pathField.addEventListener( 'change', syncRows );
-				syncRows();
-			}() );
-		</script>
+		</template>
 		<?php
 	}
 
@@ -201,8 +103,8 @@ final class DependencyController {
 	 *
 	 * @param int|string                 $index                    Row index.
 	 * @param Dependency|null            $dependency               Dependency model.
-	 * @param array<int, \QRHunt\Model\Checkpoint> $checkpoints   Available checkpoints.
-	 * @param array<int, \QRHunt\Model\Group>      $groups        Available groups.
+	 * @param array<int, \QuestUno\Model\Checkpoint> $checkpoints   Available checkpoints.
+	 * @param array<int, \QuestUno\Model\Group>      $groups        Available groups.
 	 * @param array<int, bool>           $available_checkpoint_ids Checkpoints available for the selected path.
 	 * @param array<int, bool>           $available_group_ids      Groups available for the selected path.
 	 * @param array<int, string>         $checkpoint_titles        Checkpoint titles indexed by post ID.
@@ -214,17 +116,17 @@ final class DependencyController {
 		$target_type = null === $dependency || null === $dependency->get_target_type() ? 'checkpoint' : $dependency->get_target_type();
 		$target_id   = null === $dependency || null === $dependency->get_target_id() ? 0 : (int) $dependency->get_target_id();
 		?>
-		<div class="qrhunt-dependency-row" style="margin-bottom:12px;">
-			<select name="qrhunt_dependency_type[<?php echo esc_attr( (string) $index ); ?>]">
-				<option value="before" <?php selected( $type, 'before' ); ?>><?php esc_html_e( 'BEFORE', 'qrhunt' ); ?></option>
-				<option value="after" <?php selected( $type, 'after' ); ?>><?php esc_html_e( 'AFTER', 'qrhunt' ); ?></option>
+		<div class="questuno-dependency-row">
+			<select name="questuno_dependency_type[<?php echo esc_attr( (string) $index ); ?>]">
+				<option value="before" <?php selected( $type, 'before' ); ?>><?php esc_html_e( 'BEFORE', 'questuno' ); ?></option>
+				<option value="after" <?php selected( $type, 'after' ); ?>><?php esc_html_e( 'AFTER', 'questuno' ); ?></option>
 			</select>
-			<select name="qrhunt_dependency_target_type[<?php echo esc_attr( (string) $index ); ?>]" class="qrhunt-dependency-target-type">
-				<option value="checkpoint" <?php selected( $target_type, 'checkpoint' ); ?>><?php esc_html_e( 'Checkpoint', 'qrhunt' ); ?></option>
-				<option value="group" <?php selected( $target_type, 'group' ); ?>><?php esc_html_e( 'Group', 'qrhunt' ); ?></option>
+			<select name="questuno_dependency_target_type[<?php echo esc_attr( (string) $index ); ?>]" class="questuno-dependency-target-type">
+				<option value="checkpoint" <?php selected( $target_type, 'checkpoint' ); ?>><?php esc_html_e( 'Checkpoint', 'questuno' ); ?></option>
+				<option value="group" <?php selected( $target_type, 'group' ); ?>><?php esc_html_e( 'Group', 'questuno' ); ?></option>
 			</select>
-			<select name="qrhunt_dependency_checkpoint_id[<?php echo esc_attr( (string) $index ); ?>]" class="qrhunt-dependency-checkpoint">
-				<option value="0"><?php esc_html_e( 'Select a Checkpoint', 'qrhunt' ); ?></option>
+			<select name="questuno_dependency_checkpoint_id[<?php echo esc_attr( (string) $index ); ?>]" class="questuno-dependency-checkpoint">
+				<option value="0"><?php esc_html_e( 'Select a Checkpoint', 'questuno' ); ?></option>
 				<?php foreach ( $checkpoints as $checkpoint ) : ?>
 					<?php $checkpoint_id = $checkpoint->get_post_id(); ?>
 					<?php if ( $current_checkpoint_id === $checkpoint_id ) : ?>
@@ -242,8 +144,8 @@ final class DependencyController {
 					</option>
 				<?php endforeach; ?>
 			</select>
-			<select name="qrhunt_dependency_group_id[<?php echo esc_attr( (string) $index ); ?>]" class="qrhunt-dependency-group">
-				<option value="0"><?php esc_html_e( 'Select a Group', 'qrhunt' ); ?></option>
+			<select name="questuno_dependency_group_id[<?php echo esc_attr( (string) $index ); ?>]" class="questuno-dependency-group">
+				<option value="0"><?php esc_html_e( 'Select a Group', 'questuno' ); ?></option>
 				<?php foreach ( $groups as $group ) : ?>
 					<?php $is_available = isset( $available_group_ids[ $group->get_id() ] ); ?>
 					<option
@@ -257,7 +159,7 @@ final class DependencyController {
 					</option>
 				<?php endforeach; ?>
 			</select>
-			<button type="button" class="button-link-delete qrhunt-remove-dependency"><?php esc_html_e( 'Delete', 'qrhunt' ); ?></button>
+			<button type="button" class="button-link-delete questuno-remove-dependency"><?php esc_html_e( 'Delete', 'questuno' ); ?></button>
 		</div>
 		<?php
 	}
@@ -270,10 +172,10 @@ final class DependencyController {
 	 */
 	private function parse_request( int $checkpoint_id ): array {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce is verified in CheckpointController::save() before delegating the Dependency parsing.
-		$types          = isset( $_POST['qrhunt_dependency_type'] ) ? array_map( 'sanitize_key', (array) wp_unslash( $_POST['qrhunt_dependency_type'] ) ) : array();
-		$target_types   = isset( $_POST['qrhunt_dependency_target_type'] ) ? array_map( 'sanitize_key', (array) wp_unslash( $_POST['qrhunt_dependency_target_type'] ) ) : array();
-		$checkpoint_ids = isset( $_POST['qrhunt_dependency_checkpoint_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['qrhunt_dependency_checkpoint_id'] ) ) : array();
-		$group_ids      = isset( $_POST['qrhunt_dependency_group_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['qrhunt_dependency_group_id'] ) ) : array();
+		$types          = isset( $_POST['questuno_dependency_type'] ) ? array_map( 'sanitize_key', (array) wp_unslash( $_POST['questuno_dependency_type'] ) ) : array();
+		$target_types   = isset( $_POST['questuno_dependency_target_type'] ) ? array_map( 'sanitize_key', (array) wp_unslash( $_POST['questuno_dependency_target_type'] ) ) : array();
+		$checkpoint_ids = isset( $_POST['questuno_dependency_checkpoint_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['questuno_dependency_checkpoint_id'] ) ) : array();
+		$group_ids      = isset( $_POST['questuno_dependency_group_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['questuno_dependency_group_id'] ) ) : array();
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		$dependencies   = array();
 		$row_indexes    = array_unique( array_merge( array_keys( $types ), array_keys( $target_types ), array_keys( $checkpoint_ids ), array_keys( $group_ids ) ) );
@@ -307,7 +209,7 @@ final class DependencyController {
 	/**
 	 * Builds Checkpoint titles indexed by post ID.
 	 *
-	 * @param array<int, \QRHunt\Model\Checkpoint> $checkpoints Checkpoints.
+	 * @param array<int, \QuestUno\Model\Checkpoint> $checkpoints Checkpoints.
 	 * @return array<int, string>
 	 */
 	private function get_checkpoint_titles( array $checkpoints ): array {

@@ -1,4 +1,4 @@
-# QRHunt – Software Architecture
+# QuestUno – Software Architecture
 
 **Versione:** 0.1 (Draft)
 
@@ -6,7 +6,7 @@
 
 # 1. Obiettivi
 
-L'architettura di QRHunt deve essere:
+L'architettura di QuestUno deve essere:
 
 - semplice;
 - modulare;
@@ -20,7 +20,7 @@ Ogni componente deve avere una singola responsabilità.
 
 # 2. Principi architetturali
 
-QRHunt utilizza esclusivamente le API ufficiali di WordPress.
+QuestUno utilizza esclusivamente le API ufficiali di WordPress.
 
 Il plugin non sostituisce funzionalità già offerte dalla piattaforma.
 
@@ -36,9 +36,9 @@ WordPress rimane responsabile della gestione di:
 - traduzioni;
 - amministrazione.
 
-QRHunt utilizza il locale nativo del sito o dell'utente WordPress. Non definisce una preferenza di lingua proprietaria. La versione 1.0 distribuisce l'inglese come lingua sorgente e include la traduzione italiana.
+QuestUno utilizza il locale nativo del sito o dell'utente WordPress. Non definisce una preferenza di lingua proprietaria. La versione 1.0 distribuisce l'inglese come lingua sorgente e include la traduzione italiana.
 
-QRHunt implementa esclusivamente la logica del gioco.
+QuestUno implementa esclusivamente la logica del gioco.
 
 ---
 

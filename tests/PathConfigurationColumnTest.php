@@ -2,12 +2,12 @@
 /**
  * Path configuration list column tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Controller\PathController;
+use QuestUno\Controller\PathController;
 
 /**
  * Verifies Path configuration summaries in the administration list.
@@ -29,11 +29,11 @@ final class PathConfigurationColumnTest extends IntegrationTestCase {
 		$active_path = $this->create_path();
 
 		ob_start();
-		$controller->render_list_column( 'qrhunt_configuration', (int) $draft_path->get_post_id() );
+		$controller->render_list_column( 'questuno_configuration', (int) $draft_path->get_post_id() );
 		$draft_output = (string) ob_get_clean();
 
 		ob_start();
-		$controller->render_list_column( 'qrhunt_configuration', (int) $active_path->get_post_id() );
+		$controller->render_list_column( 'questuno_configuration', (int) $active_path->get_post_id() );
 		$active_output = (string) ob_get_clean();
 
 		self::assertSame( '', $draft_output );
@@ -56,7 +56,7 @@ final class PathConfigurationColumnTest extends IntegrationTestCase {
 		$checkpoint = $this->create_checkpoint( (int) $path->get_id() );
 
 		ob_start();
-		$controller->render_list_column( 'qrhunt_configuration', (int) $path->get_post_id() );
+		$controller->render_list_column( 'questuno_configuration', (int) $path->get_post_id() );
 		$output = (string) ob_get_clean();
 
 		self::assertStringContainsString( '✕ 2 errors', $output );
@@ -85,7 +85,7 @@ final class PathConfigurationColumnTest extends IntegrationTestCase {
 		$services['path_service']->save_path( $path );
 
 		ob_start();
-		$controller->render_list_column( 'qrhunt_configuration', (int) $path->get_post_id() );
+		$controller->render_list_column( 'questuno_configuration', (int) $path->get_post_id() );
 		$output = (string) ob_get_clean();
 
 		self::assertStringContainsString( '⚠ 1 warning', $output );
@@ -114,7 +114,7 @@ final class PathConfigurationColumnTest extends IntegrationTestCase {
 		$services['path_service']->save_path( $path );
 
 		ob_start();
-		$controller->render_list_column( 'qrhunt_configuration', (int) $path->get_post_id() );
+		$controller->render_list_column( 'questuno_configuration', (int) $path->get_post_id() );
 		$output = (string) ob_get_clean();
 
 		self::assertStringContainsString( '✓ OK', $output );

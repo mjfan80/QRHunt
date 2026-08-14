@@ -2,10 +2,10 @@
 /**
  * Path custom post type registration.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt;
+namespace QuestUno;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,9 +14,9 @@ defined( 'ABSPATH' ) || exit;
  */
 final class PathPostType {
 
-	public const POST_TYPE = 'qrhunt_path';
+	public const POST_TYPE = 'questuno_path';
 
-	public const ARCHIVED_STATUS = 'qrhunt_archived';
+	public const ARCHIVED_STATUS = 'questuno_archived';
 
 	/**
 	 * Registers the Path custom post type.
@@ -27,7 +27,7 @@ final class PathPostType {
 		register_post_status(
 			self::ARCHIVED_STATUS,
 			array(
-				'label'                     => _x( 'Archived', 'Path post status', 'qrhunt' ),
+				'label'                     => _x( 'Archived', 'Path post status', 'questuno' ),
 				'public'                    => false,
 				'internal'                  => false,
 				'protected'                 => true,
@@ -39,7 +39,7 @@ final class PathPostType {
 					_n_noop(
 					'Archived <span class="count">(%s)</span>',
 					'Archived <span class="count">(%s)</span>',
-					'qrhunt'
+					'questuno'
 				),
 			)
 		);
@@ -71,22 +71,22 @@ final class PathPostType {
 	 */
 	private function get_labels(): array {
 		return array(
-			'name'                  => _x( 'Paths', 'Post type general name', 'qrhunt' ),
-			'singular_name'         => _x( 'Path', 'Post type singular name', 'qrhunt' ),
-			'menu_name'             => _x( 'Paths', 'Admin Menu text', 'qrhunt' ),
-			'name_admin_bar'        => _x( 'Path', 'Add New on Toolbar', 'qrhunt' ),
-			'add_new'               => __( 'Add New', 'qrhunt' ),
-			'add_new_item'          => __( 'Add New Path', 'qrhunt' ),
-			'new_item'              => __( 'New Path', 'qrhunt' ),
-			'edit_item'             => __( 'Edit Path', 'qrhunt' ),
-			'view_item'             => __( 'View Path', 'qrhunt' ),
-			'all_items'             => __( 'All Paths', 'qrhunt' ),
-			'search_items'          => __( 'Search Paths', 'qrhunt' ),
-			'not_found'             => __( 'No paths found.', 'qrhunt' ),
-			'not_found_in_trash'    => __( 'No paths found in Trash.', 'qrhunt' ),
-			'filter_items_list'     => __( 'Filter paths list', 'qrhunt' ),
-			'items_list_navigation' => __( 'Paths list navigation', 'qrhunt' ),
-			'items_list'            => __( 'Paths list', 'qrhunt' ),
+			'name'                  => _x( 'Paths', 'Post type general name', 'questuno' ),
+			'singular_name'         => _x( 'Path', 'Post type singular name', 'questuno' ),
+			'menu_name'             => _x( 'Paths', 'Admin Menu text', 'questuno' ),
+			'name_admin_bar'        => _x( 'Path', 'Add New on Toolbar', 'questuno' ),
+			'add_new'               => __( 'Add New', 'questuno' ),
+			'add_new_item'          => __( 'Add New Path', 'questuno' ),
+			'new_item'              => __( 'New Path', 'questuno' ),
+			'edit_item'             => __( 'Edit Path', 'questuno' ),
+			'view_item'             => __( 'View Path', 'questuno' ),
+			'all_items'             => __( 'All Paths', 'questuno' ),
+			'search_items'          => __( 'Search Paths', 'questuno' ),
+			'not_found'             => __( 'No paths found.', 'questuno' ),
+			'not_found_in_trash'    => __( 'No paths found in Trash.', 'questuno' ),
+			'filter_items_list'     => __( 'Filter paths list', 'questuno' ),
+			'items_list_navigation' => __( 'Paths list navigation', 'questuno' ),
+			'items_list'            => __( 'Paths list', 'questuno' ),
 		);
 	}
 }

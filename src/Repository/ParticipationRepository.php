@@ -2,13 +2,13 @@
 /**
  * Participation repository.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Repository;
+namespace QuestUno\Repository;
 
-use QRHunt\Model\Participation;
-use QRHunt\Model\ParticipationStatus;
+use QuestUno\Model\Participation;
+use QuestUno\Model\ParticipationStatus;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -30,7 +30,7 @@ final class ParticipationRepository {
 	 */
 	public function __construct( \wpdb $wpdb ) {
 		$this->wpdb       = $wpdb;
-		$this->table_name = $wpdb->prefix . 'qrhunt_participations';
+		$this->table_name = $wpdb->prefix . 'questuno_participations';
 	}
 
 	/**
@@ -39,7 +39,7 @@ final class ParticipationRepository {
 	 * @return array<int, Participation>
 	 */
 	public function find_all(): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_participations suffix.
 		$rows = $this->wpdb->get_results(
 			"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} ORDER BY id ASC",
 			ARRAY_A
@@ -58,7 +58,7 @@ final class ParticipationRepository {
 	 * @return array<int, Participation>
 	 */
 	public function find_by_filters( int $path_id, int $user_id, string $status ): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_participations suffix.
 		if ( 0 !== $path_id && 0 !== $user_id && '' !== $status ) {
 			$sql  = $this->wpdb->prepare(
 				"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE path_id = %d AND user_id = %d AND status = %s ORDER BY updated_at DESC, id DESC",
@@ -157,7 +157,7 @@ final class ParticipationRepository {
 	 * @return Participation|null
 	 */
 	public function find_by_id( int $id ): ?Participation {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_participations suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE id = %d",
 			$id
@@ -183,7 +183,7 @@ final class ParticipationRepository {
 	 * @return Participation|null
 	 */
 	public function find_by_user_and_path( int $user_id, int $path_id ): ?Participation {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_participations suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE user_id = %d AND path_id = %d",
 			$user_id,
@@ -209,7 +209,7 @@ final class ParticipationRepository {
 	 * @return array<int, Participation>
 	 */
 	public function find_by_user( int $user_id ): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_participations suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, user_id, path_id, status, started_at, finished_at, cancelled_at, created_at, updated_at FROM {$this->table_name} WHERE user_id = %d ORDER BY updated_at DESC, id DESC",
 			$user_id
@@ -228,7 +228,7 @@ final class ParticipationRepository {
 	 * @return int
 	 */
 	public function count_all(): int {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_participations suffix.
 		$count = $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name}" );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
@@ -242,7 +242,7 @@ final class ParticipationRepository {
 	 * @return int
 	 */
 	public function count_by_status( string $status ): int {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_participations suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_participations suffix.
 		$sql = $this->wpdb->prepare( "SELECT COUNT(*) FROM {$this->table_name} WHERE status = %s", $status );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is prepared immediately above with $wpdb->prepare().

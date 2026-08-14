@@ -2,10 +2,10 @@
 /**
  * Privacy settings service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 final class PrivacyService {
 
 	/** @var string */
-	public const OPTION_NAME = 'qrhunt_privacy_settings';
+	public const OPTION_NAME = 'questuno_privacy_settings';
 
 	/**
 	 * Determines whether IP address recording is enabled.

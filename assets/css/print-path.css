@@ -1,0 +1,62 @@
+@page {
+	size: A4 portrait;
+	margin: 12mm;
+}
+
+body {
+	margin: 0;
+	color: #111;
+	font-family: Arial, sans-serif;
+}
+
+.questuno-print-wrap {
+	padding: 0;
+}
+
+.questuno-print-title {
+	margin: 0 0 10mm;
+	font-size: 24px;
+	text-align: center;
+}
+
+.questuno-print-grid {
+	display: grid;
+	grid-template-columns: repeat( 2, 1fr );
+	gap: 10mm;
+}
+
+.questuno-print-card {
+	break-inside: avoid;
+	border: 1px solid #dcdcde;
+	padding: 8mm;
+	text-align: center;
+	page-break-inside: avoid;
+}
+
+.questuno-print-card svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	margin: 0 auto 6mm;
+}
+
+.questuno-print-name {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+@media screen {
+	body {
+		padding: 20px;
+		background: #f0f0f1;
+	}
+
+	.questuno-print-wrap {
+		min-height: 297mm;
+		max-width: 210mm;
+		margin: 0 auto;
+		padding: 12mm;
+		background: #fff;
+		box-shadow: 0 1px 4px rgba( 0, 0, 0, 0.1 );
+	}
+}

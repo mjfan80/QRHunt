@@ -2,10 +2,10 @@
 /**
  * Path model.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Model;
+namespace QuestUno\Model;
 
 defined( 'ABSPATH' ) || exit;
 

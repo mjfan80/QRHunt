@@ -2,14 +2,14 @@
 /**
  * Path statistics controller.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\PathPostType;
-use QRHunt\Service\ExportService;
-use QRHunt\Service\PathService;
+use QuestUno\PathPostType;
+use QuestUno\Service\ExportService;
+use QuestUno\Service\PathService;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -43,10 +43,10 @@ final class PathStatisticsController {
 	public function register_page(): void {
 		add_submenu_page(
 			null,
-			__( 'Path Statistics', 'qrhunt' ),
-			__( 'Path Statistics', 'qrhunt' ),
+			__( 'Path Statistics', 'questuno' ),
+			__( 'Path Statistics', 'questuno' ),
 			'edit_posts',
-			'qrhunt-path-statistics',
+			'questuno-path-statistics',
 			array( $this, 'render_page' )
 		);
 	}
@@ -63,17 +63,17 @@ final class PathStatisticsController {
 		?>
 		<div class="wrap">
 			<?php if ( null === $path ) : ?>
-				<h1><?php esc_html_e( 'Path Statistics', 'qrhunt' ); ?></h1>
-				<div class="notice notice-error"><p><?php esc_html_e( 'The requested Path could not be found.', 'qrhunt' ); ?></p></div>
+				<h1><?php esc_html_e( 'Path Statistics', 'questuno' ); ?></h1>
+				<div class="notice notice-error"><p><?php esc_html_e( 'The requested Path could not be found.', 'questuno' ); ?></p></div>
 				<?php return; ?>
 			<?php endif; ?>
 
 			<?php /* translators: %s: Path name. */ ?>
-			<h1><?php echo esc_html( sprintf( __( 'Path Statistics: %s', 'qrhunt' ), $path->get_name() ) ); ?></h1>
-			<p><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . PathPostType::POST_TYPE ) ); ?>"><?php esc_html_e( 'Back to Paths', 'qrhunt' ); ?></a></p>
+			<h1><?php echo esc_html( sprintf( __( 'Path Statistics: %s', 'questuno' ), $path->get_name() ) ); ?></h1>
+			<p><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . PathPostType::POST_TYPE ) ); ?>"><?php esc_html_e( 'Back to Paths', 'questuno' ); ?></a></p>
 			<?php $statistics = $this->export_service->get_path_statistics( $path_id ); ?>
 			<table class="widefat striped">
-				<thead><tr><th scope="col"><?php esc_html_e( 'Metric', 'qrhunt' ); ?></th><th scope="col"><?php esc_html_e( 'Count', 'qrhunt' ); ?></th></tr></thead>
+				<thead><tr><th scope="col"><?php esc_html_e( 'Metric', 'questuno' ); ?></th><th scope="col"><?php esc_html_e( 'Count', 'questuno' ); ?></th></tr></thead>
 				<tbody>
 					<?php foreach ( $this->get_metric_labels() as $key => $label ) : ?>
 						<tr><td><?php echo esc_html( $label ); ?></td><td><?php echo esc_html( (string) ( $statistics[ $key ] ?? 0 ) ); ?></td></tr>
@@ -91,15 +91,15 @@ final class PathStatisticsController {
 	 */
 	private function get_metric_labels(): array {
 		return array(
-			'participations_total'       => __( 'Participations', 'qrhunt' ),
-			'participations_in_progress' => __( 'Participations in progress', 'qrhunt' ),
-			'participations_finished'    => __( 'Participations finished', 'qrhunt' ),
-			'participations_completed'   => __( 'Participations completed', 'qrhunt' ),
-			'participations_cancelled'   => __( 'Participations cancelled', 'qrhunt' ),
-			'events_total'               => __( 'Total scans', 'qrhunt' ),
-			'events_accepted'            => __( 'Accepted scans', 'qrhunt' ),
-			'events_duplicate'           => __( 'Duplicate scans', 'qrhunt' ),
-			'events_invalid'             => __( 'Invalid scans', 'qrhunt' ),
+			'participations_total'       => __( 'Participations', 'questuno' ),
+			'participations_in_progress' => __( 'Participations in progress', 'questuno' ),
+			'participations_finished'    => __( 'Participations finished', 'questuno' ),
+			'participations_completed'   => __( 'Participations completed', 'questuno' ),
+			'participations_cancelled'   => __( 'Participations cancelled', 'questuno' ),
+			'events_total'               => __( 'Total scans', 'questuno' ),
+			'events_accepted'            => __( 'Accepted scans', 'questuno' ),
+			'events_duplicate'           => __( 'Duplicate scans', 'questuno' ),
+			'events_invalid'             => __( 'Invalid scans', 'questuno' ),
 		);
 	}
 }

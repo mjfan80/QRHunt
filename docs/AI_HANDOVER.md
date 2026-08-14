@@ -6,7 +6,7 @@
 
 # Stato del progetto
 
-QRHunt è un plugin WordPress per la gestione di percorsi basati su QR Code.
+QuestUno è un plugin WordPress per la gestione di percorsi basati su QR Code.
 
 Il progetto segue un'architettura Repository / Service.
 
@@ -83,7 +83,7 @@ Ogni QR contiene esclusivamente un URL pubblico.
 Formato:
 
 ```
-https://<dominio>/qrhunt/checkpoint/<token>
+https://<dominio>/questuno/checkpoint/<token>
 ```
 
 Il dominio viene costruito tramite `home_url()`.

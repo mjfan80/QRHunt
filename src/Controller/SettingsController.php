@@ -2,25 +2,25 @@
 /**
  * Settings controller.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\Service\PrivacyService;
+use QuestUno\Service\PrivacyService;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Renders and registers QRHunt settings.
+ * Renders and registers QuestUno settings.
  */
 final class SettingsController {
 
 	/** @var string */
-	public const PAGE_SLUG = 'qrhunt-settings';
+	public const PAGE_SLUG = 'questuno-settings';
 
 	/** @var string */
-	public const CSV_SEPARATOR_OPTION_NAME = 'qrhunt_csv_separator';
+	public const CSV_SEPARATOR_OPTION_NAME = 'questuno_csv_separator';
 
 	/**
 	 * Registers the settings page.
@@ -29,9 +29,9 @@ final class SettingsController {
 	 */
 	public function register_page(): void {
 		add_submenu_page(
-			'qrhunt',
-			__( 'Settings', 'qrhunt' ),
-			__( 'Settings', 'qrhunt' ),
+			'questuno',
+			__( 'Settings', 'questuno' ),
+			__( 'Settings', 'questuno' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			array( $this, 'render_page' )
@@ -45,7 +45,7 @@ final class SettingsController {
 	 */
 	public function register_settings(): void {
 		register_setting(
-			'qrhunt_settings',
+			'questuno_settings',
 			self::CSV_SEPARATOR_OPTION_NAME,
 			array(
 				'type'              => 'string',
@@ -55,7 +55,7 @@ final class SettingsController {
 		);
 
 		register_setting(
-			'qrhunt_settings',
+			'questuno_settings',
 			PrivacyService::OPTION_NAME,
 			array(
 				'type'              => 'array',
@@ -105,37 +105,37 @@ final class SettingsController {
 		$settings = is_array( $settings ) ? $settings : array();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'QRHunt Settings', 'qrhunt' ); ?></h1>
+			<h1><?php esc_html_e( 'QuestUno Settings', 'questuno' ); ?></h1>
 			<form action="options.php" method="post">
-				<?php settings_fields( 'qrhunt_settings' ); ?>
-				<h2><?php esc_html_e( 'Privacy', 'qrhunt' ); ?></h2>
+				<?php settings_fields( 'questuno_settings' ); ?>
+				<h2><?php esc_html_e( 'Privacy', 'questuno' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Event data', 'qrhunt' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Event data', 'questuno' ); ?></th>
 						<td>
 							<label>
 								<input name="<?php echo esc_attr( PrivacyService::OPTION_NAME ); ?>[record_ip_address]" type="checkbox" value="1" <?php checked( ! empty( $settings['record_ip_address'] ) ); ?> />
-								<?php esc_html_e( 'Record IP address for new Events', 'qrhunt' ); ?>
+								<?php esc_html_e( 'Record IP address for new Events', 'questuno' ); ?>
 							</label>
 							<br />
 							<label>
 								<input name="<?php echo esc_attr( PrivacyService::OPTION_NAME ); ?>[record_user_agent]" type="checkbox" value="1" <?php checked( ! empty( $settings['record_user_agent'] ) ); ?> />
-								<?php esc_html_e( 'Record User Agent for new Events', 'qrhunt' ); ?>
+								<?php esc_html_e( 'Record User Agent for new Events', 'questuno' ); ?>
 							</label>
 						</td>
 					</tr>
 				</table>
-				<h2><?php esc_html_e( 'Exports', 'qrhunt' ); ?></h2>
+				<h2><?php esc_html_e( 'Exports', 'questuno' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="qrhunt-csv-separator"><?php esc_html_e( 'CSV separator', 'qrhunt' ); ?></label></th>
+						<th scope="row"><label for="questuno-csv-separator"><?php esc_html_e( 'CSV separator', 'questuno' ); ?></label></th>
 						<td>
-							<select id="qrhunt-csv-separator" name="<?php echo esc_attr( self::CSV_SEPARATOR_OPTION_NAME ); ?>">
-								<option value="," <?php selected( ',', get_option( self::CSV_SEPARATOR_OPTION_NAME, ',' ) ); ?>><?php esc_html_e( 'Comma (,)', 'qrhunt' ); ?></option>
-								<option value=";" <?php selected( ';', get_option( self::CSV_SEPARATOR_OPTION_NAME, ',' ) ); ?>><?php esc_html_e( 'Semicolon (;)', 'qrhunt' ); ?></option>
-								<option value="&#9;" <?php selected( "\t", get_option( self::CSV_SEPARATOR_OPTION_NAME, ',' ) ); ?>><?php esc_html_e( 'Tab', 'qrhunt' ); ?></option>
+							<select id="questuno-csv-separator" name="<?php echo esc_attr( self::CSV_SEPARATOR_OPTION_NAME ); ?>">
+								<option value="," <?php selected( ',', get_option( self::CSV_SEPARATOR_OPTION_NAME, ',' ) ); ?>><?php esc_html_e( 'Comma (,)', 'questuno' ); ?></option>
+								<option value=";" <?php selected( ';', get_option( self::CSV_SEPARATOR_OPTION_NAME, ',' ) ); ?>><?php esc_html_e( 'Semicolon (;)', 'questuno' ); ?></option>
+								<option value="&#9;" <?php selected( "\t", get_option( self::CSV_SEPARATOR_OPTION_NAME, ',' ) ); ?>><?php esc_html_e( 'Tab', 'questuno' ); ?></option>
 							</select>
-							<p class="description"><?php esc_html_e( 'CSV exports are always encoded in UTF-8.', 'qrhunt' ); ?></p>
+							<p class="description"><?php esc_html_e( 'CSV exports are always encoded in UTF-8.', 'questuno' ); ?></p>
 						</td>
 					</tr>
 				</table>

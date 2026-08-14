@@ -1,6 +1,6 @@
 <?php return array(
     'root' => array(
-        'name' => 'qrhunt/qrhunt',
+        'name' => 'questuno/questuno',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
         'reference' => 'fd13158ba618b5e71bc92598403faa0651b3f4ea',
@@ -136,7 +136,7 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
-        'qrhunt/qrhunt' => array(
+        'questuno/questuno' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
             'reference' => 'fd13158ba618b5e71bc92598403faa0651b3f4ea',

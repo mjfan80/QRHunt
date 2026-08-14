@@ -2,15 +2,15 @@
 /**
  * QR code controller.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\Model\Checkpoint;
-use QRHunt\Service\CheckpointService;
-use QRHunt\Service\PathService;
-use QRHunt\Service\QrCodeService;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Service\CheckpointService;
+use QuestUno\Service\PathService;
+use QuestUno\Service\QrCodeService;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -48,11 +48,11 @@ final class QrCodeController {
 	 */
 	public function register_page(): void {
 		add_submenu_page(
-			'qrhunt',
-			__( 'QR Codes', 'qrhunt' ),
-			__( 'QR Codes', 'qrhunt' ),
+			'questuno',
+			__( 'QR Codes', 'questuno' ),
+			__( 'QR Codes', 'questuno' ),
 			'edit_posts',
-			'qrhunt-qr-codes',
+			'questuno-qr-codes',
 			array( $this, 'render_page' )
 		);
 	}
@@ -70,26 +70,26 @@ final class QrCodeController {
 		$checkpoints      = null === $selected_path ? array() : $this->checkpoint_service->get_checkpoints_by_path( $selected_path_id );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'QR Codes', 'qrhunt' ); ?></h1>
+			<h1><?php esc_html_e( 'QR Codes', 'questuno' ); ?></h1>
 
 			<form method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>">
-				<input type="hidden" name="page" value="qrhunt-qr-codes" />
+				<input type="hidden" name="page" value="questuno-qr-codes" />
 				<table class="form-table" role="presentation">
 					<tbody>
 						<tr>
 							<th scope="row">
-								<label for="qrhunt-qr-path"><?php esc_html_e( 'Path', 'qrhunt' ); ?></label>
+								<label for="questuno-qr-path"><?php esc_html_e( 'Path', 'questuno' ); ?></label>
 							</th>
 							<td>
-								<select id="qrhunt-qr-path" name="path_id">
-									<option value="0"><?php esc_html_e( 'Select a Path', 'qrhunt' ); ?></option>
+								<select id="questuno-qr-path" name="path_id">
+									<option value="0"><?php esc_html_e( 'Select a Path', 'questuno' ); ?></option>
 									<?php foreach ( $paths as $path ) : ?>
 										<option value="<?php echo esc_attr( (string) $path->get_id() ); ?>" <?php selected( $selected_path_id, $path->get_id() ); ?>>
 											<?php echo esc_html( $path->get_name() ); ?>
 										</option>
 									<?php endforeach; ?>
 								</select>
-								<?php submit_button( __( 'Load Checkpoints', 'qrhunt' ), 'secondary', '', false ); ?>
+								<?php submit_button( __( 'Load Checkpoints', 'questuno' ), 'secondary', '', false ); ?>
 							</td>
 						</tr>
 					</tbody>
@@ -99,22 +99,22 @@ final class QrCodeController {
 			<?php if ( null !== $selected_path ) : ?>
 				<p>
 					<a class="button button-secondary" href="<?php echo esc_url( $this->get_print_url( $selected_path_id ) ); ?>" target="_blank" rel="noopener noreferrer">
-						<?php esc_html_e( 'Print Path', 'qrhunt' ); ?>
+						<?php esc_html_e( 'Print Path', 'questuno' ); ?>
 					</a>
 				</p>
 
 				<table class="widefat striped">
 					<thead>
 						<tr>
-							<th scope="col"><?php esc_html_e( 'Name', 'qrhunt' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'Token', 'qrhunt' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'Actions', 'qrhunt' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Name', 'questuno' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Token', 'questuno' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Actions', 'questuno' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php if ( empty( $checkpoints ) ) : ?>
 							<tr>
-								<td colspan="3"><?php esc_html_e( 'No Checkpoints found for the selected Path.', 'qrhunt' ); ?></td>
+								<td colspan="3"><?php esc_html_e( 'No Checkpoints found for the selected Path.', 'questuno' ); ?></td>
 							</tr>
 						<?php else : ?>
 							<?php foreach ( $checkpoints as $checkpoint ) : ?>
@@ -123,10 +123,10 @@ final class QrCodeController {
 									<td><code><?php echo esc_html( (string) $checkpoint->get_token() ); ?></code></td>
 									<td>
 										<a class="button" href="<?php echo esc_url( $this->get_download_url( (int) $checkpoint->get_post_id(), 'png' ) ); ?>">
-											<?php esc_html_e( 'Download PNG', 'qrhunt' ); ?>
+											<?php esc_html_e( 'Download PNG', 'questuno' ); ?>
 										</a>
 										<a class="button" href="<?php echo esc_url( $this->get_download_url( (int) $checkpoint->get_post_id(), 'svg' ) ); ?>">
-											<?php esc_html_e( 'Download SVG', 'qrhunt' ); ?>
+											<?php esc_html_e( 'Download SVG', 'questuno' ); ?>
 										</a>
 									</td>
 								</tr>
@@ -145,27 +145,23 @@ final class QrCodeController {
 	 * @return void
 	 */
 	public function download(): void {
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
-		}
-
 		$checkpoint_id = isset( $_GET['checkpoint_id'] ) ? absint( wp_unslash( $_GET['checkpoint_id'] ) ) : 0;
 		$format        = isset( $_GET['format'] ) ? sanitize_key( wp_unslash( $_GET['format'] ) ) : '';
 
-		if ( ! in_array( $format, array( 'png', 'svg' ), true ) ) {
-			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
+		if ( ! current_user_can( 'edit_post', $checkpoint_id ) || ! in_array( $format, array( 'png', 'svg' ), true ) ) {
+			wp_die( esc_html__( 'Invalid request.', 'questuno' ) );
 		}
 
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 
-		if ( ! wp_verify_nonce( $nonce, 'qrhunt_download_qr_code_' . $checkpoint_id . '_' . $format ) ) {
-			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
+		if ( ! wp_verify_nonce( $nonce, 'questuno_download_qr_code_' . $checkpoint_id . '_' . $format ) ) {
+			wp_die( esc_html__( 'Invalid request.', 'questuno' ) );
 		}
 
 		$checkpoint = $this->checkpoint_service->get_checkpoint( $checkpoint_id );
 
 		if ( null === $checkpoint ) {
-			wp_die( esc_html__( 'Checkpoint not found.', 'qrhunt' ) );
+			wp_die( esc_html__( 'Checkpoint not found.', 'questuno' ) );
 		}
 
 		if ( 'png' === $format ) {
@@ -189,21 +185,12 @@ final class QrCodeController {
 	 * @return void
 	 */
 	public function print_path(): void {
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
-		}
-
 		$path_id = isset( $_GET['path_id'] ) ? absint( wp_unslash( $_GET['path_id'] ) ) : 0;
 		$nonce   = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+		$path    = $this->path_service->get_path( $path_id );
 
-		if ( ! wp_verify_nonce( $nonce, 'qrhunt_print_path_qr_codes_' . $path_id ) ) {
-			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
-		}
-
-		$path = $this->path_service->get_path( $path_id );
-
-		if ( null === $path ) {
-			wp_die( esc_html__( 'Path not found.', 'qrhunt' ) );
+		if ( null === $path || ! current_user_can( 'edit_post', (int) $path->get_post_id() ) || ! wp_verify_nonce( $nonce, 'questuno_print_path_qr_codes_' . $path_id ) ) {
+			wp_die( esc_html__( 'Invalid request.', 'questuno' ) );
 		}
 
 		$checkpoints = $this->checkpoint_service->get_checkpoints_by_path( $path_id );
@@ -221,9 +208,9 @@ final class QrCodeController {
 	private function get_download_url( int $checkpoint_id, string $format ): string {
 		return wp_nonce_url(
 			admin_url(
-				'admin-post.php?action=qrhunt_download_qr_code&checkpoint_id=' . $checkpoint_id . '&format=' . rawurlencode( $format )
+				'admin-post.php?action=questuno_download_qr_code&checkpoint_id=' . $checkpoint_id . '&format=' . rawurlencode( $format )
 			),
-			'qrhunt_download_qr_code_' . $checkpoint_id . '_' . $format
+			'questuno_download_qr_code_' . $checkpoint_id . '_' . $format
 		);
 	}
 
@@ -235,8 +222,8 @@ final class QrCodeController {
 	 */
 	private function get_print_url( int $path_id ): string {
 		return wp_nonce_url(
-			admin_url( 'admin-post.php?action=qrhunt_print_path_qr_codes&path_id=' . $path_id ),
-			'qrhunt_print_path_qr_codes_' . $path_id
+			admin_url( 'admin-post.php?action=questuno_print_path_qr_codes&path_id=' . $path_id ),
+			'questuno_print_path_qr_codes_' . $path_id
 		);
 	}
 
@@ -283,45 +270,57 @@ final class QrCodeController {
 	 * @return void
 	 */
 	private function render_print_document( string $path_name, array $checkpoints ): void {
+		$this->enqueue_print_assets();
 		?>
 		<!DOCTYPE html>
 		<html <?php language_attributes(); ?>>
 		<head>
 			<meta charset="<?php bloginfo( 'charset' ); ?>" />
 			<title><?php echo esc_html( $path_name ); ?></title>
-			<style>
-				@page { size: A4 portrait; margin: 12mm; }
-				body { font-family: Arial, sans-serif; color: #111; margin: 0; }
-				.qrhunt-print-wrap { padding: 0; }
-				.qrhunt-print-title { font-size: 24px; margin: 0 0 10mm; text-align: center; }
-				.qrhunt-print-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10mm; }
-				.qrhunt-print-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #dcdcde; padding: 8mm; text-align: center; }
-				.qrhunt-print-card svg { display: block; width: 100%; height: auto; margin: 0 auto 6mm; }
-				.qrhunt-print-name { font-size: 16px; font-weight: 600; }
-				@media screen {
-					body { background: #f0f0f1; padding: 20px; }
-					.qrhunt-print-wrap { background: #fff; margin: 0 auto; max-width: 210mm; min-height: 297mm; padding: 12mm; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
-				}
-			</style>
+			<?php wp_print_styles( array( 'questuno-print-path' ) ); ?>
 		</head>
 		<body>
-			<div class="qrhunt-print-wrap">
-				<h1 class="qrhunt-print-title"><?php echo esc_html( $path_name ); ?></h1>
-				<div class="qrhunt-print-grid">
+			<div class="questuno-print-wrap">
+				<h1 class="questuno-print-title"><?php echo esc_html( $path_name ); ?></h1>
+				<div class="questuno-print-grid">
 					<?php foreach ( $checkpoints as $checkpoint ) : ?>
-						<div class="qrhunt-print-card">
+						<div class="questuno-print-card">
 							<?php echo $this->qr_code_service->generate_checkpoint_svg( $checkpoint ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG markup is generated internally by QrCodeService from trusted Checkpoint tokens. ?>
-							<div class="qrhunt-print-name"><?php echo esc_html( get_the_title( (int) $checkpoint->get_post_id() ) ); ?></div>
+							<div class="questuno-print-name"><?php echo esc_html( get_the_title( (int) $checkpoint->get_post_id() ) ); ?></div>
 						</div>
 					<?php endforeach; ?>
 				</div>
 			</div>
-			<script>
-				window.print();
-			</script>
+			<?php wp_print_scripts( array( 'questuno-print-path' ) ); ?>
 		</body>
 		</html>
 		<?php
 		exit;
+	}
+
+	/**
+	 * Registers and queues the standalone Path print assets.
+	 *
+	 * @return void
+	 */
+	private function enqueue_print_assets(): void {
+		$plugin_file = dirname( __DIR__, 2 ) . '/questuno.php';
+
+		wp_register_style(
+			'questuno-print-path',
+			plugins_url( 'assets/css/print-path.css', $plugin_file ),
+			array(),
+			'1.0.0'
+		);
+		wp_enqueue_style( 'questuno-print-path' );
+
+		wp_register_script(
+			'questuno-print-path',
+			plugins_url( 'assets/js/print-path.js', $plugin_file ),
+			array(),
+			'1.0.0',
+			false
+		);
+		wp_enqueue_script( 'questuno-print-path' );
 	}
 }

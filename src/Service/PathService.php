@@ -2,13 +2,13 @@
 /**
  * Path service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Path;
-use QRHunt\Repository\PathRepository;
+use QuestUno\Model\Path;
+use QuestUno\Repository\PathRepository;
 
 defined( 'ABSPATH' ) || exit;
 

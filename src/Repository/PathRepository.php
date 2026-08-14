@@ -2,12 +2,12 @@
 /**
  * Path repository.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Repository;
+namespace QuestUno\Repository;
 
-use QRHunt\Model\Path;
+use QuestUno\Model\Path;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,7 +29,7 @@ final class PathRepository {
 	 */
 	public function __construct( \wpdb $wpdb ) {
 		$this->wpdb       = $wpdb;
-		$this->table_name = $wpdb->prefix . 'qrhunt_paths';
+		$this->table_name = $wpdb->prefix . 'questuno_paths';
 	}
 
 	/**
@@ -38,7 +38,7 @@ final class PathRepository {
 	 * @return array<int, Path>
 	 */
 	public function find_all(): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_paths suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_paths suffix.
 		$rows = $this->wpdb->get_results(
 			"SELECT id, post_id, name, description, status, start_checkpoint_id, finish_checkpoint_id, opening_date, closing_date, created_at, updated_at FROM {$this->table_name} ORDER BY name ASC",
 			ARRAY_A
@@ -61,7 +61,7 @@ final class PathRepository {
 	 * @return Path|null
 	 */
 	public function find_by_id( int $id ): ?Path {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_paths suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_paths suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, post_id, name, description, status, start_checkpoint_id, finish_checkpoint_id, opening_date, closing_date, created_at, updated_at FROM {$this->table_name} WHERE id = %d",
 			$id
@@ -85,7 +85,7 @@ final class PathRepository {
 	 * @return Path|null
 	 */
 	public function find_by_post_id( int $post_id ): ?Path {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_paths suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_paths suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, post_id, name, description, status, start_checkpoint_id, finish_checkpoint_id, opening_date, closing_date, created_at, updated_at FROM {$this->table_name} WHERE post_id = %d",
 			$post_id
@@ -108,7 +108,7 @@ final class PathRepository {
 	 * @return int
 	 */
 	public function count_all(): int {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_paths suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_paths suffix.
 		$count = $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name}" );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 

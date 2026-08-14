@@ -2,12 +2,12 @@
 /**
  * Dependency repository.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Repository;
+namespace QuestUno\Repository;
 
-use QRHunt\Model\Dependency;
+use QuestUno\Model\Dependency;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,7 +29,7 @@ final class DependencyRepository {
 	 */
 	public function __construct( \wpdb $wpdb ) {
 		$this->wpdb       = $wpdb;
-		$this->table_name = $wpdb->prefix . 'qrhunt_dependencies';
+		$this->table_name = $wpdb->prefix . 'questuno_dependencies';
 	}
 
 	/**
@@ -39,7 +39,7 @@ final class DependencyRepository {
 	 * @return array<int, Dependency>
 	 */
 	public function find_by_checkpoint( int $checkpoint_id ): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed qrhunt_dependencies suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and the fixed questuno_dependencies suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, checkpoint_id, type, target_type, target_id, created_at, updated_at FROM {$this->table_name} WHERE checkpoint_id = %d ORDER BY id ASC",
 			$checkpoint_id

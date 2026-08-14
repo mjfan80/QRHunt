@@ -2,13 +2,13 @@
 /**
  * Event service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Event;
-use QRHunt\Repository\EventRepository;
+use QuestUno\Model\Event;
+use QuestUno\Repository\EventRepository;
 
 defined( 'ABSPATH' ) || exit;
 

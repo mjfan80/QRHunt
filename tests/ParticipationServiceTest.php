@@ -2,12 +2,12 @@
 /**
  * Participation lifecycle tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Model\ParticipationStatus;
+use QuestUno\Model\ParticipationStatus;
 
 /**
  * Verifies creation and allowed state transitions.

@@ -2,18 +2,18 @@
 /**
  * Public My Paths controller.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\Model\Participation;
-use QRHunt\Model\ParticipationStatus;
-use QRHunt\Service\CheckpointService;
-use QRHunt\Service\ParticipationProgressBuilder;
-use QRHunt\Service\ParticipationService;
-use QRHunt\Service\PathService;
-use QRHunt\Service\QrCodeService;
+use QuestUno\Model\Participation;
+use QuestUno\Model\ParticipationStatus;
+use QuestUno\Service\CheckpointService;
+use QuestUno\Service\ParticipationProgressBuilder;
+use QuestUno\Service\ParticipationService;
+use QuestUno\Service\PathService;
+use QuestUno\Service\QrCodeService;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 final class MyPathsController {
 
 	/** @var string */
-	public const QUERY_VAR = 'qrhunt_my_paths';
+	public const QUERY_VAR = 'questuno_my_paths';
 
 	/** @var ParticipationService */
 	private $participation_service;
@@ -74,7 +74,7 @@ final class MyPathsController {
 	public static function register_rewrite_rules(): void {
 		add_rewrite_tag( '%' . self::QUERY_VAR . '%', '([01])' );
 		add_rewrite_rule(
-			'^qrhunt/my-paths/?$',
+			'^questuno/my-paths/?$',
 			'index.php?' . self::QUERY_VAR . '=1',
 			'top'
 		);
@@ -100,14 +100,14 @@ final class MyPathsController {
 
 		$this->prepare_template_response(
 			array(
-				'page_title' => __( 'My paths', 'qrhunt' ),
+				'page_title' => __( 'My paths', 'questuno' ),
 				'items'      => $this->build_items( get_current_user_id() ),
 			)
 		);
 	}
 
 	/**
-	 * Disables canonical redirects only for the QRHunt My Paths route.
+	 * Disables canonical redirects only for the QuestUno My Paths route.
 	 *
 	 * @param string|false $redirect_url  Redirect destination.
 	 * @param string       $requested_url Requested URL.
@@ -124,7 +124,7 @@ final class MyPathsController {
 	}
 
 	/**
-	 * Adds QRHunt classes to the body tag of rendered public requests.
+	 * Adds QuestUno classes to the body tag of rendered public requests.
 	 *
 	 * @param array<int, string> $classes Existing classes.
 	 * @return array<int, string>
@@ -134,14 +134,14 @@ final class MyPathsController {
 			return $classes;
 		}
 
-		$classes[] = 'qrhunt-public-ui';
-		$classes[] = 'qrhunt-public-ui--my-paths';
+		$classes[] = 'questuno-public-ui';
+		$classes[] = 'questuno-public-ui--my-paths';
 
 		return array_values( array_unique( $classes ) );
 	}
 
 	/**
-	 * Forces the plugin template only for the active QRHunt My Paths request.
+	 * Forces the plugin template only for the active QuestUno My Paths request.
 	 *
 	 * @param string $template Resolved template path.
 	 * @return string
@@ -155,7 +155,7 @@ final class MyPathsController {
 	}
 
 	/**
-	 * Prepares the plugin template response for the current QRHunt public request.
+	 * Prepares the plugin template response for the current QuestUno public request.
 	 *
 	 * @param array<string, mixed> $view_context Prepared template context.
 	 * @return void
@@ -174,7 +174,7 @@ final class MyPathsController {
 
 		$this->enqueue_public_styles();
 
-		set_query_var( 'qrhunt_public_my_paths_context', $view_context );
+		set_query_var( 'questuno_public_my_paths_context', $view_context );
 
 		add_filter( 'body_class', array( $this, 'filter_body_class' ) );
 		add_filter( 'template_include', array( $this, 'filter_template_include' ), 99 );
@@ -189,8 +189,8 @@ final class MyPathsController {
 		$stylesheet_path = dirname( __DIR__, 2 ) . '/assets/css/public-ui.css';
 
 		wp_enqueue_style(
-			'qrhunt-public-ui',
-			plugins_url( 'assets/css/public-ui.css', dirname( __DIR__, 2 ) . '/qrhunt.php' ),
+			'questuno-public-ui',
+			plugins_url( 'assets/css/public-ui.css', dirname( __DIR__, 2 ) . '/questuno.php' ),
 			array(),
 			(string) filemtime( $stylesheet_path )
 		);
@@ -244,10 +244,10 @@ final class MyPathsController {
 			'path_name'      => (string) $path->get_name(),
 			'status'         => $this->get_status_label( (string) $participation->get_status() ),
 			'progress_label' => 0 === $total_checkpoints
-				? __( 'No checkpoints', 'qrhunt' )
+				? __( 'No checkpoints', 'questuno' )
 				: sprintf(
 					/* translators: 1: visited checkpoints, 2: total checkpoints. */
-					__( '%1$d / %2$d checkpoints', 'qrhunt' ),
+					__( '%1$d / %2$d checkpoints', 'questuno' ),
 					$visited_checkpoints,
 					$total_checkpoints
 				),
@@ -307,10 +307,10 @@ final class MyPathsController {
 	 */
 	private function get_status_label( string $status ): string {
 		$labels = array(
-			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'qrhunt' ),
-			ParticipationStatus::FINISHED    => __( 'Finished', 'qrhunt' ),
-			ParticipationStatus::COMPLETED   => __( 'Completed', 'qrhunt' ),
-			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'qrhunt' ),
+			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'questuno' ),
+			ParticipationStatus::FINISHED    => __( 'Finished', 'questuno' ),
+			ParticipationStatus::COMPLETED   => __( 'Completed', 'questuno' ),
+			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'questuno' ),
 		);
 
 		return $labels[ $status ] ?? $status;

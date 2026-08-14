@@ -2,13 +2,13 @@
 /**
  * Export service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\EventResult;
-use QRHunt\Model\ParticipationStatus;
+use QuestUno\Model\EventResult;
+use QuestUno\Model\ParticipationStatus;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -270,7 +270,7 @@ final class ExportService {
 	/**
 	 * Gets Participations indexed by identifier.
 	 *
-	 * @return array<int,\QRHunt\Model\Participation>
+	 * @return array<int,\QuestUno\Model\Participation>
 	 */
 	private function get_participations_by_id(): array {
 		$participations_by_id = array();
@@ -285,7 +285,7 @@ final class ExportService {
 	/**
 	 * Counts Participations with a specific status.
 	 *
-	 * @param array<int,\QRHunt\Model\Participation> $participations Participations.
+	 * @param array<int,\QuestUno\Model\Participation> $participations Participations.
 	 * @param string                                 $status         Status.
 	 * @return int
 	 */
@@ -304,7 +304,7 @@ final class ExportService {
 	/**
 	 * Counts Events by result.
 	 *
-	 * @param array<int,\QRHunt\Model\Event> $events Events.
+	 * @param array<int,\QuestUno\Model\Event> $events Events.
 	 * @return array<string,int>
 	 */
 	private function count_events_by_result( array $events ): array {

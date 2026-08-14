@@ -1,14 +1,14 @@
 <?php
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\Model\Group;
-use QRHunt\Service\GroupService;
-use QRHunt\Service\PathService;
+use QuestUno\Model\Group;
+use QuestUno\Service\GroupService;
+use QuestUno\Service\PathService;
 
 defined( 'ABSPATH' ) || exit;
 
 final class GroupController {
-	public const PAGE_SLUG = 'qrhunt-groups';
+	public const PAGE_SLUG = 'questuno-groups';
 	private $group_service;
 	private $path_service;
 
@@ -18,7 +18,7 @@ final class GroupController {
 	}
 
 	public function register_page(): void {
-		add_submenu_page( 'qrhunt', __( 'Groups', 'qrhunt' ), __( 'Groups', 'qrhunt' ), 'edit_posts', self::PAGE_SLUG, array( $this, 'render_page' ) );
+		add_submenu_page( 'questuno', __( 'Groups', 'questuno' ), __( 'Groups', 'questuno' ), 'edit_posts', self::PAGE_SLUG, array( $this, 'render_page' ) );
 	}
 
 	public function render_page(): void {
@@ -29,20 +29,20 @@ final class GroupController {
 		$editing_id   = isset( $_GET['group_id'] ) ? absint( wp_unslash( $_GET['group_id'] ) ) : 0;
 		$editing_group = 0 === $editing_id ? null : $this->group_service->get_group( $editing_id );
 		$is_edit_mode = null !== $editing_group;
-		$form_title   = $is_edit_mode ? __( 'Edit Group', 'qrhunt' ) : __( 'Add Group', 'qrhunt' );
-		$button_label = $is_edit_mode ? __( 'Update Group', 'qrhunt' ) : __( 'Add Group', 'qrhunt' );
+		$form_title   = $is_edit_mode ? __( 'Edit Group', 'questuno' ) : __( 'Add Group', 'questuno' );
+		$button_label = $is_edit_mode ? __( 'Update Group', 'questuno' ) : __( 'Add Group', 'questuno' );
 		$path_id      = $is_edit_mode ? (int) $editing_group->get_path_id() : 0;
 		$name         = $is_edit_mode ? (string) $editing_group->get_name() : '';
 		$description  = $is_edit_mode ? (string) $editing_group->get_description() : '';
 		$completion_mode = $is_edit_mode && null !== $editing_group->get_completion_mode() ? (string) $editing_group->get_completion_mode() : 'ALL';
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Groups', 'qrhunt' ); ?></h1>
+			<h1><?php esc_html_e( 'Groups', 'questuno' ); ?></h1>
 
 			<h2><?php echo esc_html( $form_title ); ?></h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-				<?php wp_nonce_field( 'qrhunt_save_group', 'qrhunt_group_nonce' ); ?>
-				<input type="hidden" name="action" value="qrhunt_save_group" />
+				<?php wp_nonce_field( 'questuno_save_group', 'questuno_group_nonce' ); ?>
+				<input type="hidden" name="action" value="questuno_save_group" />
 				<?php if ( $is_edit_mode ) : ?>
 					<input type="hidden" name="group_id" value="<?php echo esc_attr( (string) $editing_group->get_id() ); ?>" />
 				<?php endif; ?>
@@ -50,11 +50,11 @@ final class GroupController {
 					<tbody>
 						<tr>
 							<th scope="row">
-								<label for="qrhunt-group-path"><?php esc_html_e( 'Path', 'qrhunt' ); ?></label>
+								<label for="questuno-group-path"><?php esc_html_e( 'Path', 'questuno' ); ?></label>
 							</th>
 							<td>
-								<select id="qrhunt-group-path" name="path_id" required>
-									<option value=""><?php esc_html_e( 'Select a Path', 'qrhunt' ); ?></option>
+								<select id="questuno-group-path" name="path_id" required>
+									<option value=""><?php esc_html_e( 'Select a Path', 'questuno' ); ?></option>
 									<?php foreach ( $paths as $path ) : ?>
 										<option value="<?php echo esc_attr( (string) $path->get_id() ); ?>" <?php selected( $path_id, $path->get_id() ); ?>>
 											<?php echo esc_html( $path->get_name() ); ?>
@@ -65,28 +65,28 @@ final class GroupController {
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="qrhunt-group-name"><?php esc_html_e( 'Name', 'qrhunt' ); ?></label>
+								<label for="questuno-group-name"><?php esc_html_e( 'Name', 'questuno' ); ?></label>
 							</th>
 							<td>
-								<input id="qrhunt-group-name" class="regular-text" name="name" type="text" value="<?php echo esc_attr( $name ); ?>" required />
+								<input id="questuno-group-name" class="regular-text" name="name" type="text" value="<?php echo esc_attr( $name ); ?>" required />
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="qrhunt-group-description"><?php esc_html_e( 'Description', 'qrhunt' ); ?></label>
+								<label for="questuno-group-description"><?php esc_html_e( 'Description', 'questuno' ); ?></label>
 							</th>
 							<td>
-								<textarea id="qrhunt-group-description" class="large-text" name="description" rows="5"><?php echo esc_textarea( $description ); ?></textarea>
+								<textarea id="questuno-group-description" class="large-text" name="description" rows="5"><?php echo esc_textarea( $description ); ?></textarea>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="qrhunt-group-completion-mode"><?php esc_html_e( 'Completion Mode', 'qrhunt' ); ?></label>
+								<label for="questuno-group-completion-mode"><?php esc_html_e( 'Completion Mode', 'questuno' ); ?></label>
 							</th>
 							<td>
-								<select id="qrhunt-group-completion-mode" name="completion_mode" required>
-									<option value="ALL" <?php selected( $completion_mode, 'ALL' ); ?>><?php esc_html_e( 'ALL', 'qrhunt' ); ?></option>
-									<option value="ANY" <?php selected( $completion_mode, 'ANY' ); ?>><?php esc_html_e( 'ANY', 'qrhunt' ); ?></option>
+								<select id="questuno-group-completion-mode" name="completion_mode" required>
+									<option value="ALL" <?php selected( $completion_mode, 'ALL' ); ?>><?php esc_html_e( 'ALL', 'questuno' ); ?></option>
+									<option value="ANY" <?php selected( $completion_mode, 'ANY' ); ?>><?php esc_html_e( 'ANY', 'questuno' ); ?></option>
 								</select>
 							</td>
 						</tr>
@@ -98,11 +98,11 @@ final class GroupController {
 			<table class="widefat striped">
 				<thead>
 					<tr>
-						<th scope="col"><?php esc_html_e( 'Name', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Description', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Path', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Completion Mode', 'qrhunt' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Actions', 'qrhunt' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Name', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Description', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Path', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Completion Mode', 'questuno' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Actions', 'questuno' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -114,13 +114,13 @@ final class GroupController {
 							<td><?php echo esc_html( (string) $group->get_completion_mode() ); ?></td>
 							<td>
 								<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::PAGE_SLUG . '&group_id=' . $group->get_id() ) ); ?>">
-									<?php esc_html_e( 'Edit', 'qrhunt' ); ?>
+									<?php esc_html_e( 'Edit', 'questuno' ); ?>
 								</a>
-								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
-									<?php wp_nonce_field( 'qrhunt_delete_group_' . $group->get_id(), 'qrhunt_group_nonce' ); ?>
-									<input type="hidden" name="action" value="qrhunt_delete_group" />
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="questuno-inline-form">
+									<?php wp_nonce_field( 'questuno_delete_group_' . $group->get_id(), 'questuno_group_nonce' ); ?>
+									<input type="hidden" name="action" value="questuno_delete_group" />
 									<input type="hidden" name="group_id" value="<?php echo esc_attr( (string) $group->get_id() ); ?>" />
-									<button type="submit" class="button-link-delete"><?php esc_html_e( 'Delete', 'qrhunt' ); ?></button>
+									<button type="submit" class="button-link-delete"><?php esc_html_e( 'Delete', 'questuno' ); ?></button>
 								</form>
 							</td>
 						</tr>
@@ -132,8 +132,8 @@ final class GroupController {
 	}
 
 	public function save(): void {
-		if ( ! current_user_can( 'edit_posts' ) || ! isset( $_POST['qrhunt_group_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['qrhunt_group_nonce'] ) ), 'qrhunt_save_group' ) ) {
-			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
+		if ( ! current_user_can( 'edit_posts' ) || ! isset( $_POST['questuno_group_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['questuno_group_nonce'] ) ), 'questuno_save_group' ) ) {
+			wp_die( esc_html__( 'Invalid request.', 'questuno' ) );
 		}
 
 		$group_id = isset( $_POST['group_id'] ) ? absint( wp_unslash( $_POST['group_id'] ) ) : 0;
@@ -159,8 +159,8 @@ final class GroupController {
 	public function delete(): void {
 		$id = absint( wp_unslash( $_POST['group_id'] ?? 0 ) );
 
-		if ( ! current_user_can( 'edit_posts' ) || ! isset( $_POST['qrhunt_group_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['qrhunt_group_nonce'] ) ), 'qrhunt_delete_group_' . $id ) ) {
-			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
+		if ( ! current_user_can( 'edit_posts' ) || ! isset( $_POST['questuno_group_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['questuno_group_nonce'] ) ), 'questuno_delete_group_' . $id ) ) {
+			wp_die( esc_html__( 'Invalid request.', 'questuno' ) );
 		}
 
 		$this->group_service->delete_group( $id );

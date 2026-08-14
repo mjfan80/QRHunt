@@ -2,15 +2,15 @@
 /**
  * Plugin administration menu registration.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt;
+namespace QuestUno;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Registers the QRHunt administration menu.
+ * Registers the QuestUno administration menu.
  */
 final class AdminMenu {
 
@@ -27,33 +27,33 @@ final class AdminMenu {
 	}
 
 	/**
-	 * Registers the QRHunt administration menu.
+	 * Registers the QuestUno administration menu.
 	 *
 	 * @return void
 	 */
 	public function register(): void {
 		add_menu_page(
-			__( 'QRHunt', 'qrhunt' ),
-			__( 'QRHunt', 'qrhunt' ),
+			__( 'QuestUno', 'questuno' ),
+			__( 'QuestUno', 'questuno' ),
 			'edit_posts',
-			'qrhunt',
+			'questuno',
 			$this->dashboard_callback,
 			'dashicons-location-alt',
 			26
 		);
 
 		add_submenu_page(
-			'qrhunt',
-			__( 'Paths', 'qrhunt' ),
-			__( 'Paths', 'qrhunt' ),
+			'questuno',
+			__( 'Paths', 'questuno' ),
+			__( 'Paths', 'questuno' ),
 			'edit_posts',
 			'edit.php?post_type=' . PathPostType::POST_TYPE
 		);
 
 		add_submenu_page(
-			'qrhunt',
-			__( 'Checkpoints', 'qrhunt' ),
-			__( 'Checkpoints', 'qrhunt' ),
+			'questuno',
+			__( 'Checkpoints', 'questuno' ),
+			__( 'Checkpoints', 'questuno' ),
 			'edit_posts',
 			'edit.php?post_type=' . CheckpointPostType::POST_TYPE
 		);

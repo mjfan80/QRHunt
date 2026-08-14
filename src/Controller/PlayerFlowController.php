@@ -2,22 +2,22 @@
 /**
  * Player flow controller.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\Model\Checkpoint;
-use QRHunt\Model\DependencyTargetType;
-use QRHunt\Model\DependencyType;
-use QRHunt\Model\Participation;
-use QRHunt\Model\ParticipationProgress;
-use QRHunt\Model\ParticipationStatus;
-use QRHunt\Service\CheckpointService;
-use QRHunt\Service\ParticipationProgressBuilder;
-use QRHunt\Service\ParticipationService;
-use QRHunt\Service\PathService;
-use QRHunt\Service\ScanService;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Model\DependencyTargetType;
+use QuestUno\Model\DependencyType;
+use QuestUno\Model\Participation;
+use QuestUno\Model\ParticipationProgress;
+use QuestUno\Model\ParticipationStatus;
+use QuestUno\Service\CheckpointService;
+use QuestUno\Service\ParticipationProgressBuilder;
+use QuestUno\Service\ParticipationService;
+use QuestUno\Service\PathService;
+use QuestUno\Service\ScanService;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) || exit;
 final class PlayerFlowController {
 
 	/** @var string */
-	public const QUERY_VAR = 'qrhunt_checkpoint_token';
+	public const QUERY_VAR = 'questuno_checkpoint_token';
 
 	/** @var CheckpointService */
 	private $checkpoint_service;
@@ -78,7 +78,7 @@ final class PlayerFlowController {
 	public static function register_rewrite_rules(): void {
 		add_rewrite_tag( '%' . self::QUERY_VAR . '%', '([^&]+)' );
 		add_rewrite_rule(
-			'^qrhunt/checkpoint/([^/]+)/?$',
+			'^questuno/checkpoint/([^/]+)/?$',
 			'index.php?' . self::QUERY_VAR . '=$matches[1]',
 			'top'
 		);
@@ -105,8 +105,8 @@ final class PlayerFlowController {
 				$this->build_error_view_context(
 					null,
 					null,
-					__( 'Validation failed', 'qrhunt' ),
-					__( 'QR Code not valid.', 'qrhunt' ),
+					__( 'Validation failed', 'questuno' ),
+					__( 'QR Code not valid.', 'questuno' ),
 					array(),
 					false,
 					false
@@ -129,8 +129,8 @@ final class PlayerFlowController {
 				$this->build_error_view_context(
 					$checkpoint,
 					null,
-					__( 'Validation failed', 'qrhunt' ),
-					__( 'This Path is not available.', 'qrhunt' ),
+					__( 'Validation failed', 'questuno' ),
+					__( 'This Path is not available.', 'questuno' ),
 					array(),
 					false,
 					true
@@ -168,8 +168,8 @@ final class PlayerFlowController {
 					$this->build_error_view_context(
 						$checkpoint,
 						null,
-						__( 'Validation failed', 'qrhunt' ),
-						__( 'Checkpoint could not be validated.', 'qrhunt' ),
+						__( 'Validation failed', 'questuno' ),
+						__( 'Checkpoint could not be validated.', 'questuno' ),
 						$this->build_violation_messages( $validation_result->get_failed_dependencies() ),
 						false,
 						true
@@ -184,8 +184,8 @@ final class PlayerFlowController {
 				$this->build_error_view_context(
 					$checkpoint,
 					null,
-					__( 'Validation failed', 'qrhunt' ),
-					__( 'No active Participation was found for this Path.', 'qrhunt' ),
+					__( 'Validation failed', 'questuno' ),
+					__( 'No active Participation was found for this Path.', 'questuno' ),
 					array(),
 					false,
 					true
@@ -201,8 +201,8 @@ final class PlayerFlowController {
 				$this->build_error_view_context(
 					$checkpoint,
 					$participation,
-					__( 'Validation failed', 'qrhunt' ),
-					__( 'This Participation has been cancelled.', 'qrhunt' ),
+					__( 'Validation failed', 'questuno' ),
+					__( 'This Participation has been cancelled.', 'questuno' ),
 					array(),
 					false,
 					true
@@ -259,8 +259,8 @@ final class PlayerFlowController {
 			$this->build_error_view_context(
 				$checkpoint,
 				$participation,
-				__( 'Validation failed', 'qrhunt' ),
-				__( 'Checkpoint could not be validated.', 'qrhunt' ),
+				__( 'Validation failed', 'questuno' ),
+				__( 'Checkpoint could not be validated.', 'questuno' ),
 				$this->build_violation_messages( $validation_result->get_failed_dependencies() ),
 				false,
 				true
@@ -270,7 +270,7 @@ final class PlayerFlowController {
 	}
 
 	/**
-	 * Disables canonical redirects only for the QRHunt public token route.
+	 * Disables canonical redirects only for the QuestUno public token route.
 	 *
 	 * @param string|false $redirect_url Redirect destination.
 	 * @param string       $requested_url Requested URL.
@@ -289,7 +289,7 @@ final class PlayerFlowController {
 	}
 
 	/**
-	 * Adds QRHunt classes to the body tag of rendered public requests.
+	 * Adds QuestUno classes to the body tag of rendered public requests.
 	 *
 	 * @param array<int, string> $classes Existing classes.
 	 * @return array<int, string>
@@ -299,24 +299,24 @@ final class PlayerFlowController {
 			return $classes;
 		}
 
-		$classes[] = 'qrhunt-public-ui';
-		$classes[] = 'qrhunt-public-ui--checkpoint';
+		$classes[] = 'questuno-public-ui';
+		$classes[] = 'questuno-public-ui--checkpoint';
 
 		if ( '' !== $this->current_view_context['banner_modifier'] ) {
-			$classes[] = 'qrhunt-public-ui--' . sanitize_html_class( $this->current_view_context['banner_modifier'] );
+			$classes[] = 'questuno-public-ui--' . sanitize_html_class( $this->current_view_context['banner_modifier'] );
 		}
 
 		if ( ! empty( $this->current_view_context['is_valid_checkpoint'] ) ) {
-			$classes[] = 'qrhunt-public-ui--valid';
+			$classes[] = 'questuno-public-ui--valid';
 		} else {
-			$classes[] = 'qrhunt-public-ui--invalid';
+			$classes[] = 'questuno-public-ui--invalid';
 		}
 
 		return array_values( array_unique( $classes ) );
 	}
 
 	/**
-	 * Forces the plugin template only for the active QRHunt public request.
+	 * Forces the plugin template only for the active QuestUno public request.
 	 *
 	 * @param string $template Resolved template path.
 	 * @return string
@@ -332,7 +332,7 @@ final class PlayerFlowController {
 	/**
 	 * Builds user-facing validation messages.
 	 *
-	 * @param array<int, \QRHunt\Model\DependencyViolation> $violations Dependency violations.
+	 * @param array<int, \QuestUno\Model\DependencyViolation> $violations Dependency violations.
 	 * @return array<int, string>
 	 */
 	private function build_violation_messages( array $violations ): array {
@@ -343,12 +343,12 @@ final class PlayerFlowController {
 				$messages[] = DependencyTargetType::GROUP === $violation->get_target_type()
 					? sprintf(
 						/* translators: %s: group name. */
-						__( 'You must complete the group "%s" first.', 'qrhunt' ),
+						__( 'You must complete the group "%s" first.', 'questuno' ),
 						$violation->get_display_name()
 					)
 					: sprintf(
 						/* translators: %s: checkpoint name. */
-						__( 'You must complete the checkpoint "%s" first.', 'qrhunt' ),
+						__( 'You must complete the checkpoint "%s" first.', 'questuno' ),
 						$violation->get_display_name()
 					);
 
@@ -358,12 +358,12 @@ final class PlayerFlowController {
 			$messages[] = DependencyTargetType::GROUP === $violation->get_target_type()
 				? sprintf(
 					/* translators: %s: group name. */
-					__( 'This checkpoint is no longer available because the group "%s" has already been completed.', 'qrhunt' ),
+					__( 'This checkpoint is no longer available because the group "%s" has already been completed.', 'questuno' ),
 					$violation->get_display_name()
 				)
 				: sprintf(
 					/* translators: %s: checkpoint name. */
-					__( 'This checkpoint is no longer available because the checkpoint "%s" has already been completed.', 'qrhunt' ),
+					__( 'This checkpoint is no longer available because the checkpoint "%s" has already been completed.', 'questuno' ),
 					$violation->get_display_name()
 				);
 		}
@@ -372,7 +372,7 @@ final class PlayerFlowController {
 	}
 
 	/**
-	 * Prepares the plugin template response for the current QRHunt public request.
+	 * Prepares the plugin template response for the current QuestUno public request.
 	 *
 	 * @param array<string, mixed> $view_context Prepared template context.
 	 * @param int                  $status_code  HTTP status code.
@@ -392,7 +392,7 @@ final class PlayerFlowController {
 
 		$this->enqueue_public_styles();
 
-		set_query_var( 'qrhunt_public_ui_context', $view_context );
+		set_query_var( 'questuno_public_ui_context', $view_context );
 
 		add_filter( 'body_class', array( $this, 'filter_body_class' ) );
 		add_filter( 'template_include', array( $this, 'filter_template_include' ), 99 );
@@ -407,8 +407,8 @@ final class PlayerFlowController {
 		$stylesheet_path = dirname( __DIR__, 2 ) . '/assets/css/public-ui.css';
 
 		wp_enqueue_style(
-			'qrhunt-public-ui',
-			plugins_url( 'assets/css/public-ui.css', dirname( __DIR__, 2 ) . '/qrhunt.php' ),
+			'questuno-public-ui',
+			plugins_url( 'assets/css/public-ui.css', dirname( __DIR__, 2 ) . '/questuno.php' ),
 			array(),
 			(string) filemtime( $stylesheet_path )
 		);
@@ -424,7 +424,7 @@ final class PlayerFlowController {
 	 */
 	private function build_success_view_context( Checkpoint $checkpoint, Participation $participation, ParticipationProgress $progress_before ): array {
 		$post               = get_post( (int) $checkpoint->get_post_id() );
-		$page_title         = $post instanceof \WP_Post ? get_the_title( $post ) : __( 'Checkpoint', 'qrhunt' );
+		$page_title         = $post instanceof \WP_Post ? get_the_title( $post ) : __( 'Checkpoint', 'questuno' );
 		$path_id            = $checkpoint->get_path_id();
 		$path               = null === $path_id ? null : $this->path_service->get_path( (int) $path_id );
 		$progress_after     = $this->participation_progress_builder->build( $participation );
@@ -438,7 +438,7 @@ final class PlayerFlowController {
 
 		return array(
 			'page_title'          => $page_title,
-			'validation_outcome'  => __( 'Validation succeeded', 'qrhunt' ),
+			'validation_outcome'  => __( 'Validation succeeded', 'questuno' ),
 			'message'             => '',
 			'participation'       => $participation,
 			'participation_status_label' => $this->get_participation_status_label( $participation ),
@@ -446,12 +446,12 @@ final class PlayerFlowController {
 			'render_content'      => true,
 			'banner_message'      => $banner['message'],
 			'banner_modifier'     => $banner['modifier'],
-			'path_name'           => null === $path ? __( 'Path', 'qrhunt' ) : (string) $path->get_name(),
+			'path_name'           => null === $path ? __( 'Path', 'questuno' ) : (string) $path->get_name(),
 			'progress_label'      => 0 === $total_checkpoints
 				? ''
 				: sprintf(
 					/* translators: 1: visited checkpoints, 2: total checkpoints. */
-					__( '%1$d / %2$d checkpoints', 'qrhunt' ),
+					__( '%1$d / %2$d checkpoints', 'questuno' ),
 					$visited_checkpoints,
 					$total_checkpoints
 				),
@@ -483,7 +483,7 @@ final class PlayerFlowController {
 		}
 
 		return array(
-			'page_title'          => $post instanceof \WP_Post ? get_the_title( $post ) : __( 'Checkpoint', 'qrhunt' ),
+			'page_title'          => $post instanceof \WP_Post ? get_the_title( $post ) : __( 'Checkpoint', 'questuno' ),
 			'validation_outcome'  => $validation_outcome,
 			'message'             => $message,
 			'participation'       => $participation,
@@ -514,27 +514,27 @@ final class PlayerFlowController {
 		if ( $was_completed ) {
 			return array(
 				'modifier' => 'path-already-completed',
-				'message'  => __( 'This Path was already completed.', 'qrhunt' ),
+				'message'  => __( 'This Path was already completed.', 'questuno' ),
 			);
 		}
 
 		if ( ParticipationStatus::COMPLETED === $participation->get_status() ) {
 			return array(
 				'modifier' => 'path-completed',
-				'message'  => __( 'Path completed.', 'qrhunt' ),
+				'message'  => __( 'Path completed.', 'questuno' ),
 			);
 		}
 
 		if ( $was_visited ) {
 			return array(
 				'modifier' => 'checkpoint-already-visited',
-				'message'  => __( 'Checkpoint already visited.', 'qrhunt' ),
+				'message'  => __( 'Checkpoint already visited.', 'questuno' ),
 			);
 		}
 
 		return array(
 			'modifier' => 'checkpoint-registered',
-			'message'  => __( 'Checkpoint registered.', 'qrhunt' ),
+			'message'  => __( 'Checkpoint registered.', 'questuno' ),
 		);
 	}
 
@@ -546,15 +546,15 @@ final class PlayerFlowController {
 	 */
 	private function get_participation_status_label( ?Participation $participation ): string {
 		if ( null === $participation ) {
-			return __( 'Not started', 'qrhunt' );
+			return __( 'Not started', 'questuno' );
 		}
 
 		$status = (string) $participation->get_status();
 		$labels = array(
-			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'qrhunt' ),
-			ParticipationStatus::FINISHED    => __( 'Finished', 'qrhunt' ),
-			ParticipationStatus::COMPLETED   => __( 'Completed', 'qrhunt' ),
-			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'qrhunt' ),
+			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'questuno' ),
+			ParticipationStatus::FINISHED    => __( 'Finished', 'questuno' ),
+			ParticipationStatus::COMPLETED   => __( 'Completed', 'questuno' ),
+			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'questuno' ),
 		);
 
 		return $labels[ $status ] ?? $status;
@@ -566,14 +566,14 @@ final class PlayerFlowController {
 	 * @return string
 	 */
 	private function get_my_paths_url(): string {
-		$url = home_url( '/qrhunt/my-paths/' );
+		$url = home_url( '/questuno/my-paths/' );
 
 		/**
 		 * Filters the My Paths public URL.
 		 *
 		 * @param string $url Default URL.
 		 */
-		return (string) apply_filters( 'qrhunt_public_my_paths_url', $url );
+		return (string) apply_filters( 'questuno_public_my_paths_url', $url );
 	}
 
 	/**

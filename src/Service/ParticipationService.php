@@ -2,15 +2,15 @@
 /**
  * Participation service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Checkpoint;
-use QRHunt\Model\Participation;
-use QRHunt\Model\ParticipationStatus;
-use QRHunt\Repository\ParticipationRepository;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Model\Participation;
+use QuestUno\Model\ParticipationStatus;
+use QuestUno\Repository\ParticipationRepository;
 
 defined( 'ABSPATH' ) || exit;
 

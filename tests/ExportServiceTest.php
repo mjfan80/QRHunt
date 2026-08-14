@@ -2,15 +2,15 @@
 /**
  * Export service tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Service\ExportService;
+use QuestUno\Service\ExportService;
 
 /**
- * Verifies export datasets and filters against persisted QRHunt data.
+ * Verifies export datasets and filters against persisted QuestUno data.
  */
 final class ExportServiceTest extends IntegrationTestCase {
 	/**

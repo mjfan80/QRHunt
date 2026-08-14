@@ -2,7 +2,7 @@
 
 ## Scopo
 
-Questo documento descrive il comportamento della parte pubblica di QRHunt.
+Questo documento descrive il comportamento della parte pubblica di QuestUno.
 
 L'obiettivo è definire in modo univoco il flusso di gioco e la visualizzazione dei checkpoint, indipendentemente dall'implementazione tecnica.
 
@@ -14,7 +14,7 @@ L'obiettivo è definire in modo univoco il flusso di gioco e la visualizzazione 
 
 La narrazione del gioco è affidata esclusivamente ai contenuti dei checkpoint.
 
-Ogni checkpoint è rappresentato da un elemento del Custom Post Type `qrhunt_checkpoint`, modificabile tramite il normale editor di WordPress.
+Ogni checkpoint è rappresentato da un elemento del Custom Post Type `questuno_checkpoint`, modificabile tramite il normale editor di WordPress.
 
 Il plugin non genera pagine alternative contenenti la storia del gioco.
 
@@ -22,7 +22,7 @@ Il plugin non genera pagine alternative contenenti la storia del gioco.
 
 ## Il plugin gestisce il gioco, WordPress gestisce i contenuti
 
-QRHunt aggiunge esclusivamente gli elementi dinamici necessari al gioco, quali:
+QuestUno aggiunge esclusivamente gli elementi dinamici necessari al gioco, quali:
 
 - stato della scansione;
 - messaggi informativi;
@@ -231,7 +231,7 @@ Per evitare duplicazioni e garantire la massima flessibilità editoriale:
 
 - il plugin non duplica il contenuto dei checkpoint;
 - il plugin non genera pagine narrative alternative;
-- il contenuto della storia è sempre quello del CPT `qrhunt_checkpoint`;
+- il contenuto della storia è sempre quello del CPT `questuno_checkpoint`;
 - il plugin aggiunge esclusivamente elementi dinamici relativi allo stato del gioco.
 
 Qualsiasi futura estensione della Public UI dovrà rispettare questi principi.

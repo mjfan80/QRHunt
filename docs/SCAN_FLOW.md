@@ -2,7 +2,7 @@
 
 ## Scopo
 
-Questo documento descrive il flusso completo seguito da QRHunt quando un utente effettua la scansione di un QR Code.
+Questo documento descrive il flusso completo seguito da QuestUno quando un utente effettua la scansione di un QR Code.
 
 Il flusso runtime della versione 1.0 è il Player Flow autenticato di WordPress, attivato dall'URL pubblico del QR Code.
 
@@ -124,7 +124,7 @@ Il Validation Engine non modifica mai lo stato dell'applicazione.
 
 Se il Validation Engine restituisce un risultato negativo per una Participation già persistita:
 
-- non viene registrato il Checkpoint nella tabella `wp_qrhunt_participation_checkpoints`;
+- non viene registrato il Checkpoint nella tabella `wp_questuno_participation_checkpoints`;
 - la Participation non viene modificata;
 - viene registrato un Event;
 - viene restituito il `ValidationResult`.
@@ -137,7 +137,7 @@ Il livello di presentazione costruisce il messaggio da mostrare all'utente utili
 
 Se il Validation Engine restituisce un risultato positivo:
 
-- viene registrato il Checkpoint nella tabella `wp_qrhunt_participation_checkpoints`;
+- viene registrato il Checkpoint nella tabella `wp_questuno_participation_checkpoints`;
 - viene aggiornato lo stato della Participation;
 - viene registrato un Event;
 - viene restituito il `ValidationResult`.
@@ -168,7 +168,7 @@ Gli Event rappresentano esclusivamente lo storico delle operazioni effettuate da
 
 Gli Event sono immutabili.
 
-Lo stato corrente della progressione del giocatore è invece rappresentato dalla tabella `wp_qrhunt_participation_checkpoints`.
+Lo stato corrente della progressione del giocatore è invece rappresentato dalla tabella `wp_questuno_participation_checkpoints`.
 
 ---
 

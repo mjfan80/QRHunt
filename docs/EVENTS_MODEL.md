@@ -2,13 +2,13 @@
 
 ## Scopo
 
-Questo documento descrive gli Event generati da QRHunt.
+Questo documento descrive gli Event generati da QuestUno.
 
 Gli Event rappresentano esclusivamente lo storico delle operazioni effettuate dal sistema.
 
 Gli Event non rappresentano lo stato corrente della progressione del giocatore.
 
-Lo stato corrente è invece rappresentato dalla tabella `wp_qrhunt_participation_checkpoints`.
+Lo stato corrente è invece rappresentato dalla tabella `wp_questuno_participation_checkpoints`.
 
 ---
 

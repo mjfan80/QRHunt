@@ -2,13 +2,13 @@
 /**
  * Plugin activation handler.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt;
+namespace QuestUno;
 
-use QRHunt\Controller\PlayerFlowController;
-use QRHunt\Database\DatabaseInstaller;
+use QuestUno\Controller\PlayerFlowController;
+use QuestUno\Database\DatabaseInstaller;
 
 defined( 'ABSPATH' ) || exit;
 

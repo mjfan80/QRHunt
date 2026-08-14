@@ -1,6 +1,6 @@
-# QRHunt
+# QuestUno
 
-QRHunt è un plugin open source per WordPress che permette di creare esperienze interattive basate su QR Code.
+QuestUno è un plugin open source per WordPress che permette di creare esperienze interattive basate su QR Code.
 
 Pur nascendo dall'idea della classica caccia al tesoro, il progetto è stato progettato per essere completamente generico e adattabile a numerosi contesti, tra cui:
 
@@ -14,7 +14,7 @@ Pur nascendo dall'idea della classica caccia al tesoro, il progetto è stato pro
 - 🎃 eventi stagionali (Halloween, Natale, ecc.);
 - qualsiasi esperienza basata sulla scoperta di checkpoint.
 
-QRHunt gestisce esclusivamente la logica del gioco.
+QuestUno gestisce esclusivamente la logica del gioco.
 
 Tutti i contenuti (testi, immagini, video, audio e pagine) sono gestiti tramite le funzionalità native di WordPress.
 
@@ -60,7 +60,7 @@ Ordine di lettura consigliato:
 
 ## Principi del progetto
 
-QRHunt è sviluppato seguendo alcuni principi fondamentali:
+QuestUno è sviluppato seguendo alcuni principi fondamentali:
 
 - utilizzo esclusivo delle API ufficiali di WordPress;
 - conformità a WordPress Coding Standards;

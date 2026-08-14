@@ -2,14 +2,14 @@
 /**
  * Path configuration validator.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\DependencyTargetType;
-use QRHunt\Model\DependencyType;
-use QRHunt\Model\Path;
+use QuestUno\Model\DependencyTargetType;
+use QuestUno\Model\DependencyType;
+use QuestUno\Model\Path;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -62,7 +62,7 @@ final class PathConfigurationValidator {
 		if ( null === $path_id ) {
 			return array(
 				'checks'      => array(),
-				'errors'      => array( __( 'The Path must be saved before it can be published.', 'qrhunt' ) ),
+				'errors'      => array( __( 'The Path must be saved before it can be published.', 'questuno' ) ),
 				'warnings'    => array(),
 				'publishable' => false,
 			);
@@ -88,21 +88,21 @@ final class PathConfigurationValidator {
 		$has_valid_finish = null !== $finish_checkpoint_id && isset( $checkpoint_ids[ $finish_checkpoint_id ] );
 
 		if ( ! $has_valid_start ) {
-			$errors[] = __( 'A Path must have a start Checkpoint belonging to the Path.', 'qrhunt' );
+			$errors[] = __( 'A Path must have a start Checkpoint belonging to the Path.', 'questuno' );
 		} else {
-			$checks[] = __( 'The start Checkpoint belongs to this Path.', 'qrhunt' );
+			$checks[] = __( 'The start Checkpoint belongs to this Path.', 'questuno' );
 		}
 
 		if ( ! $has_valid_finish ) {
-			$errors[] = __( 'A Path must have a finish Checkpoint belonging to the Path.', 'qrhunt' );
+			$errors[] = __( 'A Path must have a finish Checkpoint belonging to the Path.', 'questuno' );
 		} else {
-			$checks[] = __( 'The finish Checkpoint belongs to this Path.', 'qrhunt' );
+			$checks[] = __( 'The finish Checkpoint belongs to this Path.', 'questuno' );
 		}
 
 		if ( null !== $start_checkpoint_id && $start_checkpoint_id === $finish_checkpoint_id ) {
-			$errors[] = __( 'The start and finish Checkpoints must be different.', 'qrhunt' );
+			$errors[] = __( 'The start and finish Checkpoints must be different.', 'questuno' );
 		} elseif ( $has_valid_start && $has_valid_finish ) {
-			$checks[] = __( 'The start and finish Checkpoints are different.', 'qrhunt' );
+			$checks[] = __( 'The start and finish Checkpoints are different.', 'questuno' );
 		}
 
 		$precedence_graph = array();
@@ -132,13 +132,13 @@ final class PathConfigurationValidator {
 		$has_dependency_errors = count( $errors ) !== $error_count_before_dependencies;
 
 		if ( ! $has_dependency_errors ) {
-			$checks[] = __( 'All dependency targets and Groups belong to this Path.', 'qrhunt' );
+			$checks[] = __( 'All dependency targets and Groups belong to this Path.', 'questuno' );
 		}
 
 		if ( $this->has_cycle( $precedence_graph ) ) {
-			$errors[] = __( 'The Path dependencies contain a cycle.', 'qrhunt' );
+			$errors[] = __( 'The Path dependencies contain a cycle.', 'questuno' );
 		} else {
-			$checks[] = __( 'The Path dependencies do not contain cycles.', 'qrhunt' );
+			$checks[] = __( 'The Path dependencies do not contain cycles.', 'questuno' );
 		}
 
 		foreach ( $checkpoints as $checkpoint ) {
@@ -155,7 +155,7 @@ final class PathConfigurationValidator {
 
 			$warnings[] = sprintf(
 				/* translators: %s: Checkpoint title. */
-				__( 'The Checkpoint "%s" has no dependencies and can be validated independently.', 'qrhunt' ),
+				__( 'The Checkpoint "%s" has no dependencies and can be validated independently.', 'questuno' ),
 				$this->checkpoint_service->get_checkpoint_title( $checkpoint_id )
 			);
 		}
@@ -182,13 +182,13 @@ final class PathConfigurationValidator {
 	 */
 	private function get_target_checkpoint_ids( ?string $target_type, ?int $target_id, int $path_id, array $checkpoint_ids, array &$errors ): array {
 		if ( null === $target_id || $target_id <= 0 ) {
-			$errors[] = __( 'A dependency has an invalid target.', 'qrhunt' );
+			$errors[] = __( 'A dependency has an invalid target.', 'questuno' );
 			return array();
 		}
 
 		if ( DependencyTargetType::CHECKPOINT === $target_type ) {
 			if ( ! isset( $checkpoint_ids[ $target_id ] ) ) {
-				$errors[] = __( 'A dependency references a Checkpoint that does not belong to this Path.', 'qrhunt' );
+				$errors[] = __( 'A dependency references a Checkpoint that does not belong to this Path.', 'questuno' );
 				return array();
 			}
 
@@ -196,14 +196,14 @@ final class PathConfigurationValidator {
 		}
 
 		if ( DependencyTargetType::GROUP !== $target_type ) {
-			$errors[] = __( 'A dependency has an invalid target type.', 'qrhunt' );
+			$errors[] = __( 'A dependency has an invalid target type.', 'questuno' );
 			return array();
 		}
 
 		$group = $this->group_service->get_group( $target_id );
 
 		if ( null === $group || $path_id !== $group->get_path_id() ) {
-			$errors[] = __( 'A dependency references a Group that does not belong to this Path.', 'qrhunt' );
+			$errors[] = __( 'A dependency references a Group that does not belong to this Path.', 'questuno' );
 			return array();
 		}
 

@@ -1,4 +1,4 @@
-# QRHunt – Amministrazione
+# QuestUno – Amministrazione
 
 **Versione:** 0.1 (Draft)
 
@@ -6,10 +6,10 @@
 
 # 1. Menu principale
 
-QRHunt aggiunge un nuovo menu nell'amministrazione WordPress.
+QuestUno aggiunge un nuovo menu nell'amministrazione WordPress.
 
 ```
-QRHunt
+QuestUno
 
 ├── Dashboard
 
@@ -94,7 +94,7 @@ Un warning viene mostrato per ogni Checkpoint ordinario che non possiede proprie
 
 I Checkpoint vengono gestiti tramite il Custom Post Type.
 
-La schermata di modifica del Checkpoint aggiunge un metabox QRHunt.
+La schermata di modifica del Checkpoint aggiunge un metabox QuestUno.
 
 ---
 
@@ -113,7 +113,7 @@ Campi previsti
 
 # 5. Regole del Checkpoint
 
-Le Dipendenze vengono configurate tramite il metabox QRHunt presente nella schermata di modifica del Checkpoint.
+Le Dipendenze vengono configurate tramite il metabox QuestUno presente nella schermata di modifica del Checkpoint.
 
 Ogni Dipendenza può riferirsi a:
 
@@ -208,7 +208,7 @@ Dimensione, livello di correzione e logo non sono configurabili nella versione 1
 
 ## Internazionalizzazione
 
-QRHunt utilizza il locale nativo di WordPress. Non dispone di un selettore di lingua proprietario. La versione 1.0 viene distribuita con inglese come lingua sorgente e traduzione italiana inclusa.
+QuestUno utilizza il locale nativo di WordPress. Non dispone di un selettore di lingua proprietario. La versione 1.0 viene distribuita con inglese come lingua sorgente e traduzione italiana inclusa.
 
 ---
 

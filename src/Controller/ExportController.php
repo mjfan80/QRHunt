@@ -2,17 +2,17 @@
 /**
  * Export controller.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Controller;
+namespace QuestUno\Controller;
 
-use QRHunt\Model\EventResult;
-use QRHunt\Model\ParticipationStatus;
-use QRHunt\Service\CheckpointService;
-use QRHunt\Service\ExportService;
-use QRHunt\Service\PathService;
-use QRHunt\Service\ParticipationService;
+use QuestUno\Model\EventResult;
+use QuestUno\Model\ParticipationStatus;
+use QuestUno\Service\CheckpointService;
+use QuestUno\Service\ExportService;
+use QuestUno\Service\PathService;
+use QuestUno\Service\ParticipationService;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -60,11 +60,11 @@ final class ExportController {
 	 */
 	public function register_page(): void {
 		add_submenu_page(
-			'qrhunt',
-			__( 'Exports', 'qrhunt' ),
-			__( 'Exports', 'qrhunt' ),
+			'questuno',
+			__( 'Exports', 'questuno' ),
+			__( 'Exports', 'questuno' ),
 			'edit_posts',
-			'qrhunt-exports',
+			'questuno-exports',
 			array( $this, 'render_page' )
 		);
 	}
@@ -85,62 +85,62 @@ final class ExportController {
 		$checkpoints = $this->checkpoint_service->get_checkpoints();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Exports', 'qrhunt' ); ?></h1>
+			<h1><?php esc_html_e( 'Exports', 'questuno' ); ?></h1>
 
-			<h2><?php esc_html_e( 'Participations', 'qrhunt' ); ?></h2>
+			<h2><?php esc_html_e( 'Participations', 'questuno' ); ?></h2>
 			<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-				<input type="hidden" name="action" value="qrhunt_export_csv" />
+				<input type="hidden" name="action" value="questuno_export_csv" />
 				<input type="hidden" name="export_type" value="participations" />
-				<?php wp_nonce_field( 'qrhunt_export_participations', '_wpnonce', false ); ?>
-				<?php $this->render_path_select( $paths, 'qrhunt-participations-path', 0 ); ?>
-				<?php $this->render_user_select( $users, 'qrhunt-participations-user' ); ?>
-				<label for="qrhunt-participations-status"><?php esc_html_e( 'Status', 'qrhunt' ); ?></label>
-				<select id="qrhunt-participations-status" name="status">
-					<option value=""><?php esc_html_e( 'All Statuses', 'qrhunt' ); ?></option>
+				<?php wp_nonce_field( 'questuno_export_participations', '_wpnonce', false ); ?>
+				<?php $this->render_path_select( $paths, 'questuno-participations-path', 0 ); ?>
+				<?php $this->render_user_select( $users, 'questuno-participations-user' ); ?>
+				<label for="questuno-participations-status"><?php esc_html_e( 'Status', 'questuno' ); ?></label>
+				<select id="questuno-participations-status" name="status">
+					<option value=""><?php esc_html_e( 'All Statuses', 'questuno' ); ?></option>
 					<?php foreach ( $this->get_status_labels() as $status => $label ) : ?>
 						<option value="<?php echo esc_attr( $status ); ?>"><?php echo esc_html( $label ); ?></option>
 					<?php endforeach; ?>
 				</select>
-				<?php submit_button( __( 'Export Participations CSV', 'qrhunt' ), 'secondary', '', false ); ?>
+				<?php submit_button( __( 'Export Participations CSV', 'questuno' ), 'secondary', '', false ); ?>
 			</form>
 
-			<h2><?php esc_html_e( 'Events', 'qrhunt' ); ?></h2>
+			<h2><?php esc_html_e( 'Events', 'questuno' ); ?></h2>
 			<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-				<input type="hidden" name="action" value="qrhunt_export_csv" />
+				<input type="hidden" name="action" value="questuno_export_csv" />
 				<input type="hidden" name="export_type" value="events" />
-				<?php wp_nonce_field( 'qrhunt_export_events', '_wpnonce', false ); ?>
-				<?php $this->render_path_select( $paths, 'qrhunt-events-path', 0 ); ?>
-				<?php $this->render_user_select( $users, 'qrhunt-events-user' ); ?>
-				<label for="qrhunt-events-checkpoint"><?php esc_html_e( 'Checkpoint', 'qrhunt' ); ?></label>
-				<select id="qrhunt-events-checkpoint" name="checkpoint_id">
-					<option value="0"><?php esc_html_e( 'All Checkpoints', 'qrhunt' ); ?></option>
+				<?php wp_nonce_field( 'questuno_export_events', '_wpnonce', false ); ?>
+				<?php $this->render_path_select( $paths, 'questuno-events-path', 0 ); ?>
+				<?php $this->render_user_select( $users, 'questuno-events-user' ); ?>
+				<label for="questuno-events-checkpoint"><?php esc_html_e( 'Checkpoint', 'questuno' ); ?></label>
+				<select id="questuno-events-checkpoint" name="checkpoint_id">
+					<option value="0"><?php esc_html_e( 'All Checkpoints', 'questuno' ); ?></option>
 					<?php foreach ( $checkpoints as $checkpoint ) : ?>
 						<option value="<?php echo esc_attr( (string) $checkpoint->get_post_id() ); ?>">
 							<?php echo esc_html( $this->checkpoint_service->get_checkpoint_title( (int) $checkpoint->get_post_id() ) ); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>
-				<label for="qrhunt-events-result"><?php esc_html_e( 'Result', 'qrhunt' ); ?></label>
-				<select id="qrhunt-events-result" name="result">
-					<option value=""><?php esc_html_e( 'All Results', 'qrhunt' ); ?></option>
+				<label for="questuno-events-result"><?php esc_html_e( 'Result', 'questuno' ); ?></label>
+				<select id="questuno-events-result" name="result">
+					<option value=""><?php esc_html_e( 'All Results', 'questuno' ); ?></option>
 					<?php foreach ( $this->get_result_labels() as $result => $label ) : ?>
 						<option value="<?php echo esc_attr( $result ); ?>"><?php echo esc_html( $label ); ?></option>
 					<?php endforeach; ?>
 				</select>
-				<label for="qrhunt-events-date-from"><?php esc_html_e( 'From', 'qrhunt' ); ?></label>
-				<input id="qrhunt-events-date-from" type="date" name="date_from" />
-				<label for="qrhunt-events-date-to"><?php esc_html_e( 'To', 'qrhunt' ); ?></label>
-				<input id="qrhunt-events-date-to" type="date" name="date_to" />
-				<?php submit_button( __( 'Export Events CSV', 'qrhunt' ), 'secondary', '', false ); ?>
+				<label for="questuno-events-date-from"><?php esc_html_e( 'From', 'questuno' ); ?></label>
+				<input id="questuno-events-date-from" type="date" name="date_from" />
+				<label for="questuno-events-date-to"><?php esc_html_e( 'To', 'questuno' ); ?></label>
+				<input id="questuno-events-date-to" type="date" name="date_to" />
+				<?php submit_button( __( 'Export Events CSV', 'questuno' ), 'secondary', '', false ); ?>
 			</form>
 
-			<h2><?php esc_html_e( 'Path Statistics', 'qrhunt' ); ?></h2>
+			<h2><?php esc_html_e( 'Path Statistics', 'questuno' ); ?></h2>
 			<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-				<input type="hidden" name="action" value="qrhunt_export_csv" />
+				<input type="hidden" name="action" value="questuno_export_csv" />
 				<input type="hidden" name="export_type" value="path_statistics" />
-				<?php wp_nonce_field( 'qrhunt_export_path_statistics', '_wpnonce', false ); ?>
-				<?php $this->render_path_select( $paths, 'qrhunt-statistics-path', 0 ); ?>
-				<?php submit_button( __( 'Export Path Statistics CSV', 'qrhunt' ), 'secondary', '', false ); ?>
+				<?php wp_nonce_field( 'questuno_export_path_statistics', '_wpnonce', false ); ?>
+				<?php $this->render_path_select( $paths, 'questuno-statistics-path', 0 ); ?>
+				<?php submit_button( __( 'Export Path Statistics CSV', 'questuno' ), 'secondary', '', false ); ?>
 			</form>
 		</div>
 		<?php
@@ -153,12 +153,12 @@ final class ExportController {
 	 */
 	public function download(): void {
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
+			wp_die( esc_html__( 'Invalid request.', 'questuno' ) );
 		}
 
 		$export_type = isset( $_GET['export_type'] ) ? sanitize_key( wp_unslash( $_GET['export_type'] ) ) : '';
 
-		check_admin_referer( 'qrhunt_export_' . $export_type );
+		check_admin_referer( 'questuno_export_' . $export_type );
 
 		if ( 'participations' === $export_type ) {
 			$path_id = isset( $_GET['path_id'] ) ? absint( wp_unslash( $_GET['path_id'] ) ) : 0;
@@ -169,7 +169,7 @@ final class ExportController {
 				$status = '';
 			}
 
-			$this->output_csv( 'qrhunt-participations.csv', $this->export_service->get_participation_export( $path_id, $user_id, $status ) );
+			$this->output_csv( 'questuno-participations.csv', $this->export_service->get_participation_export( $path_id, $user_id, $status ) );
 		}
 
 		if ( 'events' === $export_type ) {
@@ -180,7 +180,7 @@ final class ExportController {
 			}
 
 			$this->output_csv(
-				'qrhunt-events.csv',
+				'questuno-events.csv',
 				$this->export_service->get_event_export(
 					isset( $_GET['path_id'] ) ? absint( wp_unslash( $_GET['path_id'] ) ) : 0,
 					isset( $_GET['user_id'] ) ? absint( wp_unslash( $_GET['user_id'] ) ) : 0,
@@ -195,25 +195,25 @@ final class ExportController {
 		if ( 'path_statistics' === $export_type ) {
 			$path_id = isset( $_GET['path_id'] ) ? absint( wp_unslash( $_GET['path_id'] ) ) : 0;
 
-			$this->output_csv( 'qrhunt-path-statistics.csv', $this->export_service->get_path_statistics_export( $path_id ) );
+			$this->output_csv( 'questuno-path-statistics.csv', $this->export_service->get_path_statistics_export( $path_id ) );
 		}
 
-		wp_die( esc_html__( 'Invalid request.', 'qrhunt' ) );
+		wp_die( esc_html__( 'Invalid request.', 'questuno' ) );
 	}
 
 	/**
 	 * Renders a Path select.
 	 *
-	 * @param array<int,\QRHunt\Model\Path> $paths    Paths.
+	 * @param array<int,\QuestUno\Model\Path> $paths    Paths.
 	 * @param string                        $field_id Field identifier.
 	 * @param int                           $selected Selected Path identifier.
 	 * @return void
 	 */
 	private function render_path_select( array $paths, string $field_id, int $selected ): void {
 		?>
-		<label for="<?php echo esc_attr( $field_id ); ?>"><?php esc_html_e( 'Path', 'qrhunt' ); ?></label>
+		<label for="<?php echo esc_attr( $field_id ); ?>"><?php esc_html_e( 'Path', 'questuno' ); ?></label>
 		<select id="<?php echo esc_attr( $field_id ); ?>" name="path_id">
-			<option value="0"><?php esc_html_e( 'All Paths', 'qrhunt' ); ?></option>
+			<option value="0"><?php esc_html_e( 'All Paths', 'questuno' ); ?></option>
 			<?php foreach ( $paths as $path ) : ?>
 				<option value="<?php echo esc_attr( (string) $path->get_id() ); ?>" <?php selected( $selected, $path->get_id() ); ?>>
 					<?php echo esc_html( $path->get_name() ); ?>
@@ -232,9 +232,9 @@ final class ExportController {
 	 */
 	private function render_user_select( array $users, string $field_id ): void {
 		?>
-		<label for="<?php echo esc_attr( $field_id ); ?>"><?php esc_html_e( 'User', 'qrhunt' ); ?></label>
+		<label for="<?php echo esc_attr( $field_id ); ?>"><?php esc_html_e( 'User', 'questuno' ); ?></label>
 		<select id="<?php echo esc_attr( $field_id ); ?>" name="user_id">
-			<option value="0"><?php esc_html_e( 'All Users', 'qrhunt' ); ?></option>
+			<option value="0"><?php esc_html_e( 'All Users', 'questuno' ); ?></option>
 			<?php foreach ( $users as $user ) : ?>
 				<option value="<?php echo esc_attr( (string) $user->ID ); ?>">
 					<?php echo esc_html( $user->display_name . ' (' . $user->user_email . ')' ); ?>
@@ -251,10 +251,10 @@ final class ExportController {
 	 */
 	private function get_status_labels(): array {
 		return array(
-			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'qrhunt' ),
-			ParticipationStatus::FINISHED    => __( 'Finished', 'qrhunt' ),
-			ParticipationStatus::COMPLETED   => __( 'Completed', 'qrhunt' ),
-			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'qrhunt' ),
+			ParticipationStatus::IN_PROGRESS => __( 'In Progress', 'questuno' ),
+			ParticipationStatus::FINISHED    => __( 'Finished', 'questuno' ),
+			ParticipationStatus::COMPLETED   => __( 'Completed', 'questuno' ),
+			ParticipationStatus::CANCELLED   => __( 'Cancelled', 'questuno' ),
 		);
 	}
 
@@ -265,12 +265,12 @@ final class ExportController {
 	 */
 	private function get_result_labels(): array {
 		return array(
-			EventResult::ACCEPTED                => __( 'Accepted', 'qrhunt' ),
-			EventResult::DUPLICATE               => __( 'Duplicate', 'qrhunt' ),
-			EventResult::BEFORE_FAILED           => __( 'Before Failed', 'qrhunt' ),
-			EventResult::AFTER_FAILED            => __( 'After Failed', 'qrhunt' ),
-			EventResult::PATH_CLOSED             => __( 'Path Closed', 'qrhunt' ),
-			EventResult::PARTICIPATION_CANCELLED => __( 'Participation Cancelled', 'qrhunt' ),
+			EventResult::ACCEPTED                => __( 'Accepted', 'questuno' ),
+			EventResult::DUPLICATE               => __( 'Duplicate', 'questuno' ),
+			EventResult::BEFORE_FAILED           => __( 'Before Failed', 'questuno' ),
+			EventResult::AFTER_FAILED            => __( 'After Failed', 'questuno' ),
+			EventResult::PATH_CLOSED             => __( 'Path Closed', 'questuno' ),
+			EventResult::PARTICIPATION_CANCELLED => __( 'Participation Cancelled', 'questuno' ),
 		);
 	}
 

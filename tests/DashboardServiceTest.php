@@ -2,15 +2,15 @@
 /**
  * Dashboard metric tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Model\Dependency;
-use QRHunt\Model\DependencyTargetType;
-use QRHunt\Model\DependencyType;
-use QRHunt\Service\DashboardService;
+use QuestUno\Model\Dependency;
+use QuestUno\Model\DependencyTargetType;
+use QuestUno\Model\DependencyType;
+use QuestUno\Service\DashboardService;
 
 /**
  * Verifies the essential dashboard counters.

@@ -2,7 +2,7 @@
 
 ## Project
 
-QRHunt is a WordPress plugin.
+QuestUno is a WordPress plugin.
 
 The official project specification is contained in the `docs/` directory.
 
@@ -108,7 +108,7 @@ D:\Local-Sites\app\public
 
 The plugin is available through a symbolic link in:
 
-wp-content/plugins/qrhunt
+wp-content/plugins/questuno
 
 For local testing, always use the Local Site Shell.
 

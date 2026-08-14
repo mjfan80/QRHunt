@@ -1,7 +1,7 @@
 <?php
-namespace QRHunt\Repository;
+namespace QuestUno\Repository;
 
-use QRHunt\Model\Group;
+use QuestUno\Model\Group;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -11,11 +11,11 @@ final class GroupRepository {
 
 	public function __construct( \wpdb $wpdb ) {
 		$this->wpdb = $wpdb;
-		$this->table_name = $wpdb->prefix . 'qrhunt_checkpoint_groups';
+		$this->table_name = $wpdb->prefix . 'questuno_checkpoint_groups';
 	}
 
 	public function find_all(): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_checkpoint_groups suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_checkpoint_groups suffix.
 		$rows = $this->wpdb->get_results( "SELECT id, path_id, name, description, completion_mode FROM {$this->table_name} ORDER BY name ASC", ARRAY_A );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
@@ -23,7 +23,7 @@ final class GroupRepository {
 	}
 
 	public function find_by_path( int $path_id ): array {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_checkpoint_groups suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_checkpoint_groups suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, path_id, name, description, completion_mode FROM {$this->table_name} WHERE path_id = %d ORDER BY name ASC",
 			$path_id
@@ -36,7 +36,7 @@ final class GroupRepository {
 	}
 
 	public function find_by_id( int $id ): ?Group {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_checkpoint_groups suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_checkpoint_groups suffix.
 		$sql = $this->wpdb->prepare(
 			"SELECT id, path_id, name, description, completion_mode FROM {$this->table_name} WHERE id = %d",
 			$id
@@ -55,7 +55,7 @@ final class GroupRepository {
 	}
 
 	public function count_all(): int {
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed qrhunt_checkpoint_groups suffix.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $this->table_name contains only the WordPress database prefix and fixed questuno_checkpoint_groups suffix.
 		$count = $this->wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name}" );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 

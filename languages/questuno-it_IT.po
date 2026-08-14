@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: QRHunt 1.0.0\n"
+"Project-Id-Version: QuestUno 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -11,22 +11,22 @@ msgstr ""
 "PO-Revision-Date: 2026-08-12T11:35:14+00:00\n"
 "Language: it_IT\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Domain: qrhunt\n"
+"X-Domain: questuno\n"
 
 #. Plugin Name of the plugin
-#: qrhunt.php
+#: questuno.php
 #: src/AdminMenu.php:36
 #: src/AdminMenu.php:37
-msgid "QRHunt"
-msgstr "QRHunt"
+msgid "QuestUno"
+msgstr "QuestUno"
 
 #. Description of the plugin
-#: qrhunt.php
+#: questuno.php
 msgid "Creates interactive experiences based on QR Code checkpoints."
 msgstr "Crea esperienze interattive basate su checkpoint con codici QR."
 
 #. Author of the plugin
-#: qrhunt.php
+#: questuno.php
 msgid "mjfan80"
 msgstr "mjfan80"
 
@@ -177,8 +177,8 @@ msgid "The token will be generated when the Checkpoint is first saved."
 msgstr "Il token verrà generato al primo salvataggio del punto di controllo."
 
 #: src/Controller/DashboardController.php:44
-msgid "QRHunt Dashboard"
-msgstr "Bacheca QRHunt"
+msgid "QuestUno Dashboard"
+msgstr "Bacheca QuestUno"
 
 #: src/Controller/DashboardController.php:47
 msgid "Overview of the plugin and the latest recorded scans."
@@ -814,8 +814,8 @@ msgid "Settings"
 msgstr "Impostazioni"
 
 #: src/Controller/SettingsController.php:108
-msgid "QRHunt Settings"
-msgstr "Impostazioni QRHunt"
+msgid "QuestUno Settings"
+msgstr "Impostazioni QuestUno"
 
 #: src/Controller/SettingsController.php:111
 msgid "Privacy"

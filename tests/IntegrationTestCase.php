@@ -2,42 +2,42 @@
 /**
  * Shared WordPress integration test support.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Database\DatabaseInstaller;
-use QRHunt\Model\Checkpoint;
-use QRHunt\Model\Participation;
-use QRHunt\Model\Path;
-use QRHunt\PathPostType;
-use QRHunt\CheckpointPostType;
-use QRHunt\Repository\CheckpointRepository;
-use QRHunt\Repository\DependencyRepository;
-use QRHunt\Repository\EventRepository;
-use QRHunt\Repository\GroupRepository;
-use QRHunt\Repository\ParticipationCheckpointRepository;
-use QRHunt\Repository\ParticipationRepository;
-use QRHunt\Repository\PathRepository;
-use QRHunt\Service\CheckpointService;
-use QRHunt\Service\EventService;
-use QRHunt\Service\GroupService;
-use QRHunt\Service\ParticipationCheckpointService;
-use QRHunt\Service\ParticipationProgressBuilder;
-use QRHunt\Service\ParticipationService;
-use QRHunt\Service\PathService;
-use QRHunt\Service\PathConfigurationValidator;
-use QRHunt\Service\PrivacyService;
-use QRHunt\Service\ValidationService;
-use QRHunt\Service\ScanService;
+use QuestUno\Database\DatabaseInstaller;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Model\Participation;
+use QuestUno\Model\Path;
+use QuestUno\PathPostType;
+use QuestUno\CheckpointPostType;
+use QuestUno\Repository\CheckpointRepository;
+use QuestUno\Repository\DependencyRepository;
+use QuestUno\Repository\EventRepository;
+use QuestUno\Repository\GroupRepository;
+use QuestUno\Repository\ParticipationCheckpointRepository;
+use QuestUno\Repository\ParticipationRepository;
+use QuestUno\Repository\PathRepository;
+use QuestUno\Service\CheckpointService;
+use QuestUno\Service\EventService;
+use QuestUno\Service\GroupService;
+use QuestUno\Service\ParticipationCheckpointService;
+use QuestUno\Service\ParticipationProgressBuilder;
+use QuestUno\Service\ParticipationService;
+use QuestUno\Service\PathService;
+use QuestUno\Service\PathConfigurationValidator;
+use QuestUno\Service\PrivacyService;
+use QuestUno\Service\ValidationService;
+use QuestUno\Service\ScanService;
 
 /**
- * Provides a real WordPress database and QRHunt service graph for integration tests.
+ * Provides a real WordPress database and QuestUno service graph for integration tests.
  */
 abstract class IntegrationTestCase extends \WP_UnitTestCase {
 	/**
-	 * Creates the QRHunt tables in the dedicated test database.
+	 * Creates the QuestUno tables in the dedicated test database.
 	 *
 	 * @return void
 	 */
@@ -47,7 +47,7 @@ abstract class IntegrationTestCase extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Clears QRHunt state from the dedicated test database between tests.
+	 * Clears QuestUno state from the dedicated test database between tests.
 	 *
 	 * @return void
 	 */
@@ -56,17 +56,17 @@ abstract class IntegrationTestCase extends \WP_UnitTestCase {
 
 		global $wpdb;
 		$tables = array(
-			'qrhunt_events',
-			'qrhunt_participation_checkpoints',
-			'qrhunt_participations',
-			'qrhunt_dependencies',
-			'qrhunt_checkpoints',
-			'qrhunt_checkpoint_groups',
-			'qrhunt_paths',
+			'questuno_events',
+			'questuno_participation_checkpoints',
+			'questuno_participations',
+			'questuno_dependencies',
+			'questuno_checkpoints',
+			'questuno_checkpoint_groups',
+			'questuno_paths',
 		);
 
 		foreach ( $tables as $table ) {
-			$wpdb->query( "DELETE FROM {$wpdb->prefix}{$table}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- This integration-test teardown clears only the fixed QRHunt tables in the dedicated test database.
+			$wpdb->query( "DELETE FROM {$wpdb->prefix}{$table}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- This integration-test teardown clears only the fixed QuestUno tables in the dedicated test database.
 		}
 	}
 
@@ -100,7 +100,7 @@ abstract class IntegrationTestCase extends \WP_UnitTestCase {
 			'progress_builder'             => $progress_builder,
 			'event_service'                => $event_service,
 			'path_service'                 => $path_service,
-			'path_configuration_validator' => new PathConfigurationValidator( $checkpoint_service, new \QRHunt\Service\DependencyService( $dependency_repository ), new GroupService( $group_repository ) ),
+			'path_configuration_validator' => new PathConfigurationValidator( $checkpoint_service, new \QuestUno\Service\DependencyService( $dependency_repository ), new GroupService( $group_repository ) ),
 			'scan_service'                 => new ScanService( $checkpoint_service, $progress_builder, new ValidationService(), new ParticipationCheckpointService( $participation_checkpoint_repository ), $event_service, $path_service, $participation_service, new PrivacyService() ),
 		);
 	}

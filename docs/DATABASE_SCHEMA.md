@@ -1,10 +1,10 @@
-# QRHunt – Database Schema
+# QuestUno – Database Schema
 
 **Versione:** 0.1 (Draft)
 
 ---
 
-# 1. Tabella `wp_qrhunt_paths`
+# 1. Tabella `wp_questuno_paths`
 
 ## Scopo
 
@@ -68,7 +68,7 @@ Le Foreign Key non vengono create fisicamente, in accordo con le linee guida di 
 
 L'integrità referenziale è garantita dal plugin.
 
-post_id: riferimento al post del Custom Post Type qrhunt_path. Realizza una relazione 1:1 tra il contenuto WordPress e i dati di dominio memorizzati nella tabella del plugin.
+post_id: riferimento al post del Custom Post Type questuno_path. Realizza una relazione 1:1 tra il contenuto WordPress e i dati di dominio memorizzati nella tabella del plugin.
 
 Il Checkpoint iniziale rappresenta il punto di ingresso del Percorso.
 
@@ -76,7 +76,7 @@ La prima scansione valida del Checkpoint iniziale crea automaticamente la Partic
 
 ---
 
-# 2. Tabella `wp_qrhunt_checkpoints`
+# 2. Tabella `wp_questuno_checkpoints`
 
 ## Scopo
 
@@ -143,7 +143,7 @@ L'integrità referenziale è garantita dal plugin.
 
 ---
 
-# 3. Tabella `wp_qrhunt_checkpoint_groups`
+# 3. Tabella `wp_questuno_checkpoint_groups`
 
 ## Scopo
 
@@ -197,7 +197,7 @@ INDEX (path_id)
 
 ## Note
 
-L'appartenenza di un Checkpoint ad un Gruppo è memorizzata nella tabella `wp_qrhunt_checkpoints`.
+L'appartenenza di un Checkpoint ad un Gruppo è memorizzata nella tabella `wp_questuno_checkpoints`.
 
 Il Gruppo rappresenta esclusivamente un contenitore logico.
 
@@ -207,7 +207,7 @@ L'integrità referenziale è garantita dal plugin.
 
 ---
 
-# 4. Tabella `wp_qrhunt_dependencies`
+# 4. Tabella `wp_questuno_dependencies`
 
 ## Scopo
 
@@ -297,7 +297,7 @@ Per i dettagli consultare `validation.md`.
 
 ---
 
-# 5. Tabella `wp_qrhunt_participations`
+# 5. Tabella `wp_questuno_participations`
 
 ## Scopo
 
@@ -360,7 +360,7 @@ INDEX (status)
 - Una Partecipazione appartiene ad un solo Utente.
 - Una Partecipazione appartiene ad un solo Percorso.
 - La durata del Percorso non viene memorizzata.
-- Lo stato corrente della progressione viene determinato dalla tabella `wp_qrhunt_participation_checkpoints`.
+- Lo stato corrente della progressione viene determinato dalla tabella `wp_questuno_participation_checkpoints`.
 - Le statistiche storiche vengono calcolate a partire dagli Eventi.
 ---
 
@@ -374,7 +374,7 @@ L'integrità referenziale è garantita dal plugin.
 
 ---
 
-# 6. Tabella `wp_qrhunt_participation_checkpoints`
+# 6. Tabella `wp_questuno_participation_checkpoints`
 
 ## Scopo
 
@@ -384,7 +384,7 @@ Ogni record rappresenta un Checkpoint validato con successo nell'ambito di una s
 
 Questa tabella rappresenta esclusivamente lo stato corrente della progressione.
 
-Lo storico completo delle scansioni è invece conservato nella tabella `wp_qrhunt_events`.
+Lo storico completo delle scansioni è invece conservato nella tabella `wp_questuno_events`.
 
 ---
 
@@ -429,7 +429,7 @@ INDEX (validated_at)
 
 Questa tabella rappresenta esclusivamente lo stato corrente della progressione del giocatore.
 
-Lo storico completo delle scansioni, comprese quelle duplicate o non valide, è conservato nella tabella `wp_qrhunt_events`.
+Lo storico completo delle scansioni, comprese quelle duplicate o non valide, è conservato nella tabella `wp_questuno_events`.
 
 Le Foreign Key non vengono create fisicamente.
 
@@ -439,7 +439,7 @@ L'integrità referenziale è garantita dal plugin.
 
 ---
 
-# 7. Tabella `wp_qrhunt_events`
+# 7. Tabella `wp_questuno_events`
 
 ## Scopo
 

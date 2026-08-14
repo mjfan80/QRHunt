@@ -2,14 +2,14 @@
 /**
  * Path configuration validation tests.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Tests;
+namespace QuestUno\Tests;
 
-use QRHunt\Model\Dependency;
-use QRHunt\Model\DependencyTargetType;
-use QRHunt\Model\DependencyType;
+use QuestUno\Model\Dependency;
+use QuestUno\Model\DependencyTargetType;
+use QuestUno\Model\DependencyType;
 
 /**
  * Verifies structural Path publication requirements.

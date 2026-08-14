@@ -2,10 +2,10 @@
 /**
  * Plugin deactivation handler.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt;
+namespace QuestUno;
 
 defined( 'ABSPATH' ) || exit;
 

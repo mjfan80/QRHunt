@@ -1,8 +1,8 @@
 <?php
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Group;
-use QRHunt\Repository\GroupRepository;
+use QuestUno\Model\Group;
+use QuestUno\Repository\GroupRepository;
 
 defined( 'ABSPATH' ) || exit;
 

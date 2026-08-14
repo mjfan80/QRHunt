@@ -2,13 +2,13 @@
 /**
  * Checkpoint service.
  *
- * @package QRHunt
+ * @package QuestUno
  */
 
-namespace QRHunt\Service;
+namespace QuestUno\Service;
 
-use QRHunt\Model\Checkpoint;
-use QRHunt\Repository\CheckpointRepository;
+use QuestUno\Model\Checkpoint;
+use QuestUno\Repository\CheckpointRepository;
 
 defined( 'ABSPATH' ) || exit;
 
