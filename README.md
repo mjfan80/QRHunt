@@ -1,6 +1,6 @@
 <p align="center">
   <img
-    src=".github/assets/banner-772x250.png"
+    src="https://raw.githubusercontent.com/mjfan80/QuestUno/main/.github/assets/banner-772x250.png"
     alt="QuestUno"
     width="772"
   >
